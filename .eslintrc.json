@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": [
-    "projects/**/*"
+    "projects/*/"
   ],
   "overrides": [
     {
@@ -10,8 +10,7 @@
       ],
       "parserOptions": {
         "project": [
-          "tsconfig.json",
-          "e2e/tsconfig.json"
+          "tsconfig.json"
         ],
         "createDefaultProgram": true
       },
@@ -20,28 +19,26 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
-        "@angular-eslint/no-input-rename": [
-          "warn",
+        "@angular-eslint/directive-selector": [
+          "error",
           {
-            "allowedNames": ["name"]
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
           }
         ],
         "@angular-eslint/component-selector": [
           "error",
           {
-            "prefix": "ngx",
-            "style": "kebab-case",
-            "type": "element"
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
           }
         ],
-        "@angular-eslint/directive-selector": [
-          "error",
-          {
-            "prefix": "ngx",
-            "style": "camelCase",
-            "type": "attribute"
-          }
-        ]
+        "no-empty-function": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@angular-eslint/no-empty-lifecycle-method": "off",
+        "@angular-eslint/no-input-rename": "off"
       }
     },
     {
