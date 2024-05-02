@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { NbRegisterComponent } from '@nebular/auth';
 import { NbAlertModule, NbButtonModule, NbCheckboxModule, NbInputModule } from '@nebular/theme';
 import { AuthService } from '../../servicios/auth.service';
+import {ReactiveFormsModule} from '@angular/forms';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'ngx-register',
@@ -18,22 +20,26 @@ import { AuthService } from '../../servicios/auth.service';
     NbInputModule,
     NbButtonModule,
     NbCheckboxModule,
+    ReactiveFormsModule
   ]
 })
 export class NgxRegistroComponent extends NbRegisterComponent {
 
   private authService = inject(AuthService);
 
+  nombreCompleto = new FormControl('');
+
   enviar(){
-    this.authService.registro({
-      "email":"maestradaz3@gmail.com",
-      "password":"123456789",
-      "celular":"3205015059"
+    this.authService.login({
+      "username":"maestradaz3@gmail.com",
+      "password":"123456789"
   }).subscribe(
     resultado => {
       console.log(resultado)
     }
   )
   }
+
+
 
 }

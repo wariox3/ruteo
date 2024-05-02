@@ -11,6 +11,10 @@ export class AuthService {
   constructor(private http : HttpClient) { }
 
   registro(parametros:any){
-    return this.http.post<any>(`${environment.url_api}api/usuario/registro`, parametros, {context: checkRequiereToken()})
+    return this.http.post<any>('/api/usuario/registro', parametros, {context: checkRequiereToken()})
+  }
+
+  login(parametros:any){
+    return this.http.post<any>('/api/login_check', parametros, {context: checkRequiereToken()})
   }
 }
