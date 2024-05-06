@@ -55,11 +55,6 @@ export class NgxRegistroComponent extends NbRegisterComponent {
           this.router.navigate(['auth/login']);
         }
       },
-      (error: any) => {
-        if (error.status === 400) {
-          this.alerta.mensajeError(error.error.mensaje, 'Error 1')
-        }
-      }
-    );
+    )
   }
 }

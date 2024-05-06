@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NbLoginComponent } from '@nebular/auth';
-import { NbAlertModule, NbButtonModule, NbCheckboxModule, NbGlobalPhysicalPosition, NbInputModule, NbToastrService } from '@nebular/theme';
+import { NbAlertModule, NbButtonModule, NbCheckboxModule, NbInputModule } from '@nebular/theme';
 import { TokenService } from '../../servicios/token.service';
 import { AuthService } from '../../servicios/auth.service';
 
@@ -26,7 +26,6 @@ export class NgxLoginComponent extends NbLoginComponent implements OnInit {
 
   private tokenService = inject(TokenService);
   private authService = inject(AuthService);
-  private alert = inject(NbToastrService)
 
   ngOnInit(): void {
     let calcularTiempo = new Date(
