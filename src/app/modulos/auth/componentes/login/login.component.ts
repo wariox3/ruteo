@@ -32,7 +32,7 @@ export class NgxLoginComponent extends NbLoginComponent implements OnInit {
     let calcularTiempo = new Date(
       new Date().getTime() + 3 * 60 * 60 * 1000
     );
-    this.tokenService.guardar('elToken', calcularTiempo)
+    this.tokenService.guardar('token', calcularTiempo)
   }
 
   formulario = new FormGroup({

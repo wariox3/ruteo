@@ -27,7 +27,6 @@
            pattern=".+@.+\..+"
            placeholder="Correo"
            fieldSize="large"
-           autofocus
            [status]="formulario.get('username').dirty ? (formulario.get('username').invalid  ? 'danger' : 'success') : 'basic'"
            [attr.aria-invalid]="formulario.get('username').invalid && formulario.get('username').touched ? true : null">
     <ng-container *ngIf="formulario.get('username').invalid && formulario.get('username').touched">
