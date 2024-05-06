@@ -29,10 +29,10 @@
            [attr.aria-invalid]="formulario.get('email').invalid && formulario.get('email').touched ? true : null">
     <ng-container *ngIf="formulario.get('email').invalid && formulario.get('email').touched">
       <p class="caption status-danger" *ngIf="formulario.get('email').errors?.required">
-        El correo es requerido!
+        El correo es requerido
       </p>
       <p class="caption status-danger" *ngIf="formulario.get('email').errors?.pattern">
-        ¡El correo electrónico debe ser verdadero!
+        El correo debe ser válido
       </p>
     </ng-container>
   </div>

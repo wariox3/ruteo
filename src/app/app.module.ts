@@ -20,7 +20,8 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
-import { tokenInterceptor } from './interceptores/token.interceptor';
+import { tokenInterceptor } from './comun/interceptores/token.interceptor';
+import { errorhttpInterceptor } from './comun/interceptores/errorhttp.interceptor';
 
 
 @NgModule({
@@ -43,7 +44,7 @@ import { tokenInterceptor } from './interceptores/token.interceptor';
     ThemeModule.forRoot(),
   ],
   bootstrap: [AppComponent],
-  providers: [provideHttpClient(withInterceptors([tokenInterceptor])),
+  providers: [provideHttpClient(withInterceptors([tokenInterceptor, errorhttpInterceptor])),
   ],
 })
 export class AppModule {

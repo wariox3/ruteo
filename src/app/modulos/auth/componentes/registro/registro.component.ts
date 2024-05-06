@@ -7,6 +7,7 @@ import { NbAlertModule, NbButtonModule, NbCheckboxModule, NbGlobalPhysicalPositi
 import { AuthService } from '../../servicios/auth.service';
 import {ReactiveFormsModule} from '@angular/forms';
 import {FormControl} from '@angular/forms';
+import { AlertaService } from '../../../../comun/servicios/alerta.service';
 
 @Component({
   selector: 'ngx-register',
@@ -26,7 +27,7 @@ import {FormControl} from '@angular/forms';
 export class NgxRegistroComponent extends NbRegisterComponent {
 
   private authService = inject(AuthService);
-  private alert = inject(NbToastrService)
+  private alerta = inject(AlertaService)
 
 
   validarContrasena(): ValidatorFn {
@@ -50,25 +51,13 @@ export class NgxRegistroComponent extends NbRegisterComponent {
     this.authService.registro(this.formulario.value).subscribe(
       (resultado: any) => {
         if (resultado.id) {
+          this.alerta.mensajaExitoso('Se ha creado el usuario exitosamente.', 'Guardado con éxito.')
           this.router.navigate(['auth/login']);
         }
       },
       (error: any) => {
         if (error.status === 400) {
-          let config = {
-            status: 'danger',
-            destroyByClick: true,
-            duration: 5000,
-            hasIcon: false,
-            position: NbGlobalPhysicalPosition.BOTTOM_RIGHT,
-            preventDuplicates: false,
-          };
-          this.alert.show(error.error.mensaje, 'Error 1', config);
-          console.log(error)
-          // Aquí puedes realizar acciones específicas para el error 400, como mostrar un mensaje de error al usuario
-        } else {
-          console.error('Ocurrió un error:', error);
-          // Manejar otros errores aquí
+          this.alerta.mensajeError(error.error.mensaje, 'Error 1')
         }
       }
     );
