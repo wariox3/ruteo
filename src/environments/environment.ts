@@ -10,5 +10,5 @@
 
 export const environment = {
   production: false,
-  url_api : 'http://146.190.254.20:9005/'
+  url_api : 'http://146.190.254.20:9005'
 };
