@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
 import { getCookie, removeCookie, setCookie } from 'typescript-cookie';
 
 @Injectable({
@@ -24,6 +25,22 @@ export class TokenService {
 
   refrescar(){
     
+  }
+
+  validarToken(){
+    const token = this.obtener()
+    if(!token){
+      return false
+    }
+    const tokenDecodificado = jwtDecode(token);
+    if (tokenDecodificado && tokenDecodificado?.exp) {
+      const tokenFecha = new Date(0);
+      const fechaActual = new Date();
+      tokenFecha.setUTCSeconds(tokenDecodificado.exp);
+
+      return tokenFecha.getTime() > fechaActual.getTime();
+    }
+    return false;
   }
 
 }

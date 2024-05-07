@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NbLoginComponent } from '@nebular/auth';
@@ -22,17 +22,10 @@ import { AuthService } from '../../servicios/auth.service';
     ReactiveFormsModule
   ]
 })
-export class NgxLoginComponent extends NbLoginComponent implements OnInit {
+export class NgxLoginComponent extends NbLoginComponent {
 
   private tokenService = inject(TokenService);
   private authService = inject(AuthService);
-
-  ngOnInit(): void {
-    let calcularTiempo = new Date(
-      new Date().getTime() + 3 * 60 * 60 * 1000
-    );
-    this.tokenService.guardar('token', calcularTiempo)
-  }
 
   formulario = new FormGroup({
     username: new FormControl('', Validators.required),
@@ -42,8 +35,12 @@ export class NgxLoginComponent extends NbLoginComponent implements OnInit {
   enviar(){
     this.authService.login(this.formulario.value).subscribe(
       (resultado: any) => {
-        if (resultado.id) {
-          this.router.navigate(['auth/login']);
+        if (resultado.token) {
+          let calcularTiempo = new Date(
+            new Date().getTime() + 3 * 60 * 60 * 1000
+          );
+          this.tokenService.guardar(resultado.token, calcularTiempo)
+          this.router.navigate(['/dashboard']);
         }
       }
     );
