@@ -72,13 +72,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       )
       .subscribe(themeName => this.currentTheme = themeName);
 
-      this.menuService.onItemClick().subscribe(
-        (evento)=>{
-          if (evento.item.title == 'Log out'){
-            this.authService.logout()
-          }       
-        }
-      )
+    this.menuService.onItemClick().subscribe(
+      (evento)=>{
+        if (evento.item.title == 'Log out'){
+          this.authService.logout()
+        }       
+      }
+    )
   }
 
   ngOnDestroy() {
