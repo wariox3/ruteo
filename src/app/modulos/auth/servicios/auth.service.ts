@@ -20,6 +20,14 @@ export class AuthService {
     return this.http.post<any>(`${environment.url_api}/login_check`, parametros, {context: checkRequiereToken()});
   }
 
+  recuperarClave() {
+    return this.http.post(
+      'http://reddocapi.online/seguridad/usuario/cambio-clave-solicitar/',
+      { username: 'baxtian957@hotmail.com', accion: 'clave' },
+      { context: checkRequiereToken() }
+    );
+  }
+
   logout() {
     localStorage.clear();
     this.tokenService.eliminar();
