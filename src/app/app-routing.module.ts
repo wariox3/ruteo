@@ -19,11 +19,11 @@ export const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./modulos/auth/auth.module').then(a => a.NgxAuthModule),
   },
-  // {
-  //   path: '',
-  //   canActivate: [autentificacionGuard],
-  //   loadChildren: () => import('./pages/pages.module').then(a => a.PagesModule),
-  // },
+  {
+    path: '',
+    canActivate: [autentificacionGuard],
+    loadChildren: () => import('./pages/pages.module').then(a => a.PagesModule),
+  },
   { path: '**', redirectTo: 'auth' },
 ];
 
