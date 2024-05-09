@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private http : HttpClient, private tokenService: TokenService, private router: Router) { }
 
   registro(parametros:any){
-    return this.http.post<any>(`${environment.url_api}/usuario/registro`, parametros, {context: checkRequiereToken()});
+    return this.http.post<any>(`${environment.url_api}/usuario/registro`, parametros);
   }
 
   login(parametros:any){
