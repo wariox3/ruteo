@@ -13,19 +13,11 @@ export class AuthService {
   constructor(private http : HttpClient, private tokenService: TokenService, private router: Router) { }
 
   registro(parametros:any){
-    return this.http.post<any>(`${environment.url_api}/usuario/registro`, parametros);
+    return this.http.post<any>(`${environment.url_api}/usuario/registro`, parametros, {context: checkRequiereToken()});
   }
 
   login(parametros:any){
     return this.http.post<any>(`${environment.url_api}/login_check`, parametros, {context: checkRequiereToken()});
-  }
-
-  recuperarClave() {
-    return this.http.post(
-      'http://reddocapi.online/seguridad/usuario/cambio-clave-solicitar/',
-      { username: 'baxtian957@hotmail.com', accion: 'clave' },
-      { context: checkRequiereToken() }
-    );
   }
 
   logout() {
