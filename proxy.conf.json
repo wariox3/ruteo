@@ -1,6 +1,6 @@
 {
-    "/api":{
-        "target": "http://146.190.254.20:9005",
+    "/":{
+        "target": "http://reddocapi.online",
         "secure": false,
         "logLevel": "debug",
         "changeOrigin": true

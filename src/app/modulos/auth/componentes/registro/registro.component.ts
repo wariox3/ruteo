@@ -40,8 +40,7 @@ export class NgxRegistroComponent extends NbRegisterComponent {
   }
 
   formulario = new FormGroup({
-    email: new FormControl('', Validators.required),
-    celular: new FormControl('', Validators.required),
+    username: new FormControl('', Validators.required),
     password: new FormControl('', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(20)])),
     confirmarContrasena: new FormControl('', [Validators.required, this.validarContrasena()]),
     terminoCondicion: new FormControl('', Validators.compose([Validators.requiredTrue]))

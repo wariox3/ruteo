@@ -5,5 +5,5 @@
  */
 export const environment = {
   production: true,
-  url_api : 'http://146.190.254.20:9005/api'
+  url_api : 'http://reddocapi.online'
 };
