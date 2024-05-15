@@ -33,4 +33,8 @@ export class ListaComponent extends General implements OnInit {
     );
   }
 
+  seleccionarEmpresa(){
+    this.router.navigateByUrl('/dashboard')
+  }
+
 }
