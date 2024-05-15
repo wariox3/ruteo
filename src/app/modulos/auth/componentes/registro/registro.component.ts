@@ -49,7 +49,7 @@ export class NgxRegistroComponent extends NbRegisterComponent {
   enviar() {
     this.authService.registro(this.formulario.value).subscribe(
       (resultado: any) => {
-        if (resultado.id) {
+        if (resultado.usuario.id) {
           this.alerta.mensajaExitoso('Se ha creado el usuario exitosamente.', 'Guardado con éxito.')
           this.router.navigate(['auth/login']);
         }
