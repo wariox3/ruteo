@@ -40,7 +40,7 @@ export class NgxLoginComponent extends NbLoginComponent {
             new Date().getTime() + 3 * 60 * 60 * 1000
           );
           this.tokenService.guardar(resultado.token, calcularTiempo)
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['contenedor']);
         }
       }
     );

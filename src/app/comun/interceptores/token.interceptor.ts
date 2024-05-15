@@ -1,4 +1,4 @@
-import { HttpContext, HttpContextToken,type HttpInterceptorFn } from '@angular/common/http';
+import { HttpContext, HttpContextToken,HttpHandler,HttpHandlerFn,type HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { TokenService } from '../../modulos/auth/servicios/token.service';
 
@@ -9,7 +9,7 @@ import { TokenService } from '../../modulos/auth/servicios/token.service';
   }
 
 
-export const tokenInterceptor: HttpInterceptorFn = (request, next) => {
+export const tokenInterceptor: HttpInterceptorFn = (request, next: HttpHandlerFn) => {
   const authService = inject(TokenService);
   if (request.context.get(requiereToken)) {
     //validar vigencia
@@ -24,16 +24,16 @@ export const tokenInterceptor: HttpInterceptorFn = (request, next) => {
   return next(request);
 };
 
-const adicionarToken = (request: any, next: any) => {
-  const authService = inject(TokenService);
+const adicionarToken = (request: any, next: HttpHandlerFn) => {
+  const authService = inject(TokenService);  
   if (request.context.get(requiereToken)) {
     const token = authService.obtener();
     if (token) {
       const authReq = request.clone({
         headers: request.headers.set('Authorization', `Bearer ${token}`),
       });
-      return next.handle(authReq);
+      return next(authReq);
     }
   }
-  return next.handle(request);
+  return next(request);
 }

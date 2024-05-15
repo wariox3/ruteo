@@ -10,5 +10,5 @@
 
 export const environment = {
   production: false,
-  url_api : 'http://localhost:4200'
+  url_api : 'http://reddocapi.online'
 };
