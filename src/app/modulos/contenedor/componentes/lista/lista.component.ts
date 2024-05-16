@@ -2,12 +2,14 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { ContenedorService } from '../../servicios/contenedor.service';
 import { General } from '../../../../comun/clases/general';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-lista',
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule
   ],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css'],
