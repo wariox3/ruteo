@@ -6,6 +6,8 @@ import { NbLoginComponent } from '@nebular/auth';
 import { NbAlertModule, NbButtonModule, NbCheckboxModule, NbInputModule } from '@nebular/theme';
 import { TokenService } from '../../servicios/token.service';
 import { AuthService } from '../../servicios/auth.service';
+import { Store } from '@ngrx/store';
+import { usuarioIniciar } from '../../../../redux/actions/usuario.actions';
 
 @Component({
   selector: 'ngx-login',
@@ -26,6 +28,7 @@ export class NgxLoginComponent extends NbLoginComponent {
 
   private tokenService = inject(TokenService);
   private authService = inject(AuthService);
+  private store = inject(Store)
 
   formulario = new FormGroup({
     username: new FormControl('', Validators.required),
@@ -39,6 +42,9 @@ export class NgxLoginComponent extends NbLoginComponent {
           let calcularTiempo = new Date(
             new Date().getTime() + 3 * 60 * 60 * 1000
           );
+          this.store.dispatch(usuarioIniciar({
+            'usuario': resultado.user
+          }))
           this.tokenService.guardar(resultado.token, calcularTiempo)
           this.router.navigate(['contenedor']);
         }
