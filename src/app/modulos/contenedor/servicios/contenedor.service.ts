@@ -54,4 +54,14 @@ export class ContenedorService {
     );
   }
 
+  nuevo(data: any, usuario_id: string) {
+    return this.http.post(
+      `${environment.url_api}/contenedor/contenedor/`,
+      {
+        ...data,
+        usuario_id
+      }
+    );
+  }
+
 }

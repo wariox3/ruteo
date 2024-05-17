@@ -23,7 +23,7 @@ import { ContenedorService } from "../../servicios/contenedor.service";
 import { zip, asyncScheduler, Observable, of } from "rxjs";
 import { DevuelveDigitoVerificacionService } from "../../../../comun/servicios/devuelve-digito-verificacion.service";
 import { map, tap, throttleTime } from "rxjs/operators";
-import { NbAlertModule, NbAutocompleteModule, NbInputModule, NbSelectModule } from "@nebular/theme";
+import { NbAlertModule, NbAutocompleteModule, NbButtonModule, NbCardModule, NbInputModule, NbRadioModule, NbSelectModule } from "@nebular/theme";
 
 @Component({
   selector: "app-formulario",
@@ -37,6 +37,8 @@ import { NbAlertModule, NbAutocompleteModule, NbInputModule, NbSelectModule } fr
     NbAutocompleteModule,
     NbInputModule,
     NbAlertModule,
+    NbRadioModule,
+    NbButtonModule,
   ],
   templateUrl: "./formulario.component.html",
   styleUrls: ["./formulario.component.css"],
@@ -180,7 +182,16 @@ export class FormularioComponent extends General implements OnInit {
       .subscribe();
   }
 
-  enviar() {}
+  enviar() {
+    if (this.formularioContenedor.valid) {
+      this.procesando = true;
+
+      return this.dataFormulario.emit(this.formularioContenedor.value);
+    } else {
+      this.formularioContenedor.markAllAsTouched();
+    }
+    
+  }
 
   modificarCampoFormulario(campo: string, dato: any) {
     this.formularioContenedor?.markAsDirty();
