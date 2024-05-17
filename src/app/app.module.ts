@@ -23,8 +23,9 @@ import {
 import { tokenInterceptor } from './comun/interceptores/token.interceptor';
 import { errorhttpInterceptor } from './comun/interceptores/errorhttp.interceptor';
 import { StoreModule } from '@ngrx/store';
-import { StoreApp } from './redux';
+import { EffectsApp, StoreApp } from './redux';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),
     StoreModule.forRoot(StoreApp),
+    EffectsModule.forRoot(EffectsApp),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: !isDevMode(), // Restrict extension to log-only mode
