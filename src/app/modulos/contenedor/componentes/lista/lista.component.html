@@ -1,207 +1,174 @@
-<div class="row">
-    <!--begin::Col-->
-    <div class="col-xl-12">
-      <!--begin::Tables Widget 9-->
-      <div class="card card-xl-stretch mb-5 mb-xl-8 shadow-sm">
-        <!--begin::Header-->
-        <div class="card-header" appAnimationFadeinUp>
-          <div class="card-title m-0">
-            <h3>Contenedores</h3>
-          </div>
-          <a
-            class="btn btn-primary align-self-center"
-            [routerLink]="['../nuevo']"
-          >Nuevo
-          </a>
-        </div>
-        <div class="card-body">
-          <!--begin::Table container-->
-          <div class="table-responsive-sm">
-            <!--begin::Table-->
-            <table class="table table-row-dashed table-row-gray-300">
-              <!--begin::Table head-->
-              <thead *ngIf="arrContenedores.length > 0">
-                <tr>
-                  <th></th>
-                  <th class="min-w-120px"></th>
-                  <th class="min-w-150px text-center">Plan</th>
-                  <th
-                    translate="FORMULARIOS.TITULOS.COMUNES.USUARIOS"
-                    class="min-w-100px text-center"
-                  ></th>
-                </tr>
-              </thead>
-              <tbody>
-                <div></div>
-                <ng-container
-                  *ngIf="arrContenedores.length > 0; else sinContenedores"
-                >
-                  <tr
-                    *ngFor="let contenedor of arrContenedores; let i = index"
-                    appAnimationFadeinUp
-                    [animacionDelay]="i + 1"
-                    style="height: calc(82px - 0.6rem) !important"
-                  >
-                    <td style="width: 120px">
-                      <ng-container *ngIf="contenedor.imagen">
-                        <img
-                          [ngSrc]="contenedor.imagen"
-                          [alt]="'Error al cargar logo'"
-                          width="120"
-                          height="120"
-                          style="min-width: 120px"
-                          class="img-thumbnail"
-                        />
-                      </ng-container>
-                    </td>
-                    <td>
-                      <div
-                        class="h-100 d-flex flex-column justify-content-center"
-                      >
-                        <p class="text-dark fw-bolder fs-6">
-                          {{ contenedor.nombre }}
-                          <small class="badge badge-light-primary fs-8 fw-bold">{{
-                            contenedor.rol
-                          }}</small>
-                        </p>
-  
-                        <span class="text-muted fw-bold text-muted d-block fs-7"
-                          >{{ contenedor.subdominio }}{{ dominioApp }}</span
-                        >
-                      </div>
-                    </td>
-                    <td class="w-150px">
-                      <div
-                        class="h-100 d-flex flex-column justify-content-center"
-                      >
-                        <span class="badge badge-light-info fs-8 fw-bold">{{
-                          contenedor.plan_nombre
-                        }}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <div
-                        class="h-100 d-flex flex-column justify-content-center align-items-center"
-                      >
-                        {{ contenedor.usuarios }} / {{ contenedor.usuarios_base }}
-                      </div>
-                    </td>
-                    <td class="w-50px">
-                      <div
-                        class="h-100 d-flex flex-column justify-content-center"
-                      >
-                        <button
-                          href="#"
-                          class="btn btn-bg-primary btn-color-white"
-                          (click)="seleccionarEmpresa(contenedor.contenedor_id)"
-                        >Conectar</button>
-                      </div>
-                    </td>
-                    <td class="w-50px">
-                      <div
-                        class="h-100 d-flex flex-column justify-content-center"
-                      >
-                        <div
-                          ngbDropdown
-                          class="d-inline-block"
-                          display="dynamic"
-                          placement="end"
-                          *ngIf="contenedor.rol === 'propietario'"
-                        >
-                          <button
-                            type="button"
-                            class="btn btn-link text-hover-primary"
-                            id="dropdownBasic1"
-                            ngbDropdownToggle
-                          >
-                            <i class="bi bi-three-dots-vertical fs-2x"></i>
-                          </button>
-                          <div
-                            class="menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary w-200px py-3"
-                            ngbDropdownMenu
-                            aria-labelledby="dropdownBasic1"
-                          >
-                            <div class="menu-item px-3">
-                              <a
-                                translate="FORMULARIOS.BOTONES.CONTENEDOR.INVITACION"
-                                [routerLink]="[
-                                  '/contenedor/' +
-                                    contenedor.nombre +
-                                    '/' +
-                                    contenedor.contenedor_id +
-                                    '/invitacion/nuevo'
-                                ]"
-                                class="menu-link px-3 cursor-pointer"
-                                ngbDropdownItem
-                              >
-                              </a>
-                            </div>
-                            <div class="separator my-2"></div>
-                            <div class="menu-item px-3">
-                              <a
-                                class="menu-link px-3 cursor-pointer"
-                                (click)="detalleEmpresa(contenedor.contenedor_id)"
-                                translate="FORMULARIOS.TITULOS.COMUNES.MENU.CONTENEDOR"
-                              >
-                              </a>
-                            </div>
-                            <div class="separator my-2"></div>
-                            <div class="menu-item px-3">
-                              <a
-                                class="menu-link px-3 cursor-pointer bg-hover-light-danger text-danger"
-                                translate="FORMULARIOS.BOTONES.COMUNES.ELIMINAR"
-                                (click)="
-                                  eliminarEmpresa(
-                                    contenedor.subdominio,
-                                    contenedor.contenedor_id
-                                  )
-                                "
-                              >
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
+<nb-card>
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+    <span>Contenedores</span>
+    <a nbButton status="primary" [routerLink]="['../nuevo']">Nuevo</a>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="table-responsive-sm">
+      <table class="table table-row-dashed table-row-gray-300">
+        <thead *ngIf="arrContenedores.length > 0">
+          <tr>
+            <th></th>
+            <th class="min-w-120px"></th>
+            <th class="min-w-150px text-center">Plan</th>
+            <th
+              translate="FORMULARIOS.TITULOS.COMUNES.USUARIOS"
+              class="min-w-100px text-center"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <div></div>
+          <ng-container
+            *ngIf="arrContenedores.length > 0; else sinContenedores"
+          >
+            <tr
+              *ngFor="let contenedor of arrContenedores; let i = index"
+              appAnimationFadeinUp
+              [animacionDelay]="i + 1"
+              style="height: calc(82px - 0.6rem) !important"
+            >
+              <td style="width: 120px">
+                <ng-container *ngIf="contenedor.imagen">
+                  <img
+                    [ngSrc]="contenedor.imagen"
+                    [alt]="'Error al cargar logo'"
+                    width="120"
+                    height="120"
+                    style="min-width: 120px"
+                    class="img-thumbnail"
+                  />
                 </ng-container>
-                <ng-template #sinContenedores>
-                  <ng-container *ngIf="cargandoContederes; else mensaje">
-                    <tr>
-                      <td style="width: 120px">
-                        <app-comun-skeleton-loading
-                          [height]="120"
-                          [width]="120"
-                        />
-                      </td>
-                      <td>
-                        <app-comun-skeleton-loading [height]="20" [width]="200" />
-                      </td>
-                      <td class="w-150px">
-                        <app-comun-skeleton-loading [height]="20" [width]="150" />
-                      </td>
-                      <td class="w-150px">
-                        <app-comun-skeleton-loading [height]="20" [width]="150" />
-                      </td>
-                    </tr>
-                  </ng-container>
-                  <ng-template #mensaje>
-                    <tr>
-                      <td
-                        colspan="4"
-                        translate="FORMULARIOS.MENSAJES.CONTENEDOR.SINCONTENEDORES"
-                      ></td>
-                    </tr>
-                  </ng-template>
-                </ng-template>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <!--begin::Body-->
-      </div>
-      <!--end::Tables Widget 9-->
+              </td>
+              <td>
+                <div class="h-100 d-flex flex-column justify-content-center">
+                  <p class="text-dark fw-bolder fs-6">
+                    {{ contenedor.nombre }}
+                    <small class="badge badge-light-primary fs-8 fw-bold">{{
+                      contenedor.rol
+                    }}</small>
+                  </p>
+
+                  <span class="text-muted fw-bold text-muted d-block fs-7"
+                    >{{ contenedor.subdominio }}{{ dominioApp }}</span
+                  >
+                </div>
+              </td>
+              <td class="w-150px">
+                <div class="h-100 d-flex flex-column justify-content-center">
+                  <span class="badge badge-light-info fs-8 fw-bold">{{
+                    contenedor.plan_nombre
+                  }}</span>
+                </div>
+              </td>
+              <td>
+                <div
+                  class="h-100 d-flex flex-column justify-content-center align-items-center"
+                >
+                  {{ contenedor.usuarios }} / {{ contenedor.usuarios_base }}
+                </div>
+              </td>
+              <td class="w-50px">
+                <div class="h-100 d-flex flex-column justify-content-center">
+                  <button
+                    href="#"
+                    class="btn btn-bg-primary btn-color-white"
+                    (click)="seleccionarEmpresa(contenedor.contenedor_id)"
+                  >
+                    Conectar
+                  </button>
+                </div>
+              </td>
+              <td class="w-50px">
+                <div class="h-100 d-flex flex-column justify-content-center">
+                  <div
+                    ngbDropdown
+                    class="d-inline-block"
+                    display="dynamic"
+                    placement="end"
+                    *ngIf="contenedor.rol === 'propietario'"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-link text-hover-primary"
+                      id="dropdownBasic1"
+                      ngbDropdownToggle
+                    >
+                      <i class="bi bi-three-dots-vertical fs-2x"></i>
+                    </button>
+                    <div
+                      class="menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary w-200px py-3"
+                      ngbDropdownMenu
+                      aria-labelledby="dropdownBasic1"
+                    >
+                      <div class="menu-item px-3">
+                        <a
+                          [routerLink]="[
+                            '/contenedor/' +
+                              contenedor.nombre +
+                              '/' +
+                              contenedor.contenedor_id +
+                              '/invitacion/nuevo'
+                          ]"
+                          class="menu-link px-3 cursor-pointer"
+                          ngbDropdownItem
+                        >Invitaciones
+                        </a>
+                      </div>
+                      <div class="separator my-2"></div>
+                      <div class="menu-item px-3">
+                        <a
+                          class="menu-link px-3 cursor-pointer"
+                          (click)="detalleEmpresa(contenedor.contenedor_id)"
+                        >Mi contenedor
+                        </a>
+                      </div>
+                      <div class="separator my-2"></div>
+                      <div class="menu-item px-3">
+                        <a
+                          class="menu-link px-3 cursor-pointer bg-hover-light-danger text-danger"
+                          (click)="
+                            eliminarEmpresa(
+                              contenedor.subdominio,
+                              contenedor.contenedor_id
+                            )
+                          "
+                        >Eliminar
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #sinContenedores>
+            <ng-container *ngIf="cargandoContederes; else mensaje">
+              <tr>
+                <td style="width: 120px">
+                  <app-comun-skeleton-loading [height]="120" [width]="120" />
+                </td>
+                <td>
+                  <app-comun-skeleton-loading [height]="20" [width]="200" />
+                </td>
+                <td class="w-150px">
+                  <app-comun-skeleton-loading [height]="20" [width]="150" />
+                </td>
+                <td class="w-150px">
+                  <app-comun-skeleton-loading [height]="20" [width]="150" />
+                </td>
+              </tr>
+            </ng-container>
+            <ng-template #mensaje>
+              <tr>
+                <td
+                  colspan="4"
+                >Sin contenedores</td>
+              </tr>
+            </ng-template>
+          </ng-template>
+        </tbody>
+      </table>
     </div>
-    <!--end::Col-->
-  </div>
-  
+  </nb-card-body>
+</nb-card>

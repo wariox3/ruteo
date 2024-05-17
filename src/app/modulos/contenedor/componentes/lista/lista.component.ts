@@ -3,13 +3,16 @@ import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/cor
 import { ContenedorService } from '../../servicios/contenedor.service';
 import { General } from '../../../../comun/clases/general';
 import { RouterModule } from '@angular/router';
+import { NbButtonModule, NbCardModule  } from '@nebular/theme';
 
 @Component({
   selector: 'app-lista',
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    NbCardModule,
+    NbButtonModule,
   ],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css'],
