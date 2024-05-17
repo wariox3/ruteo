@@ -12,6 +12,7 @@ import {
 import { General } from "../../../../comun/clases/general";
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -22,7 +23,7 @@ import { ContenedorService } from "../../servicios/contenedor.service";
 import { zip, asyncScheduler, Observable, of } from "rxjs";
 import { DevuelveDigitoVerificacionService } from "../../../../comun/servicios/devuelve-digito-verificacion.service";
 import { map, tap, throttleTime } from "rxjs/operators";
-import { NbAutocompleteModule, NbSelectModule } from "@nebular/theme";
+import { NbAlertModule, NbAutocompleteModule, NbInputModule, NbSelectModule } from "@nebular/theme";
 
 @Component({
   selector: "app-formulario",
@@ -34,6 +35,8 @@ import { NbAutocompleteModule, NbSelectModule } from "@nebular/theme";
     ReactiveFormsModule,
     NbSelectModule,
     NbAutocompleteModule,
+    NbInputModule,
+    NbAlertModule,
   ],
   templateUrl: "./formulario.component.html",
   styleUrls: ["./formulario.component.css"],
@@ -46,19 +49,84 @@ export class FormularioComponent extends General implements OnInit {
     DevuelveDigitoVerificacionService
   );
 
-  formularioContenedor: FormGroup;
   arrPlanes: any[] = [];
   arrIdentificacion: any[];
   arrCiudades: any[] = [];
   planSeleccionado: Number = 2;
   procesando = false;
-  @Input() informacionContenedor!: any;
+  @Input() informacionContenedor: any = [];
   @Input() visualizarCampoSubdominio: boolean = true;
   @Input() visualizarBtnAtras: boolean = true;
   @Output() dataFormulario: EventEmitter<any> = new EventEmitter();
 
   @ViewChild("autoInput") input;
   filteredOptions$: Observable<any[]>;
+
+  formularioContenedor = new FormGroup({
+    subdominio: new FormControl(
+      this.informacionContenedor.subdominio,
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(100),
+        Validators.pattern(/^[a-z-0-9]*$/),
+      ])
+    ),
+    nombre: new FormControl(
+      this.informacionContenedor.nombre,
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(100), // Se ha removido la restricción de mayúsculas
+      ]),
+    ), 
+    plan_id: new FormControl(
+      this.planSeleccionado,
+      Validators.compose([Validators.required]),
+    ),
+    direccion: new FormControl(
+      this.informacionContenedor.direccion,
+      Validators.compose([Validators.required, Validators.maxLength(50)]),
+    ),
+    correo: new FormControl(
+      this.informacionContenedor.correo,
+      Validators.compose([
+        Validators.required,
+        Validators.maxLength(255),
+        Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
+      ]),
+    ),
+    ciudad_nombre: new FormControl(this.informacionContenedor.ciudad_nombre),
+    ciudad_id: new FormControl(
+      this.informacionContenedor.ciudad,
+      Validators.compose([Validators.required]),
+    ),
+    numero_identificacion: new FormControl(
+      this.informacionContenedor.numero_identificacion,
+      Validators.compose([
+        Validators.required,
+        Validators.maxLength(20),
+        Validators.pattern(/^[0-9]+$/),
+      ]),
+    ),
+    digito_verificacion: new FormControl(
+      this.informacionContenedor.digito_verificacion,
+      Validators.compose([Validators.required, Validators.maxLength(1)]),
+    ),
+    identificacion_id: new FormControl(
+      this.informacionContenedor.identificacion,
+      Validators.compose([Validators.required]),
+    ),
+    telefono: new FormControl(
+      this.informacionContenedor.telefono,
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(50),
+        Validators.pattern(/^[0-9]+$/),
+      ]),
+    ),
+  });
 
   constructor() {
     super();
@@ -69,7 +137,6 @@ export class FormularioComponent extends General implements OnInit {
       this.informacionContenedor.plan_id !== 0
         ? this.informacionContenedor.plan_id
         : this.planSeleccionado;
-    this.inicializarFormulario();
     this.consultarInformacion();
     this.consultarCiudad(null);
   }
@@ -114,74 +181,6 @@ export class FormularioComponent extends General implements OnInit {
   }
 
   enviar() {}
-
-  inicializarFormulario() {
-    this.formularioContenedor = this.formBuilder.group({
-      subdominio: [
-        this.informacionContenedor.subdominio,
-        Validators.compose([
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(100),
-          Validators.pattern(/^[a-z-0-9]*$/),
-        ]),
-      ],
-      nombre: [
-        this.informacionContenedor.nombre,
-        Validators.compose([
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(100), // Se ha removido la restricción de mayúsculas
-        ]),
-      ],
-      plan_id: [
-        this.planSeleccionado,
-        Validators.compose([Validators.required]),
-      ],
-      direccion: [
-        this.informacionContenedor.direccion,
-        Validators.compose([Validators.required, Validators.maxLength(50)]),
-      ],
-      correo: [
-        this.informacionContenedor.correo,
-        Validators.compose([
-          Validators.required,
-          Validators.maxLength(255),
-          Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
-        ]),
-      ],
-      ciudad_nombre: [this.informacionContenedor.ciudad_nombre],
-      ciudad_id: [
-        this.informacionContenedor.ciudad,
-        Validators.compose([Validators.required]),
-      ],
-      numero_identificacion: [
-        this.informacionContenedor.numero_identificacion,
-        Validators.compose([
-          Validators.required,
-          Validators.maxLength(20),
-          Validators.pattern(/^[0-9]+$/),
-        ]),
-      ],
-      digito_verificacion: [
-        this.informacionContenedor.digito_verificacion,
-        Validators.compose([Validators.required, Validators.maxLength(1)]),
-      ],
-      identificacion_id: [
-        this.informacionContenedor.identificacion,
-        Validators.compose([Validators.required]),
-      ],
-      telefono: [
-        this.informacionContenedor.telefono,
-        Validators.compose([
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(50),
-          Validators.pattern(/^[0-9]+$/),
-        ]),
-      ],
-    });
-  }
 
   modificarCampoFormulario(campo: string, dato: any) {
     this.formularioContenedor?.markAsDirty();
@@ -257,7 +256,7 @@ export class FormularioComponent extends General implements OnInit {
         ciudad_nombre: arrCiudad?.ciudad_nombre,
       });
     }
-    const filterValue = value.toLowerCase();
+    const filterValue = value?.toLowerCase();
     return this.arrCiudades.filter((optionValue) =>
       optionValue.ciudad_nombre.toLowerCase().includes(filterValue)
     );
