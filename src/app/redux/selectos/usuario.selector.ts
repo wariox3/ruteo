@@ -6,3 +6,8 @@ export const obtenerUsuarioNombreCorto = createSelector(
     Usuario,
     (Usuario) => `${Usuario.nombre_corto}`
 )
+
+export const obtenerUsuarioId = createSelector(
+    Usuario,
+    (Usuario) => `${Usuario.id}`
+  );

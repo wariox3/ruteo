@@ -9,7 +9,7 @@ export class ContenedorService {
 
   constructor(private http : HttpClient,) { }
 
-  lista(usuario_id: string) {
+  lista(usuario_id: any) {
     return this.http.post<any>(
       `${environment.url_api}/contenedor/usuariocontenedor/consulta-usuario/`,
       {
