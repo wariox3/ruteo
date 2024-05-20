@@ -16,7 +16,7 @@ export class UsuarioEffects {
         let calcularTiempo = new Date(
             new Date().getTime() + 3 * 60 * 60 * 1000
           );
-          setCookie('usuario', JSON.stringify(action), {
+          setCookie('usuario', JSON.stringify(action.usuario), {
             expires: calcularTiempo,
             path: '/'
           })

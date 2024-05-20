@@ -4,6 +4,7 @@ import { noRequiereToken } from '../../../comun/interceptores/token.interceptor'
 import { environment } from '../../../../environments/environment';
 import { TokenService } from './token.service';
 import { Router } from '@angular/router';
+import { removeCookie } from 'typescript-cookie';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,7 @@ export class AuthService {
   logout() {
     localStorage.clear();
     this.tokenService.eliminar();
+    removeCookie('usuario', { path: '/' })
     this.router.navigate(['']);
   }
 }
