@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule, NgOptimizedImage } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,7 +16,7 @@ import { of } from "rxjs";
 @Component({
   selector: "app-lista",
   standalone: true,
-  imports: [CommonModule, RouterModule, NbCardModule, NbButtonModule],
+  imports: [CommonModule, RouterModule, NbCardModule, NbButtonModule, NgOptimizedImage],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush,
