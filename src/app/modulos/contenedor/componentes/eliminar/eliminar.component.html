@@ -1,0 +1,49 @@
+<form
+  (ngSubmit)="eliminar()"
+  [formGroup]="formularioEliminar"
+  #form="ngForm"
+  aria-labelledby="title"
+>
+  <div class="row mb-10">
+    <div class="col-md-12 col-sm-12">
+      <label class="label required">Subdominio</label>
+      <input
+        nbInput
+        fullWidth
+        formControlName="nombre"
+        type="text"
+        autocomplete="off"
+        autofocus
+        [status]="
+          formularioEliminar.get('nombre').dirty
+            ? formularioEliminar.get('nombre').invalid
+              ? 'danger'
+              : 'success'
+            : 'basic'
+        "
+        [attr.aria-invalid]="
+          formularioEliminar.get('nombre').invalid &&
+          formularioEliminar.get('nombre').touched
+            ? true
+            : null
+        "
+      />
+      <ng-container
+        *ngIf="
+          formularioEliminar.get('nombre').invalid &&
+          formularioEliminar.get('nombre').touched
+        "
+      >
+        <p
+          class="caption status-danger"
+          *ngIf="formularioEliminar.get('nombre').errors?.required"
+        >
+          El subdominio es requerido!
+        </p>
+      </ng-container>
+    </div>
+  </div>
+  <div>
+    <button nbButton type="submit" status="primary" #btnGuardar>Guardar</button>
+  </div>
+</form>

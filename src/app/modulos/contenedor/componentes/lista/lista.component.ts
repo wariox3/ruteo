@@ -14,11 +14,13 @@ import {
   NbContextMenuModule,
   NbIconModule,
   NbMenuService,
+  NbWindowService,
 } from "@nebular/theme";
 import { obtenerUsuarioId } from "../../../../redux/selectos/usuario.selector";
-import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
+import { catchError, switchMap, tap } from "rxjs/operators";
 import { of } from "rxjs";
 import { NbEvaIconsModule } from "@nebular/eva-icons";
+import { EliminarComponent } from "../eliminar/eliminar.component";
 
 @Component({
   selector: "app-lista",
@@ -38,29 +40,37 @@ import { NbEvaIconsModule } from "@nebular/eva-icons";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListaComponent extends General implements OnInit {
-  arrContenedores: any[] = [];
   private contenedorService = inject(ContenedorService);
-  private menuService= inject(NbMenuService);
-  
-  items = [{ title: 'Invitaciones' }, { title: 'Mi contenedor' }, { title: 'Eliminar' }];
+  private menuService = inject(NbMenuService);
+  private windowService = inject(NbWindowService);
+  arrContenedores: any[] = [];
   contenedor: any = [];
-  dominioApp = '.reddoc.online'
+  dominioApp = ".reddoc.online";
+  items = [
+    { title: "Invitaciones" },
+    { title: "Mi contenedor" },
+    { title: "Eliminar" },
+  ];
 
   ngOnInit() {
     this.consultarLista();
     this.menu();
   }
 
-  menu(){
+  menu() {
     this.menuService.onItemClick().subscribe((evento) => {
-      if (evento.item.title == "Eliminar") {
-        this.eliminarContenedor();
+      if (evento.item.title == "Invitaciones") {
+        this.router.navigateByUrl(
+          `/contenedor/${this.contenedor.nombre}/${this.contenedor.contenedor_id}/invitacion/nuevo`
+        );
       }
       if (evento.item.title == "Mi contenedor") {
-        this.router.navigateByUrl(`/contenedor/detalle/${this.contenedor.contenedor_id}`)
+        this.router.navigateByUrl(
+          `/contenedor/detalle/${this.contenedor.contenedor_id}`
+        );
       }
-      if (evento.item.title == "Invitaciones") {
-        this.router.navigateByUrl(`/contenedor/${this.contenedor.nombre}/${this.contenedor.contenedor_id}/invitacion/nuevo`)
+      if (evento.item.title == "Eliminar") {
+        this.eliminarContenedor();
       }
     });
   }
@@ -91,12 +101,12 @@ export class ListaComponent extends General implements OnInit {
     this.router.navigateByUrl("/dashboard");
   }
 
-  eliminarContenedor(){
- 
+  eliminarContenedor() {
+    this.windowService.open(EliminarComponent, { title: `Eliminar contenedor`, context: this.contenedor });
   }
 
-  onMenuItemClick(contenedor:any){
-    this.contenedor = contenedor
+  onMenuItemClick(contenedor: any) {
+    this.contenedor = contenedor;
     this.changeDetectorRef.detectChanges();
   }
 }
