@@ -20,14 +20,20 @@ export const routes: Route[] = [
             (m) => m.NuevoComponent
         )
   },
-//   {
-//     path: '',
-//     loadChildren: () =>
-//       import('../../pages/dashboard/dashboard.module').then(
-//         (m) => m.DashboardModule
-//       ),
-//   },
-  //   import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+  {
+    path: ':contenedorNombre/:contenedorCodigo/invitacion/nuevo',
+    loadComponent: () =>
+      import('./componentes/invitacion/invitacion.component').then(
+        (m) => m.InvitacionComponent
+      )
+  },
+  {
+    path: 'detalle/:contenedorCodigo',
+    loadComponent: () =>
+      import('./componentes/detalle/detalle.component').then(
+        (m) => m.DetalleComponent
+      )
+  },
   { path: '', redirectTo: 'lista', pathMatch: 'full' },
   { path: '**', redirectTo: 'lista', pathMatch: 'full' },
 ];

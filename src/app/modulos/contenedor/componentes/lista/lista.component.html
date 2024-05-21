@@ -67,75 +67,31 @@
                   {{ contenedor.usuarios }} / {{ contenedor.usuarios_base }}
                 </div>
               </td>
-              <td class="w-50px">
-                <div class="h-100 d-flex flex-column justify-content-center">
+              <td>
+                <div>
                   <button
+                    nbButton
                     href="#"
-                    class="btn btn-bg-primary btn-color-white"
+                    status="primary"
                     (click)="seleccionarEmpresa(contenedor.contenedor_id)"
                   >
                     Conectar
                   </button>
                 </div>
               </td>
-              <td class="w-50px">
-                <div class="h-100 d-flex flex-column justify-content-center">
+              <td>
+                <div>
                   <div
-                    ngbDropdown
-                    class="d-inline-block"
-                    display="dynamic"
-                    placement="end"
                     *ngIf="contenedor.rol === 'propietario'"
                   >
                     <button
+                      nbButton
                       type="button"
-                      class="btn btn-link text-hover-primary"
-                      id="dropdownBasic1"
-                      ngbDropdownToggle
+                      [nbContextMenu]="items" nbContextMenuTrigger="click"
+                      (click)="onMenuItemClick(contenedor)"
                     >
-                      <i class="bi bi-three-dots-vertical fs-2x"></i>
+                      <nb-icon icon="more-vertical-outline"></nb-icon>
                     </button>
-                    <div
-                      class="menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary w-200px py-3"
-                      ngbDropdownMenu
-                      aria-labelledby="dropdownBasic1"
-                    >
-                      <div class="menu-item px-3">
-                        <a
-                          [routerLink]="[
-                            '/contenedor/' +
-                              contenedor.nombre +
-                              '/' +
-                              contenedor.contenedor_id +
-                              '/invitacion/nuevo'
-                          ]"
-                          class="menu-link px-3 cursor-pointer"
-                          ngbDropdownItem
-                        >Invitaciones
-                        </a>
-                      </div>
-                      <div class="separator my-2"></div>
-                      <div class="menu-item px-3">
-                        <a
-                          class="menu-link px-3 cursor-pointer"
-                          (click)="detalleEmpresa(contenedor.contenedor_id)"
-                        >Mi contenedor
-                        </a>
-                      </div>
-                      <div class="separator my-2"></div>
-                      <div class="menu-item px-3">
-                        <a
-                          class="menu-link px-3 cursor-pointer bg-hover-light-danger text-danger"
-                          (click)="
-                            eliminarEmpresa(
-                              contenedor.subdominio,
-                              contenedor.contenedor_id
-                            )
-                          "
-                        >Eliminar
-                        </a>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </td>
