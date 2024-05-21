@@ -38,7 +38,7 @@
           class="caption status-danger"
           *ngIf="formularioContenedor.get('subdominio').errors?.required"
         >
-          El subdominio es requerido!
+          El campo es requerido!
         </p>
       </ng-container>
       <ng-container
@@ -92,7 +92,7 @@
           class="caption status-danger"
           *ngIf="formularioContenedor.get('nombre').errors?.required"
         >
-          El nombre es requerido!
+          El campo es requerido!
         </p>
       </ng-container>
     </div>
@@ -121,6 +121,21 @@
             : null
         "
       />
+      <ng-container
+        *ngIf="
+          formularioContenedor.get('numero_identificacion').invalid &&
+          formularioContenedor.get('numero_identificacion').touched
+        "
+      >
+        <p
+          class="caption status-danger"
+          *ngIf="
+            formularioContenedor.get('numero_identificacion').errors?.required
+          "
+        >
+          El campo es requerido!
+        </p>
+      </ng-container>
     </div>
     <div class="col-md-2 col-sm-12">
       <label class="label required">Digito verificación</label>
@@ -159,6 +174,19 @@
           >{{ identificacion.identificacion_nombre }}</nb-option
         >
       </nb-select>
+      <ng-container
+        *ngIf="
+          formularioContenedor.get('identificacion_id').invalid &&
+          formularioContenedor.get('identificacion_id').touched
+        "
+      >
+        <p
+          class="caption status-danger"
+          *ngIf="formularioContenedor.get('identificacion_id').errors?.required"
+        >
+          El campo es requerido!
+        </p>
+      </ng-container>
     </div>
   </div>
   <div class="row mb-10">
@@ -171,7 +199,6 @@
         formControlName="ciudad_nombre"
         type="text"
         (input)="onChange()"
-        placeholder="Enter value"
         [nbAutocomplete]="auto"
       />
       <nb-autocomplete #auto (selectedChange)="onSelectionChange($event)">
@@ -183,6 +210,19 @@
           {{ option.ciudad_nombre }}
         </nb-option>
       </nb-autocomplete>
+      <ng-container
+        *ngIf="
+          formularioContenedor.get('ciudad_nombre').invalid &&
+          formularioContenedor.get('ciudad_nombre').touched
+        "
+      >
+        <p
+          class="caption status-danger"
+          *ngIf="formularioContenedor.get('ciudad_nombre').errors?.required"
+        >
+          El campo es requerido!
+        </p>
+      </ng-container>
     </div>
     <div class="col-md-6 col-sm-12">
       <label class="label required">Dirección</label>
@@ -206,6 +246,19 @@
             : null
         "
       />
+      <ng-container
+        *ngIf="
+          formularioContenedor.get('direccion').invalid &&
+          formularioContenedor.get('direccion').touched
+        "
+      >
+        <p
+          class="caption status-danger"
+          *ngIf="formularioContenedor.get('direccion').errors?.required"
+        >
+          El campo es requerido!
+        </p>
+      </ng-container>
     </div>
   </div>
   <div class="row mb-10">
@@ -231,6 +284,19 @@
             : null
         "
       />
+      <ng-container
+        *ngIf="
+          formularioContenedor.get('correo').invalid &&
+          formularioContenedor.get('correo').touched
+        "
+      >
+        <p
+          class="caption status-danger"
+          *ngIf="formularioContenedor.get('correo').errors?.required"
+        >
+          El campo es requerido!
+        </p>
+      </ng-container>
     </div>
     <div class="col-md-6 col-sm-12">
       <label class="label required">Teléfono</label>
@@ -254,6 +320,19 @@
             : null
         "
       />
+      <ng-container
+      *ngIf="
+        formularioContenedor.get('telefono').invalid &&
+        formularioContenedor.get('telefono').touched
+      "
+    >
+      <p
+        class="caption status-danger"
+        *ngIf="formularioContenedor.get('telefono').errors?.required"
+      >
+        El campo es requerido!
+      </p>
+    </ng-container>
     </div>
   </div>
   <div class="row mb-10">
