@@ -9,6 +9,7 @@ import { ContenedorService } from "../../servicios/contenedor.service";
 import { General } from "../../../../comun/clases/general";
 import { RouterModule } from "@angular/router";
 import {
+  NbBadgeModule,
   NbButtonModule,
   NbCardModule,
   NbContextMenuModule,
@@ -34,6 +35,7 @@ import { EliminarComponent } from "../eliminar/eliminar.component";
     NbContextMenuModule,
     NbEvaIconsModule,
     NbIconModule,
+    NbBadgeModule,
   ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.css"],
