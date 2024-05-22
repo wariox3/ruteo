@@ -5,7 +5,7 @@
       (change)="propiedadSeleccionada($event)"
     >
       <option value="">
-        {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR" | translate }}
+        {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR" }}
       </option>
       <ng-container *ngFor="let propiedad of camposVisibles">
         <option
@@ -31,11 +31,11 @@
               ? ("LISTAS." +
                   (tipo | uppercase) +
                   "." +
-                  (propiedad.modeloFk | uppercase) | translate)
+                  (propiedad.modeloFk | uppercase) )
               : ("LISTAS." +
                   (tipo | uppercase) +
                   "." +
-                  (propiedad.nombre | uppercase) | translate)
+                  (propiedad.nombre | uppercase) )
           }}
         </option>
       </ng-container>
@@ -48,7 +48,7 @@
       (change)="onCriterioSeleccionado($event)"
     >
       <option value="">
-        {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR" | translate }}
+        {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR"}}
       </option>
       <option
         *ngFor="let criterioBusqueda of criteriosBusqueda"
@@ -57,7 +57,7 @@
       >
         {{
           "FORMULARIOS.CAMPOS.FILTROS.OPERADORES." +
-            (criterioBusqueda.texto | uppercase) | translate
+            (criterioBusqueda.texto | uppercase) 
         }}
       </option>
     </select>

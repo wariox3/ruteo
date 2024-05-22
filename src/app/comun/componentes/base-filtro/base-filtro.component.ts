@@ -1,8 +1,4 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-import { TranslationModule } from '@modulos/i18n';
 import {
   FormArray,
   FormBuilder,
@@ -12,8 +8,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { BaseFiltroFormularioComponent } from '../base-filtro-formulario/base-filtro-formulario.component';
-import { FiltrosAplicados, Listafiltros } from '@interfaces/comunes/filtros';
-import { General } from '@comun/clases/general';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { General } from '../../clases/general';
 
 @Component({
   selector: 'app-base-filtro',
@@ -22,8 +19,6 @@ import { General } from '@comun/clases/general';
   imports: [
     CommonModule,
     RouterModule,
-    TranslateModule,
-    TranslationModule,
     FormsModule,
     ReactiveFormsModule,
     BaseFiltroFormularioComponent,
@@ -31,9 +26,9 @@ import { General } from '@comun/clases/general';
 })
 export class BaseFiltroComponent extends General implements OnInit {
   formularioItem: FormGroup;
-  listaFiltros: Listafiltros[] = [];
-  modelo: any = this.modelo;
-  filtrosAplicados: FiltrosAplicados[] = [
+  listaFiltros: any[] = [];
+  // modelo: any = this.modelo;
+  filtrosAplicados: any[] = [
     {
       propiedad: '',
       operador: '',
@@ -42,7 +37,7 @@ export class BaseFiltroComponent extends General implements OnInit {
       visualizarBtnAgregarFiltro: true,
     },
   ];
-  @Input() propiedades: Listafiltros[];
+  @Input() propiedades: any[];
   @Input() persistirFiltros: boolean = true;
   @Output() emitirFiltros: EventEmitter<any> = new EventEmitter();
   nombreFiltro = ``;
@@ -214,10 +209,10 @@ export class BaseFiltroComponent extends General implements OnInit {
         this.emitirFiltros.emit(this.listaFiltros);
       }
     } else {
-      this.alertaService.mensajeError(
-        'Error en formulario filtros',
-        'contiene campos vacios'
-      );
+      // this.alertaService.mensajeError(
+      //   'Error en formulario filtros',
+      //   'contiene campos vacios'
+      // );
     }
   }
 
