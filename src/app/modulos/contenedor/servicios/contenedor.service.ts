@@ -64,4 +64,10 @@ export class ContenedorService {
     );
   }
 
+  detalle(codigoContenedor: string) {
+    return this.http.get<any>(
+      `${environment.url_api}/contenedor/contenedor/${codigoContenedor}/`
+    );
+  }
+
 }

@@ -29,6 +29,7 @@ export class AuthService {
     localStorage.clear();
     this.tokenService.eliminar();
     removeCookie('usuario', { path: '/' })
-    this.router.navigate(['']);
+    removeCookie('contenedor', { path: '/' })
+    window.location.href = ''
   }
 }

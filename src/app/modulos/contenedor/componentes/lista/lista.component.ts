@@ -22,6 +22,7 @@ import { catchError, switchMap, tap } from "rxjs/operators";
 import { of } from "rxjs";
 import { NbEvaIconsModule } from "@nebular/eva-icons";
 import { EliminarComponent } from "../eliminar/eliminar.component";
+import { ContenedorActionInit } from "../../../../redux/actions/contenedor.actions";
 
 @Component({
   selector: "app-lista",
@@ -99,8 +100,36 @@ export class ListaComponent extends General implements OnInit {
       .subscribe();
   }
 
-  seleccionarEmpresa() {
-    this.router.navigateByUrl("/dashboard");
+  seleccionarEmpresa(contenedor_id: string) {
+    this.contenedorService.detalle(contenedor_id).subscribe(
+      (respuesta) => {
+        const contenedor: any = {
+          nombre: respuesta.nombre,
+          imagen:
+            'https://es.expensereduction.com/wp-content/uploads/2018/02/logo-placeholder.png',
+          contenedor_id: respuesta.id,
+          subdominio: respuesta.subdominio,
+          id: respuesta.id,
+          usuario_id: 1,
+          seleccion: true,
+          rol: respuesta.rol,
+          plan_id: null,
+          plan_nombre: null,
+          usuarios: 1,
+          usuarios_base: 0,
+          ciudad: 0,
+          correo: '',
+          direccion: '',
+          identificacion: 0,
+          nombre_corto: '',
+          numero_identificacion: 0,
+          telefono: '',
+        };
+        this.store.dispatch(ContenedorActionInit({ contenedor }));
+        this.router.navigateByUrl("/dashboard");
+      }
+    )
+
   }
 
   eliminarContenedor() {

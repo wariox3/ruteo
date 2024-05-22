@@ -13,6 +13,7 @@ import { Subject } from "rxjs";
 import { AuthService } from "../../../modulos/auth/servicios/auth.service";
 import { Store } from "@ngrx/store";
 import { obtenerUsuarioNombreCorto } from "../../../redux/selectos/usuario.selector";
+import { obtenerContenedorSeleccion } from "../../../redux/selectos/contenedor.selectors";
 
 @Component({
   selector: "ngx-header",
@@ -25,6 +26,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   user: any;
   usuarioNombreCorto$ = this.store.select(obtenerUsuarioNombreCorto);
   usuarioNombreCorto = "";
+  iconoMenuVisible$ = this.store.select(obtenerContenedorSeleccion);
+  
 
   themes = [
     {
