@@ -249,12 +249,14 @@ export class FormularioComponent extends General implements OnInit {
   }
 
   calcularDigitoVerificacion() {
-    let digito = this.devuelveDigitoVerificacionService.digitoVerificacion(
-      this.formularioContenedor.get("numero_identificacion")?.value
-    );
-    this.formularioContenedor.patchValue({
-      digito_verificacion: digito,
-    });
+    if(this.formularioContenedor.get("numero_identificacion").value){
+      let digito = this.devuelveDigitoVerificacionService.digitoVerificacion(
+        this.formularioContenedor.get("numero_identificacion")?.value
+      );
+      this.formularioContenedor.patchValue({
+        digito_verificacion: digito,
+      });
+    }
   }
 
   private filter(value: string): string[] {

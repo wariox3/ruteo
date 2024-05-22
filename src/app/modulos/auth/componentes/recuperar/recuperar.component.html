@@ -1,0 +1,57 @@
+<h1 id="title" class="title">Recuperar contraseña</h1>
+<p class="sub-title">Introduce tu dirección de correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</p>
+
+<nb-alert *ngIf="showMessages.error && errors?.length && !submitted" outline="danger" role="alert">
+    <p class="alert-title"><b>Oh snap!</b></p>
+    <ul class="alert-message-list">
+      <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+    </ul>
+  </nb-alert>
+  
+  <nb-alert *ngIf="showMessages.success && messages?.length && !submitted" outline="success" role="alert">
+    <p class="alert-title"><b>Hooray!</b></p>
+    <ul class="alert-message-list">
+      <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>
+    </ul>
+  </nb-alert>
+  
+
+<form (ngSubmit)="recuperar()" [formGroup]="formulario" #requestPassForm="ngForm" aria-labelledby="title">
+
+  <div class="form-control-group">
+    <label class="label" for="input-email">Ingresa tu dirección de correo electrónico:</label>
+    <input nbInput
+           formControlName="email"
+           id="input-email"
+           name="email"
+           pattern=".+@.+\..+"
+           placeholder="Email address"
+           autofocus
+           fullWidth
+           fieldSize="large"
+           [status]="formulario.get('email').dirty ? (formulario.get('email').invalid  ? 'danger' : 'success') : 'basic'"
+           [attr.aria-invalid]="formulario.get('email').invalid && formulario.get('email').touched ? true : null">
+    <ng-container *ngIf="formulario.get('email').invalid && formulario.get('email').touched">
+      <p class="caption status-danger" *ngIf="formulario.get('email').errors?.required">
+        El correo es requerido
+      </p>
+      <p class="caption status-danger" *ngIf="formulario.get('email').errors?.pattern">
+        El correo debe ser válido
+      </p>
+    </ng-container>
+  </div>
+
+  <button nbButton
+          fullWidth
+          status="primary"
+          size="large"
+          [disabled]="submitted || !requestPassForm.valid"
+          [class.btn-pulse]="submitted">
+    Recuperar contraseña
+  </button>
+</form>
+
+<section class="sign-in-or-up" aria-label="Sign in or sign up">
+  <a class="text-link" routerLink="/auth/login">Volver al login</a>
+  <a routerLink="/auth/register" class="text-link">Registro</a>
+</section>

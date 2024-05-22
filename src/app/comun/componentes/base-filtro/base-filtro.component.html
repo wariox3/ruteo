@@ -1,0 +1,45 @@
+<form [formGroup]="formularioItem">
+  <div formArrayName="filtros">
+    <div
+      class="row mb-6"
+      *ngFor="let filtro of filtros.controls; let i = index"
+    >
+      <div class="col-12 col-md-11 mb-2" [formGroupName]="i">
+        <app-base-filtro-formulario
+          [datosSeleccionados]="filtrosAplicados[i]"
+          (dataPropiedad)="actualizarPropiedad($event, i)"
+          (dataOperador)="actualizarOperador($event, i)"
+          (dataValor1)="actualizarValor1($event, i)"
+        ></app-base-filtro-formulario>
+      </div>
+      <div class="col-12 col-md-1" [formGroupName]="i">
+        <div class="d-flex justify-content-end">
+          <i
+            class="bi bi-plus-lg fs-2x align-self-center cursor-pointer user-select-none text-hover-primary"
+            (click)="agregarNuevoFiltro()"
+          ></i>
+          <i
+            (click)="eliminarFiltro(i)"
+            *ngIf="filtros.length > 1"
+            class="bi bi-trash fs-2x align-self-center cursor-pointer user-select-none text-hover-danger"
+          ></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end gap-2">
+    <button
+      type="submit"
+      class="btn btn-primary btn-sm"
+      (click)="limpiarFormulario()"
+      *ngIf="filtros.length >= 1"
+      translate="FORMULARIOS.TITULOS.COMUNES.LIMPIAR"
+    ></button>
+    <button
+      translate="FORMULARIOS.TITULOS.COMUNES.FILTRAR"
+      type="submit"
+      class="btn btn-primary btn-sm"
+      (click)="aplicarFiltro()"
+    ></button>
+  </div>
+</form>

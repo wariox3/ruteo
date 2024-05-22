@@ -1,0 +1,262 @@
+<div class="row mb-4 justify-content-between gap-sm-5">
+  <div class="col-md-5 col-sm-12 d-flex align-items-center gap-3 mb-2">
+    <i
+      (click)="disminuirDesplazamiento()"
+      class="bi bi-arrow-left fs-2x cursor-pointer"
+    ></i>
+    <input
+      type="text"
+      class="form-control form-control-sm w-100px"
+      [value]="lado + 1 + '-' + al"
+      (blur)="calcularValorMostrar($event)"
+    />
+    <span>de</span>
+    <span>{{ cantidad_registros }}</span>
+    <i
+      (click)="aumentarDesplazamiento()"
+      class="bi bi-arrow-right fs-2x cursor-pointer"
+    ></i>
+  </div>
+  <div class="col-md-5 col-sm-12 d-flex justify-content-end">
+    <div
+      class="btn-group contenedor-btn-group"
+      data-toggle="buttons"
+      [ngClass]="{ 'btn-toolbar': btnGrupoResponsive }"
+    >
+      <app-importar
+        modelo="{{ modelo }}"
+        *ngIf="visualizarBtnImportar"
+      ></app-importar>
+      <div
+        class="btn-group"
+        ngbDropdown
+        role="group"
+        *ngIf="visualizarBtnExportar"
+      >
+        <button
+          type="button"
+          class="btn btn-sm btn-flex bg-body btn-color-gray-700 btn-active-primary btn-text-primary"
+          ngbDropdownToggle
+        >
+          {{ "FORMULARIOS.BOTONES.COMUNES.EXPORTAR" | translate }}
+        </button>
+        <div class="dropdown-menu p-2" ngbDropdownMenu>
+          <button ngbDropdownItem (click)="exportarExcel()">
+            {{ "FORMULARIOS.BOTONES.COMUNES.EXCEL" | translate }}
+          </button>
+        </div>
+      </div>
+      <button
+        (click)="navegarNuevo()"
+        class="btn btn-sm btn-flex bg-body btn-color-gray-700 btn-active-primary btn-text-primary"
+        translate="FORMULARIOS.BOTONES.COMUNES.NUEVO"
+        *ngIf="visualizarBtnNuevo"
+      ></button>
+      <div class="btn-group" ngbDropdown role="group">
+        <button
+          type="button"
+          class="btn btn-sm btn-flex bg-body btn-color-gray-700 btn-active-primary btn-text-primary"
+          ngbDropdownToggle
+        >
+          {{ "FORMULARIOS.TITULOS.COMUNES.COLUMNAS" | translate }}
+        </button>
+        <div class="dropdown-menu p-2" ngbDropdownMenu>
+          <div>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="Buscar"
+              (keyup)="filterCampos($event)"
+            />
+          </div>
+          <div class="dropdown-divider my-2"></div>
+          <div>
+            <div class="form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="dropdownCheck"
+                (change)="visualizarColumnas()"
+              />
+              <label class="form-check-label" for="dropdownCheck">
+                seleccionar todos
+              </label>
+            </div>
+          </div>
+          <div class="dropdown-divider my-2"></div>
+          <ng-container *ngFor="let item of columnas; let i = index">
+            <div class="mb-2">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  [id]="item.nombre"
+                  [checked]="item.visibleTabla ? true : false"
+                  (click)="agregarColumna(item.nombre)"
+                  [disabled]="item.nombre === 'ID'"
+                />
+                <label class="form-check-label" [for]="item.nombre">
+                  {{
+                    "LISTAS." +
+                      (tipo | uppercase) +
+                      "." +
+                      (item.nombre | uppercase) | translate
+                  }}
+                </label>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <button
+        type="button"
+        *ngIf="visualizarBtnEliminar"
+        (click)="eliminarRegistros()"
+        class="btn btn-sm btn-flex bg-body btn-color-gray-700 btn-active-danger btn-text-danger"
+        translate="FORMULARIOS.BOTONES.COMUNES.ELIMINAR"
+      ></button>
+    </div>
+  </div>
+</div>
+<div class="table-responsive table-loading">
+  <table
+    class="table table-hover table-bordered table-rounded border gy-2 gs-2"
+  >
+    <thead>
+      <tr class="fw-bold text-gray-800">
+        <ng-container *ngFor="let item of columnasVibles; let i = index">
+          <th
+            (click)="item.ordenable && orderPor(item.nombre, i)"
+            [ngClass]="{ 'cursor-pointer user-select-none': item.ordenable }"
+          >
+            <div class="d-flex justify-content-between">
+              <div style="flex: 1; text-align: center">
+                {{
+                  "LISTAS." +
+                    (tipo | uppercase) +
+                    "." +
+                    (item.nombreAbreviado
+                      ? (item.nombreAbreviado | uppercase)
+                      : (item.nombre | uppercase)) | translate
+                }}
+              </div>
+              <div *ngIf="item.ordenable">
+                <ng-container
+                  *ngIf="
+                    this.ordenadoTabla === item.nombre.toLowerCase() ||
+                      this.ordenadoTabla === '-' + item.nombre.toLowerCase();
+                    else iconopordefecto
+                  "
+                >
+                  <i
+                    class="ki-outline ki-arrow-up fs-2"
+                    *ngIf="this.ordenadoTabla === item.nombre.toLowerCase()"
+                  ></i>
+                  <i
+                    class="ki-outline ki-arrow-down fs-2"
+                    *ngIf="
+                      this.ordenadoTabla === '-' + item.nombre.toLowerCase()
+                    "
+                  ></i>
+                </ng-container>
+                <ng-template #iconopordefecto>
+                  <i class="ki-outline ki-arrow-up-down fs-2"></i>
+                </ng-template>
+              </div>
+            </div>
+          </th>
+        </ng-container>
+        <th *ngIf="visualizarColumnaEditar"></th>
+        <th *ngIf="visualizarColumnaDetalle"></th>
+        <th class="text-center" *ngIf="visualizarColumnaSeleccionar">
+          <label [for]="selectAll">
+            <i
+              class="cursor-pointer"
+              [ngClass]="
+                checkboxSelectAll.checked
+                  ? 'ki-duotone ki-check-square text-danger'
+                  : 'fa-regular fa-square text-gray-500'
+              "
+            >
+              <span class="path1"></span>
+              <span class="path2"></span>
+            </i>
+
+            <input
+              class="d-none"
+              type="checkbox"
+              #checkboxSelectAll
+              [id]="selectAll"
+              [checked]="selectAll"
+              [value]="selectAll"
+              (change)="toggleSelectAll()"
+            />
+          </label>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let item of datosFiltrados; let i = index"
+        appAnimationFadeinUp
+      >
+        <td
+          *ngFor="let key of item | keys"
+          [ngClass]="{
+            'text-end': item[key].aplicaFormatoNumerico,
+            'text-center': item[key].campoTipo === 'Booleano'
+          }"
+        >
+          {{ getTipoDato(item[key].valor, item[key]) }}
+        </td>
+        <td class="w-45px" *ngIf="visualizarColumnaEditar">
+          <label
+            (click)="navegarEditar(item['id'].valor)"
+            class="cursor-pointer"
+            *ngIf="visualizarBtnEstado(item)"
+          >
+            <i class="ki-duotone ki-notepad-edit hover-primary">
+              <span class="path1"></span>
+              <span class="path2"></span>
+            </i>
+          </label>
+        </td>
+        <td class="w-45px" *ngIf="visualizarColumnaDetalle">
+          <label
+            (click)="navegarDetalle(item['id'].valor)"
+            class="cursor-pointer"
+          >
+            <i class="ki-duotone ki-document hover-primary">
+              <span class="path1"></span>
+              <span class="path2"></span>
+            </i>
+          </label>
+        </td>
+        <td class="w-20px" *ngIf="visualizarColumnaSeleccionar">
+          <label [for]="item['id'].valor">
+            <i
+              class="cursor-pointer"
+              [ngClass]="
+                checked.checked
+                  ? 'ki-duotone ki-check-square text-danger'
+                  : 'fa-regular fa-square text-gray-500'
+              "
+            >
+              <span class="path1"></span>
+              <span class="path2"></span>
+            </i>
+            <input
+              #checked
+              class="d-none"
+              type="checkbox"
+              [id]="item['id'].valor"
+              [value]="item['id'].valor"
+              (change)="agregarRegistrosEliminar(item['id'].valor)"
+              [checked]="item.selected"
+            />
+          </label>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

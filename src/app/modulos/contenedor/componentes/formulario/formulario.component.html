@@ -212,13 +212,13 @@
       </nb-autocomplete>
       <ng-container
         *ngIf="
-          formularioContenedor.get('ciudad_nombre').invalid &&
-          formularioContenedor.get('ciudad_nombre').touched
+          formularioContenedor.get('ciudad_id').invalid &&
+          formularioContenedor.get('ciudad_id').touched
         "
       >
         <p
           class="caption status-danger"
-          *ngIf="formularioContenedor.get('ciudad_nombre').errors?.required"
+          *ngIf="formularioContenedor.get('ciudad_id').errors?.required"
         >
           El campo es requerido!
         </p>

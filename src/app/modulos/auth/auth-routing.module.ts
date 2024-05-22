@@ -1,23 +1,28 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { NgxLoginComponent } from './componentes/login/login.component'
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { NgxLoginComponent } from "./componentes/login/login.component";
 
-import { NbAuthComponent } from '@nebular/auth'; 
-import { NgxRegistroComponent } from './componentes/registro/registro.component';
+import { NbAuthComponent } from "@nebular/auth";
+import { NgxRegistroComponent } from "./componentes/registro/registro.component";
+import { RecuperarComponent } from "./componentes/recuperar/recuperar.component";
 export const routes: Routes = [
   {
-    path: '',
+    path: "",
     component: NbAuthComponent,
     children: [
-        {
-          path: 'login',
-          component: NgxLoginComponent,
-        },
-          {
-          path: 'register',
-          component: NgxRegistroComponent,
-        },
-      ],
+      {
+        path: "login",
+        component: NgxLoginComponent,
+      },
+      {
+        path: "register",
+        component: NgxRegistroComponent,
+      },
+      {
+        path: "reset-password",
+        component:  RecuperarComponent,
+      },
+    ],
   },
 ];
 
@@ -25,5 +30,4 @@ export const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class NgxAuthRoutingModule {
-}
+export class NgxAuthRoutingModule {}
