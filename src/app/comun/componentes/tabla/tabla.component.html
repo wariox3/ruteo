@@ -38,11 +38,11 @@
           class="btn btn-sm btn-flex bg-body btn-color-gray-700 btn-active-primary btn-text-primary"
           ngbDropdownToggle
         >
-          {{ "FORMULARIOS.BOTONES.COMUNES.EXPORTAR" | translate }}
+          {{ "FORMULARIOS.BOTONES.COMUNES.EXPORTAR" }}
         </button>
         <div class="dropdown-menu p-2" ngbDropdownMenu>
           <button ngbDropdownItem (click)="exportarExcel()">
-            {{ "FORMULARIOS.BOTONES.COMUNES.EXCEL" | translate }}
+            {{ "FORMULARIOS.BOTONES.COMUNES.EXCEL" }}
           </button>
         </div>
       </div>
@@ -58,7 +58,7 @@
           class="btn btn-sm btn-flex bg-body btn-color-gray-700 btn-active-primary btn-text-primary"
           ngbDropdownToggle
         >
-          {{ "FORMULARIOS.TITULOS.COMUNES.COLUMNAS" | translate }}
+          {{ "FORMULARIOS.TITULOS.COMUNES.COLUMNAS" }}
         </button>
         <div class="dropdown-menu p-2" ngbDropdownMenu>
           <div>
@@ -100,7 +100,7 @@
                     "LISTAS." +
                       (tipo | uppercase) +
                       "." +
-                      (item.nombre | uppercase) | translate
+                      (item.nombre | uppercase)
                   }}
                 </label>
               </div>
@@ -137,7 +137,7 @@
                     "." +
                     (item.nombreAbreviado
                       ? (item.nombreAbreviado | uppercase)
-                      : (item.nombre | uppercase)) | translate
+                      : (item.nombre | uppercase))
                 }}
               </div>
               <div *ngIf="item.ordenable">

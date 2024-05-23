@@ -12,20 +12,8 @@ import {
 } from '@angular/core';
 import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { KeysPipe } from '@pipe/keys.pipe';
-import { TranslateModule } from '@ngx-translate/core';
-import { TranslationModule } from '@modulos/i18n';
-import { ImportarComponent } from '../importar/importar.component';
-import { General } from '@comun/clases/general';
-import { interval, take } from 'rxjs';
-import { AnimationFadeinUpDirective } from '@comun/Directive/AnimationFadeinUp.directive';
-import {
-  obtenerMenuDataMapeo,
-  obtenerMenuDataMapeoBuscarCampo,
-  obtenerMenuDataMapeoCamposVisibleTabla,
-} from '@redux/selectors/menu.selectors';
-import { ActualizarCampoMapeo } from '@redux/actions/menu.actions';
+import { General } from '../../clases/general';
+
 
 @Component({
   selector: 'app-comun-tabla',
@@ -36,12 +24,6 @@ import { ActualizarCampoMapeo } from '@redux/actions/menu.actions';
   imports: [
     CommonModule,
     FormsModule,
-    NgbDropdownModule,
-    KeysPipe,
-    TranslateModule,
-    TranslationModule,
-    ImportarComponent,
-    AnimationFadeinUpDirective,
   ],
 })
 export class TablaComponent extends General implements OnInit, OnChanges {
@@ -124,14 +106,14 @@ export class TablaComponent extends General implements OnInit, OnChanges {
     // se reinicia la tabla
     this.datosFiltrados = [];
     //se cargan los datos que se visualizan en la thead
-    this.store.select(obtenerMenuDataMapeo).subscribe((campos: any) => {
-      this.columnas = campos;
-    });
-    this.store
-      .select(obtenerMenuDataMapeoCamposVisibleTabla)
-      .subscribe((campos: any) => {
-        this.columnasVibles = campos;
-      });
+    // this.store.select(obtenerMenuDataMapeo).subscribe((campos: any) => {
+    //   this.columnas = campos;
+    // });
+    // this.store
+    //   .select(obtenerMenuDataMapeoCamposVisibleTabla)
+    //   .subscribe((campos: any) => {
+    //     this.columnasVibles = campos;
+    //   });
     //se  construye el tbody de la tabla
     // Recorre todas las claves en el objeto "camposVisibles"
     for (let clave in this.columnasVibles) {
@@ -161,12 +143,12 @@ export class TablaComponent extends General implements OnInit, OnChanges {
       }
     }
 
-    interval(800)
-      .pipe(take(1))
-      .subscribe(() => {
-        this.cargandoTabla = false;
-        this.changeDetectorRef.detectChanges();
-      });
+    // interval(800)
+    //   .pipe(take(1))
+    //   .subscribe(() => {
+    //     this.cargandoTabla = false;
+    //     this.changeDetectorRef.detectChanges();
+    //   });
 
     // Detecta los cambios y actualiza la vista
     this.changeDetectorRef.detectChanges();
@@ -345,9 +327,9 @@ export class TablaComponent extends General implements OnInit, OnChanges {
     nuevasColumnasVisibles.map((campo: any) => {
       campo.visibleTabla = true;
     });
-    this.store.dispatch(
-      ActualizarCampoMapeo({ dataMapeo: nuevasColumnasVisibles })
-    );
+    // this.store.dispatch(
+    //   ActualizarCampoMapeo({ dataMapeo: nuevasColumnasVisibles })
+    // );
 
     // Reconstruye la tabla
     this.construirTabla();
@@ -362,9 +344,9 @@ export class TablaComponent extends General implements OnInit, OnChanges {
         campo.visibleTabla = !campo.visibleTabla;
       }
     });
-    this.store.dispatch(
-      ActualizarCampoMapeo({ dataMapeo: nuevasColumnasVisibles })
-    );
+    // this.store.dispatch(
+    //   ActualizarCampoMapeo({ dataMapeo: nuevasColumnasVisibles })
+    // );
     // Reconstruye la tabla
     this.construirTabla();
   }
@@ -374,15 +356,15 @@ export class TablaComponent extends General implements OnInit, OnChanges {
     // Obtiene el texto de búsqueda en minúsculas
     const buacarCompo = event.target.value.toLowerCase();
     // Filtra las columnas en "columnasVibles" basándose en el texto de búsqueda
-    if (buacarCompo !== '') {
-      this.store
-        .select(obtenerMenuDataMapeoBuscarCampo(buacarCompo))
-        .subscribe((resultado) => (this.columnas = resultado));
-    } else {
-      this.store.select(obtenerMenuDataMapeo).subscribe((campos: any) => {
-        this.columnas = campos;
-      });
-    }
+    // if (buacarCompo !== '') {
+    //   this.store
+    //     .select(obtenerMenuDataMapeoBuscarCampo(buacarCompo))
+    //     .subscribe((resultado) => (this.columnas = resultado));
+    // } else {
+    //   this.store.select(obtenerMenuDataMapeo).subscribe((campos: any) => {
+    //     this.columnas = campos;
+    //   });
+    // }
   }
 
   exportarExcel() {

@@ -10,5 +10,6 @@
 
 export const environment = {
   production: false,
-  url_api : 'http://reddocapi.online'
+  url_api : 'http://reddocapi.online',
+  url_api_subdominio: 'http://subdominio.reddocapi.online'
 };

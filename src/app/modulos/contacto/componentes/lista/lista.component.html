@@ -7,6 +7,23 @@
 <nb-card>
     <nb-card-header>Contacto</nb-card-header>
     <nb-card-body>
-        
+        <table>
+            <thead>
+                <tr>
+                    <th *ngFor="let encabezado of encabezados">{{ encabezado.nombre }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of arrItems">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.identificacion_abreviatura }}</td>
+                    <td>{{ item.numero_identificacion }}</td>
+                    <td>{{ item.nombre_corto }}</td>
+                    <td>{{ item.correo }}</td>
+                    <td>{{ item.telefono }}</td>
+                    <td>{{ item.celular }}</td>
+                </tr>
+            </tbody>
+        </table>
     </nb-card-body>
 </nb-card>

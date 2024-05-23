@@ -1,0 +1,17 @@
+import { Store } from "@ngrx/store";
+import { environment } from "../../../environments/environment";
+import { obtenerContenedorSubdominio } from "../../redux/selectos/contenedor.selectors";
+import { inject, Injectable } from '@angular/core';
+
+export class Subdomino {
+
+  private store = inject(Store)
+
+  urlSubDominio: string = environment.url_api_subdominio;
+
+  constructor() {
+    this.store.select(obtenerContenedorSubdominio).subscribe((respuesta) => {
+      this.urlSubDominio = this.urlSubDominio.replace("subdominio", respuesta);
+    }); 
+  }
+}
