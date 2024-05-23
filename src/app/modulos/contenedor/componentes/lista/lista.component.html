@@ -11,85 +11,45 @@
             <th></th>
             <th class="min-w-120px"></th>
             <th class="min-w-150px text-center">Plan</th>
-            <th
-              class="min-w-100px text-center"
-            >Usuarios</th>
+            <th class="min-w-100px text-center">Usuarios</th>
           </tr>
         </thead>
         <tbody>
-          <div></div>
-          <ng-container
-            *ngIf="arrContenedores.length > 0; else sinContenedores"
-          >
-            <tr
-              *ngFor="let contenedor of arrContenedores; let i = index"
-              appAnimationFadeinUp
-              [animacionDelay]="i + 1"
-              style="height: calc(82px - 0.6rem) !important"
-            >
+          <ng-container *ngIf="arrContenedores.length > 0; else sinContenedores">
+            <tr *ngFor="let contenedor of arrContenedores; let i = index" appAnimationFadeinUp [animacionDelay]="i + 1" style="height: calc(82px - 0.6rem) !important">
               <td style="width: 120px">
                 <ng-container *ngIf="contenedor.imagen">
-                  <img
-                    [ngSrc]="contenedor.imagen"
-                    [alt]="'Error al cargar logo'"
-                    width="120"
-                    height="120"
-                    style="min-width: 120px"
-                    class="img-thumbnail"
-                  />
+                  <img [ngSrc]="contenedor.imagen" [alt]="'Error al cargar logo'" width="120" height="120" style="min-width: 120px" class="img-thumbnail" />
                 </ng-container>
               </td>
               <td>
                 <div class="h-100 d-flex flex-column justify-content-center">
                   <p class="text-dark fw-bolder fs-6">
                     {{ contenedor.nombre }}
-                    <small class="badge badge-light-primary fs-8 fw-bold">{{
-                      contenedor.rol
-                    }}</small>
+                    <small class="badge badge-light-primary fs-8 fw-bold">{{ contenedor.rol }}</small>
                   </p>
-
-                  <span class="text-muted fw-bold text-muted d-block fs-7"
-                    >{{ contenedor.subdominio }}{{ dominioApp }}</span
-                  >
+                  <span class="text-muted fw-bold text-muted d-block fs-7">{{ contenedor.subdominio }}{{ dominioApp }}</span>
                 </div>
               </td>
               <td class="w-150px">
                 <div class="h-100 d-flex flex-column justify-content-center">
-                  <span class="badge badge-light-info fs-8 fw-bold">{{
-                    contenedor.plan_nombre
-                  }}</span>
+                  <span class="badge badge-light-info fs-8 fw-bold">{{ contenedor.plan_nombre }}</span>
                 </div>
               </td>
               <td>
-                <div
-                  class="h-100 d-flex flex-column justify-content-center align-items-center"
-                >
+                <div class="h-100 d-flex flex-column justify-content-center align-items-center">
                   {{ contenedor.usuarios }} / {{ contenedor.usuarios_base }}
                 </div>
               </td>
               <td>
                 <div>
-                  <button
-                    nbButton
-                    href="#"
-                    status="primary"
-                    (click)="seleccionarEmpresa(contenedor.contenedor_id)"
-                  >
-                    Conectar
-                  </button>
+                  <button nbButton href="#" status="primary" (click)="seleccionarEmpresa(contenedor.contenedor_id)">Conectar</button>
                 </div>
               </td>
               <td>
                 <div>
-                  <div
-                    *ngIf="contenedor.rol === 'propietario'"
-                  >
-                    <button
-                      nbButton
-                      type="button"
-                      [nbContextMenu]="items" nbContextMenuTrigger="click"
-                      (click)="onMenuItemClick(contenedor)"
-                    >
+                  <div *ngIf="contenedor.rol === 'propietario'">
+                    <button nbButton type="button" [nbContextMenu]="items" nbContextMenuTrigger="click" (click)="onMenuItemClick(contenedor)">
                       <nb-icon icon="more-vertical-outline"></nb-icon>
                     </button>
                   </div>
@@ -116,9 +76,7 @@
             </ng-container>
             <ng-template #mensaje>
               <tr>
-                <td
-                  colspan="4"
-                >Sin contenedores</td>
+                <td colspan="4">Sin contenedores</td>
               </tr>
             </ng-template>
           </ng-template>

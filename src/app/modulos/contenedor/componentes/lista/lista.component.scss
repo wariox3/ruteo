@@ -1,0 +1,114 @@
+:host ::ng-deep .table-responsive-sm {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  :host ::ng-deep table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: var(--nb-theme-font-size);
+    font-family: var(--nb-theme-font-family);
+    text-align: left;
+  }
+  
+  :host ::ng-deep thead th {
+    background-color: var(--nb-theme-color-secondary-100);
+    font-weight: bold;
+    padding: 12px;
+    border-bottom: 2px solid var(--nb-border-color);
+    font-size: var(--nb-theme-font-size-caption);
+    font-family: var(--nb-theme-font-family-caption);
+    white-space: nowrap;
+  }
+  
+  :host ::ng-deep tbody td {
+    padding: 12px;
+    border-bottom: 1px solid var(--nb-border-color);
+    font-size: var(--nb-theme-font-size-caption);
+    font-family: var(--nb-theme-font-family-caption);
+    white-space: nowrap;
+  }
+  
+  :host ::ng-deep tbody tr:nth-child(even) {
+    background-color: var(--nb-theme-color-secondary-200);
+  }
+  
+  :host ::ng-deep .h-100 {
+    height: 100%;
+  }
+  
+  :host ::ng-deep .d-flex {
+    display: flex;
+  }
+  
+  :host ::ng-deep .justify-content-center {
+    justify-content: center;
+  }
+  
+  :host ::ng-deep .justify-content-between {
+    justify-content: space-between;
+  }
+  
+  :host ::ng-deep .align-items-center {
+    align-items: center;
+  }
+  
+  :host ::ng-deep .text-dark {
+    color: var(--nb-theme-color-default-900);
+  }
+  
+  :host ::ng-deep .text-muted {
+    color: var(--nb-theme-color-default-600);
+  }
+  
+  :host ::ng-deep .fw-bolder {
+    font-weight: bolder;
+  }
+  
+  :host ::ng-deep .fw-bold {
+    font-weight: bold;
+  }
+  
+  :host ::ng-deep .fs-6 {
+    font-size: var(--nb-theme-font-size);
+  }
+  
+  :host ::ng-deep .fs-7 {
+    font-size: var(--nb-theme-font-size-small);
+  }
+  
+  :host ::ng-deep .fs-8 {
+    font-size: var(--nb-theme-font-size-tiny);
+  }
+  
+  :host ::ng-deep .badge-light-primary {
+    background-color: var(--nb-theme-color-primary-100);
+    color: var(--nb-theme-color-primary-700);
+  }
+  
+  :host ::ng-deep .badge-light-info {
+    background-color: var(--nb-theme-color-info-100);
+    color: var(--nb-theme-color-info-700);
+  }
+  
+  @media screen and (max-width: 600px) {
+    :host ::ng-deep .table-responsive-sm {
+      overflow-x: auto;
+    }
+  
+    :host ::ng-deep table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  
+    :host ::ng-deep thead, 
+    :host ::ng-deep tbody, 
+    :host ::ng-deep th, 
+    :host ::ng-deep td, 
+    :host ::ng-deep tr {
+      display: table-cell;
+    }
+  }
+  
