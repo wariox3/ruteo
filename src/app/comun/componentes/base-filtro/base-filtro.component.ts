@@ -11,6 +11,7 @@ import { BaseFiltroFormularioComponent } from '../base-filtro-formulario/base-fi
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { General } from '../../clases/general';
+import { NbButtonModule } from '@nebular/theme';
 
 @Component({
   selector: 'app-base-filtro',
@@ -22,6 +23,7 @@ import { General } from '../../clases/general';
     FormsModule,
     ReactiveFormsModule,
     BaseFiltroFormularioComponent,
+    NbButtonModule
   ],
 })
 export class BaseFiltroComponent extends General implements OnInit {

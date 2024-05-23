@@ -12,7 +12,7 @@ import { mapeo } from "../../mapeo"
   standalone: true,
   imports: [CommonModule, NbCardModule, BaseFiltroComponent, TablaComponent],
   templateUrl: "./lista.component.html",
-  styleUrls: ["./lista.component.css"],
+  styleUrls: ["./lista.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListaComponent extends General implements OnInit {

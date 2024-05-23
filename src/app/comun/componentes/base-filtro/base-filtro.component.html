@@ -29,17 +29,16 @@
   </div>
   <div class="d-flex justify-content-end gap-2">
     <button
+      nbButton
       type="submit"
-      class="btn btn-primary btn-sm"
+      status="primary"
       (click)="limpiarFormulario()"
       *ngIf="filtros.length >= 1"
-      translate="FORMULARIOS.TITULOS.COMUNES.LIMPIAR"
-    ></button>
-    <button
-      translate="FORMULARIOS.TITULOS.COMUNES.FILTRAR"
-      type="submit"
-      class="btn btn-primary btn-sm"
-      (click)="aplicarFiltro()"
-    ></button>
+    >
+      Limpiar
+    </button>
+    <button nbButton type="submit" status="primary" (click)="aplicarFiltro()">
+      Filtrar
+    </button>
   </div>
 </form>
