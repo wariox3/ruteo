@@ -5,7 +5,10 @@
     </nb-card-body>
 </nb-card>
 <nb-card>
-    <nb-card-header>Contacto</nb-card-header>
+    <nb-card-header class="d-flex justify-content-between align-items-center">
+        <span>Contacto</span>
+        <a nbButton status="primary" [routerLink]="['../nuevo']">Nuevo</a>
+      </nb-card-header>
     <nb-card-body>
         <table>
             <thead>

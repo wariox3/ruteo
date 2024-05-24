@@ -1,0 +1,603 @@
+<form
+  (ngSubmit)="enviar()"
+  [formGroup]="formularioContacto"
+  #form="ngForm"
+  aria-labelledby="title"
+>
+  <nb-card>
+    <nb-card-header>Nuevo contacto</nb-card-header>
+    <nb-card-body>
+      <div class="row mb-10">
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Persona tipo</label>
+          <nb-select
+            placeholder="Seleccione un tipo"
+            [formControl]="formularioContacto.get('tipo_persona')"
+            fullWidth
+          >
+            <nb-option
+              *ngFor="let tipoPersona of arrTipoPersona"
+              [value]="tipoPersona.tipo_persona_id"
+              >{{ tipoPersona.tipo_persona_nombre }}</nb-option
+            >
+          </nb-select>
+          <ng-container
+            *ngIf="
+              formularioContacto.get('tipo_persona').invalid &&
+              formularioContacto.get('tipo_persona').touched
+            "
+          >
+            <p
+              class="caption status-danger"
+              *ngIf="formularioContacto.get('tipo_persona').errors?.required"
+            >
+              El campo es requerido!
+            </p>
+          </ng-container>
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-4 col-sm-12">
+          <label class="label required">Número de identificación</label>
+          <input
+            nbInput
+            fullWidth
+            formControlName="numero_identificacion"
+            type="text"
+            autocomplete="off"
+            (blur)="calcularDigitoVerificacion()"
+            [status]="
+              formularioContacto.get('numero_identificacion').dirty
+                ? formularioContacto.get('numero_identificacion').invalid
+                  ? 'danger'
+                  : 'success'
+                : 'basic'
+            "
+            [attr.aria-invalid]="
+              formularioContacto.get('numero_identificacion').invalid &&
+              formularioContacto.get('numero_identificacion').touched
+                ? true
+                : null
+            "
+          />
+          <ng-container
+            *ngIf="
+              formularioContacto.get('numero_identificacion').invalid &&
+              formularioContacto.get('numero_identificacion').touched
+            "
+          >
+            <p
+              class="caption status-danger"
+              *ngIf="
+                formularioContacto.get('numero_identificacion').errors?.required
+              "
+            >
+              El campo es requerido!
+            </p>
+          </ng-container>
+        </div>
+        <div class="col-md-2 col-sm-12">
+          <label class="label required">Digito verificación</label>
+          <input
+            nbInput
+            fullWidth
+            formControlName="digito_verificacion"
+            type="text"
+            autocomplete="off"
+            readonly
+            [status]="
+              formularioContacto.get('digito_verificacion').dirty
+                ? formularioContacto.get('digito_verificacion').invalid
+                  ? 'danger'
+                  : 'success'
+                : 'basic'
+            "
+            [attr.aria-invalid]="
+              formularioContacto.get('digito_verificacion').invalid &&
+              formularioContacto.get('digito_verificacion').touched
+                ? true
+                : null
+            "
+          />
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Tipo identificación</label>
+          <nb-select
+            placeholder="Seleccione un tipo"
+            [formControl]="formularioContacto.get('identificacion_id')"
+            fullWidth
+          >
+            <nb-option
+              *ngFor="let identificacion of arrIdentificacion"
+              [value]="identificacion.identificacion_id"
+              >{{ identificacion.identificacion_nombre }}</nb-option
+            >
+          </nb-select>
+          <ng-container
+            *ngIf="
+              formularioContacto.get('identificacion_id').invalid &&
+              formularioContacto.get('identificacion_id').touched
+            "
+          >
+            <p
+              class="caption status-danger"
+              *ngIf="
+                formularioContacto.get('identificacion_id').errors?.required
+              "
+            >
+              El campo es requerido!
+            </p>
+          </ng-container>
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Teléfono</label>
+          <input
+            nbInput
+            fullWidth
+            formControlName="telefono"
+            type="text"
+            autocomplete="off"
+            [status]="
+              formularioContacto.get('telefono').dirty
+                ? formularioContacto.get('telefono').invalid
+                  ? 'danger'
+                  : 'success'
+                : 'basic'
+            "
+            [attr.aria-invalid]="
+              formularioContacto.get('telefono').invalid &&
+              formularioContacto.get('telefono').touched
+                ? true
+                : null
+            "
+          />
+          <ng-container
+            *ngIf="
+              formularioContacto.get('telefono').invalid &&
+              formularioContacto.get('telefono').touched
+            "
+          >
+            <p
+              class="caption status-danger"
+              *ngIf="formularioContacto.get('telefono').errors?.required"
+            >
+              El campo es requerido!
+            </p>
+          </ng-container>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Celular</label>
+          <input
+            nbInput
+            fullWidth
+            formControlName="celular"
+            type="text"
+            autocomplete="off"
+            [status]="
+              formularioContacto.get('celular').dirty
+                ? formularioContacto.get('celular').invalid
+                  ? 'danger'
+                  : 'success'
+                : 'basic'
+            "
+            [attr.aria-invalid]="
+              formularioContacto.get('celular').invalid &&
+              formularioContacto.get('celular').touched
+                ? true
+                : null
+            "
+          />
+          <ng-container
+            *ngIf="
+              formularioContacto.get('celular').invalid &&
+              formularioContacto.get('celular').touched
+            "
+          >
+            <p
+              class="caption status-danger"
+              *ngIf="formularioContacto.get('celular').errors?.required"
+            >
+              El campo es requerido!
+            </p>
+          </ng-container>
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Ciudad</label>
+          <input
+            nbInput
+            fullWidth
+            #autoInput
+            formControlName="ciudad_nombre"
+            type="text"
+            (input)="onChange()"
+            [nbAutocomplete]="auto"
+          />
+          <nb-autocomplete #auto (selectedChange)="onSelectionChange($event)">
+            <nb-option
+              (click)="seleccionarCiudad(option)"
+              *ngFor="let option of filteredOptions$ | async"
+              [value]="option.ciudad_nombre"
+            >
+              {{ option.ciudad_nombre }}
+            </nb-option>
+          </nb-autocomplete>
+          <ng-container
+            *ngIf="
+              formularioContacto.get('ciudad_id').invalid &&
+              formularioContacto.get('ciudad_id').touched
+            "
+          >
+            <p
+              class="caption status-danger"
+              *ngIf="formularioContacto.get('ciudad_id').errors?.required"
+            >
+              El campo es requerido!
+            </p>
+          </ng-container>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Dirección</label>
+          <input
+            nbInput
+            fullWidth
+            formControlName="direccion"
+            type="text"
+            autocomplete="off"
+            [status]="
+              formularioContacto.get('direccion').dirty
+                ? formularioContacto.get('direccion').invalid
+                  ? 'danger'
+                  : 'success'
+                : 'basic'
+            "
+            [attr.aria-invalid]="
+              formularioContacto.get('direccion').invalid &&
+              formularioContacto.get('direccion').touched
+                ? true
+                : null
+            "
+          />
+          <ng-container
+            *ngIf="
+              formularioContacto.get('direccion').invalid &&
+              formularioContacto.get('direccion').touched
+            "
+          >
+            <p
+              class="caption status-danger"
+              *ngIf="formularioContacto.get('direccion').errors?.required"
+            >
+              El campo es requerido!
+            </p>
+          </ng-container>
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Barrio</label>
+          <input
+            nbInput
+            fullWidth
+            formControlName="barrio"
+            type="text"
+            autocomplete="off"
+            [status]="
+              formularioContacto.get('barrio').dirty
+                ? formularioContacto.get('barrio').invalid
+                  ? 'danger'
+                  : 'success'
+                : 'basic'
+            "
+            [attr.aria-invalid]="
+              formularioContacto.get('barrio').invalid &&
+              formularioContacto.get('barrio').touched
+                ? true
+                : null
+            "
+          />
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Correo</label>
+          <input
+            nbInput
+            fullWidth
+            formControlName="correo"
+            type="text"
+            autocomplete="off"
+            [status]="
+              formularioContacto.get('correo').dirty
+                ? formularioContacto.get('correo').invalid
+                  ? 'danger'
+                  : 'success'
+                : 'basic'
+            "
+            [attr.aria-invalid]="
+              formularioContacto.get('correo').invalid &&
+              formularioContacto.get('correo').touched
+                ? true
+                : null
+            "
+          />
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Régimen</label>
+          <nb-select
+            placeholder="Seleccione un tipo"
+            [formControl]="formularioContacto.get('regimen')"
+            fullWidth
+          >
+            <nb-option
+              *ngFor="let regimen of arrRegimen"
+              [value]="regimen.regimen_id"
+              >{{ regimen.regimen_nombre }}</nb-option
+            >
+          </nb-select>
+          <ng-container
+            *ngIf="
+              formularioContacto.get('regimen').invalid &&
+              formularioContacto.get('regimen').touched
+            "
+          >
+            <p
+              class="caption status-danger"
+              *ngIf="formularioContacto.get('regimen').errors?.required"
+            >
+              El campo es requerido!
+            </p>
+          </ng-container>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Código CIUU</label>
+          <input
+            nbInput
+            fullWidth
+            formControlName="codigo_ciuu"
+            type="text"
+            autocomplete="off"
+            [status]="
+              formularioContacto.get('codigo_ciuu').dirty
+                ? formularioContacto.get('codigo_ciuu').invalid
+                  ? 'danger'
+                  : 'success'
+                : 'basic'
+            "
+            [attr.aria-invalid]="
+              formularioContacto.get('codigo_ciuu').invalid &&
+              formularioContacto.get('codigo_ciuu').touched
+                ? true
+                : null
+            "
+          />
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+  <nb-card>
+    <nb-card-header> Información comercial </nb-card-header>
+    <nb-card-body>
+      <div class="row mb-10">
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Plazo pago</label>
+          <nb-select
+            placeholder="Seleccione un tipo"
+            [formControl]="formularioContacto.get('plazo_pago')"
+            fullWidth
+          >
+            <nb-option
+              *ngFor="let plazoPago of arrPlazoPagos"
+              [value]="plazoPago.plazo_pago_id"
+              >{{ plazoPago.plazo_pago_nombre }}</nb-option
+            >
+          </nb-select>
+          <ng-container
+            *ngIf="
+              formularioContacto.get('plazo_pago').invalid &&
+              formularioContacto.get('plazo_pago').touched
+            "
+          >
+            <p
+              class="caption status-danger"
+              *ngIf="formularioContacto.get('plazo_pago').errors?.required"
+            >
+              El campo es requerido!
+            </p>
+          </ng-container>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+  <!-- <div class="row mb-10">
+
+
+  </div>
+  <div class="row mb-10">
+
+    <div class="col-md-6 col-sm-12">
+      <label class="label required">Dirección</label>
+      <input
+        nbInput
+        fullWidth
+        formControlName="direccion"
+        type="text"
+        autocomplete="off"
+        [status]="
+          formularioContenedor.get('direccion').dirty
+            ? formularioContenedor.get('direccion').invalid
+              ? 'danger'
+              : 'success'
+            : 'basic'
+        "
+        [attr.aria-invalid]="
+          formularioContenedor.get('direccion').invalid &&
+          formularioContenedor.get('direccion').touched
+            ? true
+            : null
+        "
+      />
+      <ng-container
+        *ngIf="
+          formularioContenedor.get('direccion').invalid &&
+          formularioContenedor.get('direccion').touched
+        "
+      >
+        <p
+          class="caption status-danger"
+          *ngIf="formularioContenedor.get('direccion').errors?.required"
+        >
+          El campo es requerido!
+        </p>
+      </ng-container>
+    </div>
+  </div>
+  <div class="row mb-10">
+    <div class="col-md-6 col-sm-12">
+      <label class="label required">Correo</label>
+      <input
+        nbInput
+        fullWidth
+        formControlName="correo"
+        type="text"
+        autocomplete="off"
+        [status]="
+          formularioContenedor.get('correo').dirty
+            ? f  <div class="row mb-10">
+
+
+  </div>
+  <div class="row mb-10">
+
+    <div class="col-md-6 col-sm-12">
+      <label class="label required">Dirección</label>
+      <input
+        nbInput
+        fullWidth
+        formControlName="direccion"
+        type="text"
+        autocomplete="off"
+        [status]="
+          formularioContenedor.get('direccion').dirty
+            ? formularioContenedor.get('direccion').invalid
+              ? 'danger'
+              : 'success'
+            : 'basic'
+        "
+        [attr.aria-invalid]="
+          formularioContenedor.get('direccion').invalid &&
+          formularioContenedor.get('direccion').touched
+            ? true
+            : null
+        "
+      />
+      <ng-container
+        *ngIf="
+          formularioContenedor.get('direccion').invalid &&
+          formularioContenedor.get('direccion').touched
+        "
+      >
+        <p
+          class="caption status-danger"
+          *ngIf="formularioContenedor.get('direccion').errors?.required"
+        >
+          El campo es requerido!
+        </p>
+      </ng-container>
+    </div>
+  </div>
+  <div class="row mb-10">
+    <div class="col-md-6 col-sm-12">
+      <label class="label required">Correo</label>
+      <input
+        nbInput
+        fullWidth
+        formControlName="correo"
+        type="text"
+        autocomplete="off"
+        [status]="
+          formularioContenedor.get('correo').dirty
+            ? formularioContenedor.get('correo').invalid
+              ? 'danger'
+              : 'success'
+            : 'basic'
+        "
+        [attr.aria-invalid]="
+          formularioContenedor.get('correo').invalid &&
+          formularioContenedor.get('correo').touched
+            ? true
+            : null
+        "
+      />
+      <ng-container
+        *ngIf="
+          formularioContenedor.get('correo').invalid &&
+          formularioContenedor.get('correo').touched
+        "
+      >
+        <p
+          class="caption status-danger"
+          *ngIf="formularioContenedor.get('correo').errors?.required"
+        >
+          El campo es requerido!
+        </p>
+      </ng-container>
+    </div>ormularioContenedor.get('correo').invalid
+              ? 'danger'
+              : 'success'
+            : 'basic'
+        "
+        [attr.aria-invalid]="
+          formularioContenedor.get('correo').invalid &&
+          formularioContenedor.get('correo').touched
+            ? true
+            : null
+        "
+      />
+      <ng-container
+        *ngIf="
+          formularioContenedor.get('correo').invalid &&
+          formularioContenedor.get('correo').touched
+        "
+      >
+        <p
+          class="caption status-danger"
+          *ngIf="formularioContenedor.get('correo').errors?.required"
+        >
+          El campo es requerido!
+        </p>
+      </ng-container>
+    </div>
+
+  </div>
+  <div class="row mb-10">
+    <div class="col-md-12 col-sm-12">
+      <label class="label required">Planes </label>
+      <nb-radio-group
+        *ngFor="let plan of arrPlanes"
+        [formControl]="formularioContenedor.get('plan_id')"
+      >
+        <nb-radio
+          [checked]="plan.id === formularioContenedor.get('plan_id')"
+          [value]="plan.id"
+        >
+          {{ plan.nombre }}
+        </nb-radio>
+      </nb-radio-group>
+    </div>
+  </div>
+  <div
+    class="fv-row d-flex"
+    [ngClass]="{
+      'justify-content-between': visualizarBtnAtras === true,
+      'justify-content-end': visualizarBtnAtras === false
+    }"
+  >
+    <a nbButton status="basic" [routerLink]="['../lista']">Atrás </a>
+    <button nbButton type="submit" status="primary" #btnGuardar>Guardar</button>
+  </div> -->
+</form>

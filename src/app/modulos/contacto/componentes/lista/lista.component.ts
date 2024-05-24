@@ -1,16 +1,17 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, Inject, OnInit, inject } from "@angular/core";
-import { NbCardModule } from "@nebular/theme";
+import { NbButtonModule, NbCardModule } from "@nebular/theme";
 import { BaseFiltroComponent } from "../../../../comun/componentes/base-filtro/base-filtro.component";
 import { TablaComponent } from "../../../../comun/componentes/tabla/tabla.component";
 import { General } from "../../../../comun/clases/general";
 import { ContactoService } from "../../servicios/contacto.service";
 import { mapeo } from "../../mapeo"
+import { RouterModule } from "@angular/router";
 
 @Component({
   selector: "app-lista",
   standalone: true,
-  imports: [CommonModule, NbCardModule, BaseFiltroComponent, TablaComponent],
+  imports: [CommonModule, NbCardModule, BaseFiltroComponent, TablaComponent, RouterModule, NbButtonModule],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

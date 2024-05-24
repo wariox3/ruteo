@@ -13,6 +13,13 @@ export const routes: Route[] = [
             (m) => m.ListaComponent
         )
   },
+  {
+    path: 'nuevo',
+    loadComponent: () => 
+        import('./componentes/nuevo/nuevo.component').then(
+            (m) => m.NuevoComponent
+        )
+  },
   // {
   //   path: 'nuevo',
   //   loadComponent: () => 

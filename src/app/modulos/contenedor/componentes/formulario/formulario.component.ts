@@ -11,7 +11,6 @@ import {
 } from "@angular/core";
 import { General } from "../../../../comun/clases/general";
 import {
-  FormBuilder,
   FormControl,
   FormGroup,
   FormsModule,
@@ -23,7 +22,15 @@ import { ContenedorService } from "../../servicios/contenedor.service";
 import { zip, asyncScheduler, Observable, of } from "rxjs";
 import { DevuelveDigitoVerificacionService } from "../../../../comun/servicios/devuelve-digito-verificacion.service";
 import { map, tap, throttleTime } from "rxjs/operators";
-import { NbAlertModule, NbAutocompleteModule, NbButtonModule, NbCardModule, NbInputModule, NbRadioModule, NbSelectModule } from "@nebular/theme";
+import {
+  NbAlertModule,
+  NbAutocompleteModule,
+  NbButtonModule,
+  NbCardModule,
+  NbInputModule,
+  NbRadioModule,
+  NbSelectModule,
+} from "@nebular/theme";
 
 @Component({
   selector: "app-formulario",
@@ -46,7 +53,6 @@ import { NbAlertModule, NbAutocompleteModule, NbButtonModule, NbCardModule, NbIn
 })
 export class FormularioComponent extends General implements OnInit {
   private contenedorService = inject(ContenedorService);
-  private formBuilder = inject(FormBuilder);
   private devuelveDigitoVerificacionService = inject(
     DevuelveDigitoVerificacionService
   );
@@ -80,15 +86,15 @@ export class FormularioComponent extends General implements OnInit {
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(100), // Se ha removido la restricción de mayúsculas
-      ]),
-    ), 
+      ])
+    ),
     plan_id: new FormControl(
       this.planSeleccionado,
-      Validators.compose([Validators.required]),
+      Validators.compose([Validators.required])
     ),
     direccion: new FormControl(
       this.informacionContenedor.direccion,
-      Validators.compose([Validators.required, Validators.maxLength(50)]),
+      Validators.compose([Validators.required, Validators.maxLength(50)])
     ),
     correo: new FormControl(
       this.informacionContenedor.correo,
@@ -96,12 +102,12 @@ export class FormularioComponent extends General implements OnInit {
         Validators.required,
         Validators.maxLength(255),
         Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
-      ]),
+      ])
     ),
     ciudad_nombre: new FormControl(this.informacionContenedor.ciudad_nombre),
     ciudad_id: new FormControl(
       this.informacionContenedor.ciudad,
-      Validators.compose([Validators.required]),
+      Validators.compose([Validators.required])
     ),
     numero_identificacion: new FormControl(
       this.informacionContenedor.numero_identificacion,
@@ -109,15 +115,15 @@ export class FormularioComponent extends General implements OnInit {
         Validators.required,
         Validators.maxLength(20),
         Validators.pattern(/^[0-9]+$/),
-      ]),
+      ])
     ),
     digito_verificacion: new FormControl(
       this.informacionContenedor.digito_verificacion,
-      Validators.compose([Validators.required, Validators.maxLength(1)]),
+      Validators.compose([Validators.required, Validators.maxLength(1)])
     ),
     identificacion_id: new FormControl(
       this.informacionContenedor.identificacion,
-      Validators.compose([Validators.required]),
+      Validators.compose([Validators.required])
     ),
     telefono: new FormControl(
       this.informacionContenedor.telefono,
@@ -126,7 +132,7 @@ export class FormularioComponent extends General implements OnInit {
         Validators.minLength(3),
         Validators.maxLength(50),
         Validators.pattern(/^[0-9]+$/),
-      ]),
+      ])
     ),
   });
 
@@ -190,7 +196,6 @@ export class FormularioComponent extends General implements OnInit {
     } else {
       this.formularioContenedor.markAllAsTouched();
     }
-    
   }
 
   modificarCampoFormulario(campo: string, dato: any) {
@@ -249,7 +254,7 @@ export class FormularioComponent extends General implements OnInit {
   }
 
   calcularDigitoVerificacion() {
-    if(this.formularioContenedor.get("numero_identificacion").value){
+    if (this.formularioContenedor.get("numero_identificacion").value) {
       let digito = this.devuelveDigitoVerificacionService.digitoVerificacion(
         this.formularioContenedor.get("numero_identificacion")?.value
       );
@@ -260,10 +265,10 @@ export class FormularioComponent extends General implements OnInit {
   }
 
   private filter(value: string): string[] {
-    let arrCiudad = this.arrCiudades.find((ciudad:any) => (
-      ciudad.ciudad_nombre === value
-    ))
-    if(arrCiudad){
+    let arrCiudad = this.arrCiudades.find(
+      (ciudad: any) => ciudad.ciudad_nombre === value
+    );
+    if (arrCiudad) {
       this.formularioContenedor.patchValue({
         ciudad_id: arrCiudad?.ciudad_id,
         ciudad_nombre: arrCiudad?.ciudad_nombre,
@@ -281,16 +286,13 @@ export class FormularioComponent extends General implements OnInit {
 
   onChange() {
     this.consultarCiudad(this.input.nativeElement.value);
-    this.filteredOptions$ = this.getFilteredOptions(this.input.nativeElement.value);
+    this.filteredOptions$ = this.getFilteredOptions(
+      this.input.nativeElement.value
+    );
   }
 
   onSelectionChange($event) {
     this.filteredOptions$ = this.getFilteredOptions($event);
-    // let arrCiudad =     this.arrCiudades.find((ciudad:any) => 
-    //   (ciudad.ciudad_nombre === $event)
-    // )
-    // this.seleccionarCiudad(arrCiudad)
-
   }
 
   seleccionarCiudad(ciudad: any) {
