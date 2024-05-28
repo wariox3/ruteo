@@ -1,0 +1,24 @@
+<form
+  (ngSubmit)="enviar()"
+  [formGroup]="formularioVehiculo"
+  #form="ngForm"
+  aria-labelledby="title"
+>
+  <nb-card>
+    <nb-card-header>Nuevo vehículo</nb-card-header>
+    <nb-card-body>
+      <div class="row mb-10">
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Placa</label>
+          <input
+            nbInput
+            fullWidth
+            formControlName="placa"
+            type="text"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</form>

@@ -26,6 +26,12 @@ const routes: Routes = [{
       )
     },
     {
+      path: 'administracion/vehiculo',
+      loadChildren:() => import('../modulos/vehiculo/vehiculo-routing').then(
+        (r) => r.routes
+      )
+    },
+    {
       path: '**',
       component: NotFoundComponent,
     },
