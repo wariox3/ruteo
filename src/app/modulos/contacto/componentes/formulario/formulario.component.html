@@ -4,6 +4,16 @@
   #form="ngForm"
   aria-labelledby="title"
 >
+  <div
+    class="fv-row d-flex"
+    [ngClass]="{
+      'justify-content-between': visualizarBtnAtras === true,
+      'justify-content-end': visualizarBtnAtras === false
+    }"
+  >
+    <a nbButton status="basic" [routerLink]="['../lista']">Atrás </a>
+    <button nbButton type="submit" status="primary" #btnGuardar>Guardar</button>
+  </div>
   <nb-card>
     <nb-card-header>Nuevo contacto</nb-card-header>
     <nb-card-body>
@@ -412,192 +422,4 @@
       </div>
     </nb-card-body>
   </nb-card>
-
-  <!-- <div class="row mb-10">
-
-
-  </div>
-  <div class="row mb-10">
-
-    <div class="col-md-6 col-sm-12">
-      <label class="label required">Dirección</label>
-      <input
-        nbInput
-        fullWidth
-        formControlName="direccion"
-        type="text"
-        autocomplete="off"
-        [status]="
-          formularioContenedor.get('direccion').dirty
-            ? formularioContenedor.get('direccion').invalid
-              ? 'danger'
-              : 'success'
-            : 'basic'
-        "
-        [attr.aria-invalid]="
-          formularioContenedor.get('direccion').invalid &&
-          formularioContenedor.get('direccion').touched
-            ? true
-            : null
-        "
-      />
-      <ng-container
-        *ngIf="
-          formularioContenedor.get('direccion').invalid &&
-          formularioContenedor.get('direccion').touched
-        "
-      >
-        <p
-          class="caption status-danger"
-          *ngIf="formularioContenedor.get('direccion').errors?.required"
-        >
-          El campo es requerido!
-        </p>
-      </ng-container>
-    </div>
-  </div>
-  <div class="row mb-10">
-    <div class="col-md-6 col-sm-12">
-      <label class="label required">Correo</label>
-      <input
-        nbInput
-        fullWidth
-        formControlName="correo"
-        type="text"
-        autocomplete="off"
-        [status]="
-          formularioContenedor.get('correo').dirty
-            ? f  <div class="row mb-10">
-
-
-  </div>
-  <div class="row mb-10">
-
-    <div class="col-md-6 col-sm-12">
-      <label class="label required">Dirección</label>
-      <input
-        nbInput
-        fullWidth
-        formControlName="direccion"
-        type="text"
-        autocomplete="off"
-        [status]="
-          formularioContenedor.get('direccion').dirty
-            ? formularioContenedor.get('direccion').invalid
-              ? 'danger'
-              : 'success'
-            : 'basic'
-        "
-        [attr.aria-invalid]="
-          formularioContenedor.get('direccion').invalid &&
-          formularioContenedor.get('direccion').touched
-            ? true
-            : null
-        "
-      />
-      <ng-container
-        *ngIf="
-          formularioContenedor.get('direccion').invalid &&
-          formularioContenedor.get('direccion').touched
-        "
-      >
-        <p
-          class="caption status-danger"
-          *ngIf="formularioContenedor.get('direccion').errors?.required"
-        >
-          El campo es requerido!
-        </p>
-      </ng-container>
-    </div>
-  </div>
-  <div class="row mb-10">
-    <div class="col-md-6 col-sm-12">
-      <label class="label required">Correo</label>
-      <input
-        nbInput
-        fullWidth
-        formControlName="correo"
-        type="text"
-        autocomplete="off"
-        [status]="
-          formularioContenedor.get('correo').dirty
-            ? formularioContenedor.get('correo').invalid
-              ? 'danger'
-              : 'success'
-            : 'basic'
-        "
-        [attr.aria-invalid]="
-          formularioContenedor.get('correo').invalid &&
-          formularioContenedor.get('correo').touched
-            ? true
-            : null
-        "
-      />
-      <ng-container
-        *ngIf="
-          formularioContenedor.get('correo').invalid &&
-          formularioContenedor.get('correo').touched
-        "
-      >
-        <p
-          class="caption status-danger"
-          *ngIf="formularioContenedor.get('correo').errors?.required"
-        >
-          El campo es requerido!
-        </p>
-      </ng-container>
-    </div>ormularioContenedor.get('correo').invalid
-              ? 'danger'
-              : 'success'
-            : 'basic'
-        "
-        [attr.aria-invalid]="
-          formularioContenedor.get('correo').invalid &&
-          formularioContenedor.get('correo').touched
-            ? true
-            : null
-        "
-      />
-      <ng-container
-        *ngIf="
-          formularioContenedor.get('correo').invalid &&
-          formularioContenedor.get('correo').touched
-        "
-      >
-        <p
-          class="caption status-danger"
-          *ngIf="formularioContenedor.get('correo').errors?.required"
-        >
-          El campo es requerido!
-        </p>
-      </ng-container>
-    </div>
-
-  </div>
-  <div class="row mb-10">
-    <div class="col-md-12 col-sm-12">
-      <label class="label required">Planes </label>
-      <nb-radio-group
-        *ngFor="let plan of arrPlanes"
-        [formControl]="formularioContenedor.get('plan_id')"
-      >
-        <nb-radio
-          [checked]="plan.id === formularioContenedor.get('plan_id')"
-          [value]="plan.id"
-        >
-          {{ plan.nombre }}
-        </nb-radio>
-      </nb-radio-group>
-    </div>
-  </div>
-  <div
-    class="fv-row d-flex"
-    [ngClass]="{
-      'justify-content-between': visualizarBtnAtras === true,
-      'justify-content-end': visualizarBtnAtras === false
-    }"
-  >
-    <a nbButton status="basic" [routerLink]="['../lista']">Atrás </a>
-    <button nbButton type="submit" status="primary" #btnGuardar>Guardar</button>
-  </div> -->
 </form>

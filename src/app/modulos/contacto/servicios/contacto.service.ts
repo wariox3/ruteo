@@ -43,4 +43,8 @@ export class ContactoService {
       arrFiltros
     );
   }
+
+  guardarContacto(data: any) {
+    return this.http.post<any[]>(`general/contacto/`, data);
+  }
 }

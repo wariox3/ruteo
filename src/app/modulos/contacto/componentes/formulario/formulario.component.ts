@@ -4,8 +4,10 @@ import {
   Component,
   Input,
   OnInit,
+  Output,
   ViewChild,
   inject,
+  EventEmitter
 } from "@angular/core";
 import { General } from "../../../../comun/clases/general";
 import {
@@ -17,6 +19,7 @@ import {
 } from "@angular/forms";
 import {
   NbAutocompleteModule,
+  NbButtonModule,
   NbCardModule,
   NbInputModule,
   NbSelectModule,
@@ -25,6 +28,7 @@ import { Observable, asyncScheduler, of, zip } from "rxjs";
 import { ContactoService } from "../../servicios/contacto.service";
 import { DevuelveDigitoVerificacionService } from "../../../../comun/servicios/devuelve-digito-verificacion.service";
 import { map, tap, throttleTime } from "rxjs/operators";
+import { RouterModule } from "@angular/router";
 
 @Component({
   selector: "app-formulario",
@@ -37,6 +41,8 @@ import { map, tap, throttleTime } from "rxjs/operators";
     NbSelectModule,
     NbAutocompleteModule,
     NbCardModule,
+    RouterModule,
+    NbButtonModule
   ],
   templateUrl: "./formulario.component.html",
   styleUrls: ["./formulario.component.css"],
@@ -44,6 +50,8 @@ import { map, tap, throttleTime } from "rxjs/operators";
 })
 export class FormularioComponent extends General implements OnInit {
   @Input() informacionContacto: any = [];
+  @Input() visualizarBtnAtras: boolean = true;
+  @Output() dataFormulario: EventEmitter<any> = new EventEmitter();
 
   formularioContacto = new FormGroup({
     tipo_persona: new FormControl(
@@ -124,7 +132,13 @@ export class FormularioComponent extends General implements OnInit {
     this.consultarCiudad(null);
   }
 
-  enviar() {}
+  enviar() {
+    if (this.formularioContacto.valid) {
+      return this.dataFormulario.emit(this.formularioContacto.value);
+    } else {
+      this.formularioContacto.markAllAsTouched();
+    }
+  }
 
   consultarInformacion() {
     zip(

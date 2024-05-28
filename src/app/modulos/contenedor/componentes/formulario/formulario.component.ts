@@ -26,7 +26,6 @@ import {
   NbAlertModule,
   NbAutocompleteModule,
   NbButtonModule,
-  NbCardModule,
   NbInputModule,
   NbRadioModule,
   NbSelectModule,

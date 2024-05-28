@@ -1,0 +1,10 @@
+<div>
+    <input id="address" [(ngModel)]="address" (input)="searchAddress()" placeholder="Dirección de origen" type="text">
+    <ul *ngIf="suggestions.length > 0">
+      <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
+        {{ suggestion.address.label }}
+      </li>
+    </ul>
+  </div>
+  <div id="map" style="width: 60%; height: 400px;"></div>
+  

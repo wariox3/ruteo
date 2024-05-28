@@ -1,8 +1,14 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  inject,
+} from "@angular/core";
 import { NbCardModule } from "@nebular/theme";
 import { FormularioComponent } from "../formulario/formulario.component";
 import { General } from "../../../../comun/clases/general";
+import { ContactoService } from "../../servicios/contacto.service";
 
 @Component({
   selector: "app-nuevo",
@@ -13,6 +19,8 @@ import { General } from "../../../../comun/clases/general";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NuevoComponent extends General implements OnInit {
+  private contactoService = inject(ContactoService);
+
   informacionContacto: any = {
     numero_identificacion: "",
     digito_verificacion: "",
@@ -39,5 +47,10 @@ export class NuevoComponent extends General implements OnInit {
 
   ngOnInit() {}
 
-  enviarFormulario(formulario: any) {}
+  enviarFormulario(formulario: any) {
+    this.contactoService.guardarContacto(formulario).subscribe((respuesta) => {
+      this.alerta.mensajaExitoso('Se ha creado el contacto exitosamente.', 'Guardado con éxito.')
+      // this.router.navigate(['/contacto/detalle']);
+    });
+  }
 }

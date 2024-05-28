@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NbCardModule, NbInputModule } from '@nebular/theme';
+import { VehicleMapComponent } from '../../../../comun/componentes/vehicle-map/vehicle-map.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-formulario',
@@ -11,7 +13,9 @@ import { NbCardModule, NbInputModule } from '@nebular/theme';
     FormsModule,
     ReactiveFormsModule,
     NbInputModule,
-    NbCardModule
+    NbCardModule,
+    VehicleMapComponent,
+    RouterModule
   ],
   templateUrl: './formulario.component.html',
   styleUrls: ['./formulario.component.css'],
