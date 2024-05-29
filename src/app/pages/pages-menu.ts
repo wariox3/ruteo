@@ -16,5 +16,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: 'administracion/contacto',
       }
     ],
+  },
+  {
+    title: 'Utilidad',
+    icon: 'pantone-outline',
+    children: [
+      {
+        icon: 'file-add-outline',
+        title: 'Importar guias',
+        link: '',
+      }
+    ],
   }
 ];
