@@ -21,30 +21,6 @@ import { ContactoService } from "../../servicios/contacto.service";
 export class NuevoComponent extends General implements OnInit {
   private contactoService = inject(ContactoService);
 
-  informacionContacto: any = {
-    numero_identificacion: "",
-    digito_verificacion: "",
-    nombre_corto: "",
-    nombre1: "",
-    nombre2: "",
-    apellido1: "",
-    apellido2: "",
-    direccion: "",
-    correo: "",
-    ciudad: "",
-    ciudad_nombre: "",
-    identificacion: "",
-    telefono: "",
-    celular: "",
-    tipo_persona: "",
-    regimen: "",
-    codigo_ciuu: "",
-    barrio: "",
-    precio: "",
-    plazo_pago: "",
-    asesor: "",
-  };
-
   ngOnInit() {}
 
   enviarFormulario(formulario: any) {

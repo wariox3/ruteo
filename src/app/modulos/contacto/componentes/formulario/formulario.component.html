@@ -7,11 +7,18 @@
   <div
     class="fv-row d-flex"
     [ngClass]="{
-      'justify-content-between': visualizarBtnAtras === true,
-      'justify-content-end': visualizarBtnAtras === false
+      'justify-content-start': true
     }"
   >
-    <a nbButton status="basic" [routerLink]="['../lista']">Atrás </a>
+    <a
+      nbButton
+      status="control"
+      [routerLink]="['../lista']"
+      style="margin-right: 10px"
+    >
+      <nb-icon icon="arrow-back-outline"></nb-icon>
+      Atrás
+    </a>
     <button nbButton type="submit" status="primary" #btnGuardar>Guardar</button>
   </div>
   <nb-card>
@@ -44,6 +51,31 @@
               El campo es requerido!
             </p>
           </ng-container>
+        </div>
+      </div>
+
+      <div class="row mb-10" *ngIf="tipoPersonaSeleccionada === 1">
+        <div class="col-md-12 col-sm-12">
+          <label class="label required">Razón Social</label>
+          <input nbInput formControlName="nombre_corto" fullWidth type="text" />
+        </div>
+      </div>
+      <div class="row mb-10" *ngIf="tipoPersonaSeleccionada === 2">
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Primer nombre</label>
+          <input nbInput formControlName="nombre1" fullWidth type="text" />
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label class="label">Segundo nombre</label>
+          <input nbInput formControlName="nombre2" fullWidth type="text" />
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Primer apellido</label>
+          <input nbInput formControlName="apellido1" fullWidth type="text" />
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Segundo apellido</label>
+          <input nbInput formControlName="apellido2" fullWidth type="text" />
         </div>
       </div>
       <div class="row mb-10">
@@ -114,7 +146,7 @@
           <label class="label required">Tipo identificación</label>
           <nb-select
             placeholder="Seleccione un tipo"
-            [formControl]="formularioContacto.get('identificacion_id')"
+            [formControl]="formularioContacto.get('identificacion')"
             fullWidth
           >
             <nb-option
@@ -125,15 +157,13 @@
           </nb-select>
           <ng-container
             *ngIf="
-              formularioContacto.get('identificacion_id').invalid &&
-              formularioContacto.get('identificacion_id').touched
+              formularioContacto.get('identificacion').invalid &&
+              formularioContacto.get('identificacion').touched
             "
           >
             <p
               class="caption status-danger"
-              *ngIf="
-                formularioContacto.get('identificacion_id').errors?.required
-              "
+              *ngIf="formularioContacto.get('identificacion').errors?.required"
             >
               El campo es requerido!
             </p>
@@ -237,13 +267,13 @@
           </nb-autocomplete>
           <ng-container
             *ngIf="
-              formularioContacto.get('ciudad_id').invalid &&
-              formularioContacto.get('ciudad_id').touched
+              formularioContacto.get('ciudad').invalid &&
+              formularioContacto.get('ciudad').touched
             "
           >
             <p
               class="caption status-danger"
-              *ngIf="formularioContacto.get('ciudad_id').errors?.required"
+              *ngIf="formularioContacto.get('ciudad').errors?.required"
             >
               El campo es requerido!
             </p>

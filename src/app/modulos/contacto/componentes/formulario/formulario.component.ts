@@ -21,6 +21,7 @@ import {
   NbAutocompleteModule,
   NbButtonModule,
   NbCardModule,
+  NbIconModule,
   NbInputModule,
   NbSelectModule,
 } from "@nebular/theme";
@@ -42,16 +43,40 @@ import { RouterModule } from "@angular/router";
     NbAutocompleteModule,
     NbCardModule,
     RouterModule,
-    NbButtonModule
+    NbButtonModule,
+    NbIconModule
   ],
   templateUrl: "./formulario.component.html",
   styleUrls: ["./formulario.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormularioComponent extends General implements OnInit {
-  @Input() informacionContacto: any = [];
   @Input() visualizarBtnAtras: boolean = true;
   @Output() dataFormulario: EventEmitter<any> = new EventEmitter();
+
+  informacionContacto: any = {
+    numero_identificacion: "",
+    digito_verificacion: "",
+    nombre_corto: "",
+    nombre1: null,
+    nombre2: null,
+    apellido1: null,
+    apellido2: null,
+    direccion: "",
+    correo: "",
+    ciudad: "",
+    ciudad_nombre: "",
+    identificacion: "",
+    telefono: "",
+    celular: "",
+    tipo_persona: "",
+    regimen: "",
+    codigo_ciuu: null,
+    barrio: "",
+    precio: "",
+    plazo_pago: "",
+    asesor: "",
+  };
 
   formularioContacto = new FormGroup({
     tipo_persona: new FormControl(
@@ -70,9 +95,25 @@ export class FormularioComponent extends General implements OnInit {
       this.informacionContacto.digito_verificacion,
       Validators.compose([Validators.required, Validators.maxLength(1)])
     ),
-    identificacion_id: new FormControl(
+    identificacion: new FormControl(
       this.informacionContacto.identificacion,
       Validators.compose([Validators.required])
+    ),
+    nombre_corto: new FormControl(
+      this.informacionContacto.nombre_corto,
+        Validators.compose([Validators.maxLength(200)])
+    ),
+    nombre1: new FormControl(
+      this.informacionContacto.nombre1
+    ),
+    nombre2: new FormControl(
+      this.informacionContacto.nombre2
+    ),
+    apellido1: new FormControl(
+      this.informacionContacto.apellido1
+    ),
+    apellido2: new FormControl(
+      this.informacionContacto.apellido2
     ),
     telefono: new FormControl(
       this.informacionContacto.telefono,
@@ -100,7 +141,7 @@ export class FormularioComponent extends General implements OnInit {
     ),
     codigo_ciuu: new FormControl(this.informacionContacto.codigo_ciuu),
     ciudad_nombre: new FormControl(this.informacionContacto.ciudad_nombre),
-    ciudad_id: new FormControl(
+    ciudad: new FormControl(
       this.informacionContacto.ciudad,
       Validators.compose([Validators.required])
     ),
@@ -112,6 +153,12 @@ export class FormularioComponent extends General implements OnInit {
       this.informacionContacto.plazo_pago,
       Validators.compose([Validators.required])
     ),
+    precio: new FormControl(
+      this.informacionContacto.precio
+    ),
+    asesor: new FormControl(
+      this.informacionContacto.asesor
+    )
   });
 
   arrTipoPersona = [];
@@ -119,6 +166,8 @@ export class FormularioComponent extends General implements OnInit {
   arrRegimen = [];
   arrCiudades = [];
   arrPlazoPagos = [];
+
+  tipoPersonaSeleccionada: number | null = null;
 
   private contactoService = inject(ContactoService);
   private devuelveDigitoVerificacionService = inject(
@@ -130,10 +179,34 @@ export class FormularioComponent extends General implements OnInit {
   ngOnInit() {
     this.consultarInformacion();
     this.consultarCiudad(null);
+    this.formularioContacto.get('tipo_persona').valueChanges.subscribe(value => {
+      this.tipoPersonaSeleccionada = value;
+    }); 
   }
 
   enviar() {
     if (this.formularioContacto.valid) {
+      if(this.formularioContacto.get('tipo_persona').value === 2){
+        let nombreCorto = '';
+        const nombre1 = this.formularioContacto.get('nombre1')?.value;
+        const nombre2 = this.formularioContacto.get('nombre2')?.value;
+        const apellido1 = this.formularioContacto.get('apellido1')?.value;
+        const apellido2 = this.formularioContacto.get('apellido2')?.value;
+    
+        nombreCorto = `${nombre1}`;
+        if (nombre2 !== null) {
+          nombreCorto += ` ${nombre2}`;
+        }
+        nombreCorto += ` ${apellido1}`;
+        if (apellido2 !== null) {
+          nombreCorto += ` ${apellido2}`;
+        }
+    
+        this.formularioContacto
+          .get('nombre_corto')
+          ?.patchValue(nombreCorto, { emitEvent: false });
+      }
+
       return this.dataFormulario.emit(this.formularioContacto.value);
     } else {
       this.formularioContacto.markAllAsTouched();
@@ -200,7 +273,7 @@ export class FormularioComponent extends General implements OnInit {
     );
     if (arrCiudad) {
       this.formularioContacto.patchValue({
-        ciudad_id: arrCiudad?.ciudad_id,
+        ciudad: arrCiudad?.ciudad_id,
         ciudad_nombre: arrCiudad?.ciudad_nombre,
       });
     }
@@ -226,8 +299,8 @@ export class FormularioComponent extends General implements OnInit {
   }
 
   seleccionarCiudad(ciudad: any) {
-    this.informacionContacto.patchValue({
-      ciudad_id: ciudad?.ciudad_id,
+    this.formularioContacto.patchValue({
+      ciudad: ciudad?.ciudad_id,
       ciudad_nombre: ciudad?.ciudad_nombre,
     });
   }
