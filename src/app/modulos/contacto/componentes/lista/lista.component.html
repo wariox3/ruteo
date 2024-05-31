@@ -1,32 +1,43 @@
 <nb-card>
-    <nb-card-header>Filtros</nb-card-header>
-    <nb-card-body>
-        <app-base-filtro></app-base-filtro>
-    </nb-card-body>
+  <nb-card-header>Filtros</nb-card-header>
+  <nb-card-body>
+    <app-base-filtro></app-base-filtro>
+  </nb-card-body>
 </nb-card>
 <nb-card>
-    <nb-card-header class="d-flex justify-content-between align-items-center">
-        <span>Contacto</span>
-        <a nbButton status="primary" [routerLink]="['../nuevo']">Nuevo</a>
-      </nb-card-header>
-    <nb-card-body>
-        <table>
-            <thead>
-                <tr>
-                    <th *ngFor="let encabezado of encabezados">{{ encabezado.nombre }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of arrItems">
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.identificacion_abreviatura }}</td>
-                    <td>{{ item.numero_identificacion }}</td>
-                    <td>{{ item.nombre_corto }}</td>
-                    <td>{{ item.correo }}</td>
-                    <td>{{ item.telefono }}</td>
-                    <td>{{ item.celular }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </nb-card-body>
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+    <span>Contacto</span>
+    <a nbButton status="primary" [routerLink]="['../nuevo']">Nuevo</a>
+  </nb-card-header>
+  <nb-card-body>
+    <table>
+      <thead>
+        <tr>
+          <th *ngFor="let encabezado of encabezados">
+            {{ encabezado.nombre }}
+          </th>
+        </tr>
+        <tr></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of arrItems">
+          <td>{{ item.id }}</td>
+          <td>{{ item.identificacion_abreviatura }}</td>
+          <td>{{ item.numero_identificacion }}</td>
+          <td>{{ item.nombre_corto }}</td>
+          <td>{{ item.correo }}</td>
+          <td>{{ item.telefono }}</td>
+          <td>{{ item.celular }}</td>
+          <td>
+            <a
+              class="menu-link px-3 cursor-pointer"
+              (click)="detalleEmpresa(item.id)"
+            >
+              <nb-icon icon="eye-outline"></nb-icon>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </nb-card-body>
 </nb-card>

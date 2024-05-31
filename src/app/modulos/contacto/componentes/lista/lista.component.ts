@@ -1,17 +1,18 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, Inject, OnInit, inject } from "@angular/core";
-import { NbButtonModule, NbCardModule } from "@nebular/theme";
+import { NbButtonModule, NbCardModule, NbIconModule } from "@nebular/theme";
 import { BaseFiltroComponent } from "../../../../comun/componentes/base-filtro/base-filtro.component";
 import { TablaComponent } from "../../../../comun/componentes/tabla/tabla.component";
 import { General } from "../../../../comun/clases/general";
 import { ContactoService } from "../../servicios/contacto.service";
 import { mapeo } from "../../mapeo"
 import { RouterModule } from "@angular/router";
+import { KeysPipe } from "../../../../comun/pipe/keys.pipe";
 
 @Component({
   selector: "app-lista",
   standalone: true,
-  imports: [CommonModule, NbCardModule, BaseFiltroComponent, TablaComponent, RouterModule, NbButtonModule],
+  imports: [CommonModule, NbCardModule, BaseFiltroComponent, TablaComponent, RouterModule, NbButtonModule, KeysPipe, NbIconModule],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,7 +35,6 @@ export class ListaComponent extends General implements OnInit {
   ngOnInit(){
     this.consultarLista();    
     this.encabezados = mapeo.datos.filter((titulo) => titulo.visibleTabla === true)
-    // Menu.dataMapeo.filter((titulo: any) => titulo.visibleTabla === true)
   }
 
   consultarLista(){
@@ -43,5 +43,9 @@ export class ListaComponent extends General implements OnInit {
       this.arrItems = respuesta.registros;
       this.changeDetectorRef.detectChanges();
     })
+  }
+
+  detalleEmpresa(contacto_id: Number) {
+    this.router.navigate([`/administracion/contacto/detalle/${contacto_id}`]);
   }
 }
