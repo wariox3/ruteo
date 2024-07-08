@@ -55,12 +55,18 @@ export class FormularioComponent extends General implements OnChanges{
   formularioVehiculo = new FormGroup({
     placa: new FormControl(
       '',
-      Validators.compose([Validators.required])
+      Validators.compose([
+        Validators.required,
+        Validators.maxLength(6)
+      ])
     ),
     capacidad: new FormControl(
       '',
-      Validators.compose([Validators.required])
-    ),
+      Validators.compose([
+        Validators.required,
+        Validators.pattern('^[0-9]*$')
+      ])
+    )
   });
 
   ngOnChanges(changes: SimpleChanges) {

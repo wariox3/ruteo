@@ -21,7 +21,9 @@
       <nb-icon icon="arrow-back-outline"></nb-icon>
       Atrás
     </a>
-    <button nbButton type="submit" size="small" status="primary" #btnGuardar>Guardar</button>
+    <button nbButton type="submit" size="small" status="primary" #btnGuardar>
+      Guardar
+    </button>
   </div>
   <nb-card>
     <nb-card-header>Nuevo vehículo</nb-card-header>
@@ -36,7 +38,27 @@
             type="text"
             autocomplete="off"
           />
+          <ng-container
+            *ngIf="
+              formularioVehiculo.get('placa').invalid &&
+              formularioVehiculo.get('placa').touched
+            "
+          >
+            <p
+              class="caption status-danger"
+              *ngIf="formularioVehiculo.get('placa').errors?.required"
+            >
+              El campo es requerido!
+            </p>
+            <p
+              class="caption status-danger"
+              *ngIf="formularioVehiculo.get('placa').errors?.maxlength"
+            >
+              La placa no puede tener más de 6 caracteres!
+            </p>
+          </ng-container>
         </div>
+        
         <div class="col-md-6 col-sm-12">
           <label class="label required">Capacidad</label>
           <input
@@ -46,6 +68,25 @@
             type="text"
             autocomplete="off"
           />
+          <ng-container
+            *ngIf="
+              formularioVehiculo.get('capacidad').invalid &&
+              formularioVehiculo.get('capacidad').touched
+            "
+          >
+            <p
+              class="caption status-danger"
+              *ngIf="formularioVehiculo.get('capacidad').errors?.required"
+            >
+              El campo es requerido!
+            </p>
+            <p
+              class="caption status-danger"
+              *ngIf="formularioVehiculo.get('capacidad').errors?.pattern"
+            >
+              Solo se permiten números!
+            </p>
+          </ng-container>
         </div>
       </div>
     </nb-card-body>
