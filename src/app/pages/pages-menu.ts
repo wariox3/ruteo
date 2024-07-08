@@ -24,7 +24,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         icon: 'file-add-outline',
         title: 'Importar guias',
-        link: '',
+        link: 'utilidad/importar',
       }
     ],
   }

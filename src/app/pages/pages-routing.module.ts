@@ -32,6 +32,12 @@ const routes: Routes = [{
       )
     },
     {
+      path: 'utilidad/importar',
+      loadChildren:() => import('../modulos/guia/guia-routing').then(
+        (r) => r.routes
+      )
+    },
+    {
       path: '**',
       component: NotFoundComponent,
     },
