@@ -5,7 +5,7 @@
       (change)="propiedadSeleccionada($event)"
     >
       <option value="">
-        {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR" }}
+        Seleccionar
       </option>
       <ng-container *ngFor="let propiedad of camposVisibles">
         <option
@@ -48,7 +48,7 @@
       (change)="onCriterioSeleccionado($event)"
     >
       <option value="">
-        {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR"}}
+        Seleccionar
       </option>
       <option
         *ngFor="let criterioBusqueda of criteriosBusqueda"
@@ -120,7 +120,7 @@
                 (change)="propiedadSeleccionadaModal($event, i)"
               >
                 <option value="">
-                  {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR" | translate }}
+                  Seleccionar
                 </option>
                 <ng-container
                   *ngFor="let propiedad of propiedadBusquedaAvanzada"
