@@ -1,12 +1,30 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NbCardModule, NbInputModule } from '@nebular/theme';
-import { VehicleMapComponent } from '../../../../comun/componentes/vehicle-map/vehicle-map.component';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from "@angular/common";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from "@angular/core";
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
+import {
+  NbButtonModule,
+  NbCardModule,
+  NbIconModule,
+  NbInputModule,
+} from "@nebular/theme";
+import { VehicleMapComponent } from "../../../../comun/componentes/vehicle-map/vehicle-map.component";
+import { RouterModule } from "@angular/router";
 
 @Component({
-  selector: 'app-formulario',
+  selector: "app-formulario",
   standalone: true,
   imports: [
     CommonModule,
@@ -15,25 +33,37 @@ import { RouterModule } from '@angular/router';
     NbInputModule,
     NbCardModule,
     VehicleMapComponent,
-    RouterModule
+    RouterModule,
+    NbIconModule,
+    NbButtonModule,
   ],
-  templateUrl: './formulario.component.html',
-  styleUrls: ['./formulario.component.css'],
+  templateUrl: "./formulario.component.html",
+  styleUrls: ["./formulario.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormularioComponent {
-
   @Input() informacionVehiculo: any = [];
 
-  formularioVehiculo  = new FormGroup({
+  @Input() visualizarBtnAtras: boolean = true;
+  @Output() dataFormulario: EventEmitter<any> = new EventEmitter();
+  @ViewChild("autoInput") input;
+
+  formularioVehiculo = new FormGroup({
     placa: new FormControl(
       this.informacionVehiculo.placa,
       Validators.compose([Validators.required])
-    )
-  })
+    ),
+    capacidad: new FormControl(
+      this.informacionVehiculo.capacidad,
+      Validators.compose([Validators.required])
+    ),
+  });
 
-
-  enviar(){
-
+  enviar() {
+    if (this.formularioVehiculo.valid) {
+      return this.dataFormulario.emit(this.formularioVehiculo.value);
+    } else {
+      this.formularioVehiculo.markAllAsTouched();
+    }
   }
- }
+}

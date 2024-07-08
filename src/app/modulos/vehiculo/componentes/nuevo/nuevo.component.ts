@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { FormularioComponent } from '../formulario/formulario.component';
+import { vehiculoService } from '../../servicios/vehiculo.service';
+import { General } from '../../../../comun/clases/general';
 
 @Component({
   selector: 'app-nuevo',
@@ -13,16 +15,23 @@ import { FormularioComponent } from '../formulario/formulario.component';
   styleUrls: ['./nuevo.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NuevoComponent implements OnInit {
+export class NuevoComponent extends General implements OnInit {
+  private vehiculoService = inject(vehiculoService);
 
   informacionVehiculo: any = {
     placa: "",
-    capacidad_maxima: "",
+    capacidad: "",
 
   };
 
   ngOnInit() {}
 
-  enviarFormulario(formulario: any) {}
+  enviarFormulario(formulario: any) {
+    console.log(formulario);
+    
+    this.vehiculoService.guardarVehiculo(formulario).subscribe((respuesta) => {
+      this.alerta.mensajaExitoso('Se ha creado el contacto exitosamente.', 'Guardado con éxito.')
+    });
+  }
 
  }
