@@ -57,7 +57,11 @@ export class ListaComponent extends General implements OnInit {
       });
   }
 
-  detalleEmpresa(vehiculo_id: Number) {
-    this.router.navigate([`/administracion/vehiculo/detalle/${vehiculo_id}`]);
+  detalleVehiculo(vehiculo_id: Number) {    
+    this.router.navigate([`/administracion/vehiculo/detalle/`, vehiculo_id]);
+  }
+
+  editarVehiculo(vehiculo_id: Number){
+    this.router.navigate([`/administracion/vehiculo/editar/`, vehiculo_id]);
   }
 }

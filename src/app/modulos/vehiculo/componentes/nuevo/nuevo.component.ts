@@ -27,10 +27,9 @@ export class NuevoComponent extends General implements OnInit {
   ngOnInit() {}
 
   enviarFormulario(formulario: any) {
-    console.log(formulario);
-    
-    this.vehiculoService.guardarVehiculo(formulario).subscribe((respuesta) => {
-      this.alerta.mensajaExitoso('Se ha creado el contacto exitosamente.', 'Guardado con éxito.')
+    this.vehiculoService.guardarVehiculo(formulario).subscribe((respuesta: any) => {
+      this.alerta.mensajaExitoso('Se ha creado el vehículo exitosamente.', 'Guardado con éxito.')
+      this.router.navigate(['/administracion/vehiculo/detalle', respuesta.id]);
     });
   }
 

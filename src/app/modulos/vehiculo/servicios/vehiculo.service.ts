@@ -47,7 +47,11 @@ export class vehiculoService {
     return this.http.post<any[]>(`ruteo/vehiculo/`, data);
   }
 
+  actualizarDatosVehiculo(id: number, data: any) {
+    return this.http.put<any>(`ruteo/vehiculo/${id}/`, data);
+  }
+
   consultarDetalle(id: number) {
-    return this.http.getDetalle<any>(`general/vehiculo/${id}/`);
+    return this.http.getDetalle<any>(`ruteo/vehiculo/${id}/`);
   }
 }

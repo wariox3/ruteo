@@ -21,7 +21,14 @@ export const routes: Route[] = [
         )
   },
   {
-    path: 'detalle/:vehiculoCodigo',
+    path: 'editar/:id',
+    loadComponent: () => 
+        import('./componentes/editar/editar.component').then(
+            (m) => m.EditarComponent
+        )
+  },
+  {
+    path: 'detalle/:id',
     loadComponent: () => 
         import('./componentes/detalle/detalle.component').then(
             (m) => m.DetalleComponent

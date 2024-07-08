@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NbCardModule } from '@nebular/theme';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { NbButtonModule, NbCardModule, NbIconModule } from '@nebular/theme';
 import { vehiculoService } from '../../servicios/vehiculo.service';
+import { switchMap, tap } from 'rxjs/operators';
+import { General } from '../../../../comun/clases/general';
 
 @Component({
   selector: 'app-detalle',
@@ -10,15 +12,18 @@ import { vehiculoService } from '../../servicios/vehiculo.service';
   imports: [
     CommonModule,
     NbCardModule,
+    RouterModule,
+    NbIconModule,
+    NbButtonModule
   ],
   templateUrl: './detalle.component.html',
   styleUrls: ['./detalle.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DetalleComponent implements OnInit {
+export class DetalleComponent extends General implements OnInit {
 
   protected activatedRoute = inject(ActivatedRoute);
-  protected vehiculoService: vehiculoService
+  protected vehiculoService = inject(vehiculoService)
 
   vehiculo: any = {
     placa: '',
@@ -26,14 +31,15 @@ export class DetalleComponent implements OnInit {
   }
 
 ngOnInit(): void {
-  this.activatedRoute.queryParams.subscribe(
-    (parametros) => {
-      console.log(parametros);
-
-      // this.vehiculoService.consultarDetalle
-
-    }
-  );
+  this.activatedRoute.params.pipe(
+    switchMap((respuestaParametros: any)=> {
+      return this.vehiculoService.consultarDetalle(respuestaParametros.id)
+    }),
+    tap((respuestaConsultaDetalle)=>{
+      this.vehiculo = respuestaConsultaDetalle
+      this.changeDetectorRef.detectChanges();
+    })
+  ).subscribe();
 }
 
 }

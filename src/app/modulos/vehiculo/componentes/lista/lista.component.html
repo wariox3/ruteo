@@ -18,6 +18,7 @@
           </th>
         </tr>
         <tr></tr>
+        <tr></tr>
       </thead>
       <tbody>
         <tr *ngFor="let vehiculo of arrVehiculos">
@@ -26,8 +27,18 @@
           <td>{{ vehiculo.capacidad }}</td>
           <td>
             <a
-              class="menu-link px-3 cursor-pointer"
-              (click)="detalleEmpresa(vehiculo.id)"
+              class="menu-link px-3"
+              style="cursor: pointer;"
+              (click)="editarVehiculo(vehiculo.id)"
+            >
+              <nb-icon icon="edit-outline"></nb-icon>
+            </a>
+          </td>
+          <td>
+            <a
+              class="menu-link px-3"
+              style="cursor: pointer;"
+              (click)="detalleVehiculo(vehiculo.id)"
             >
               <nb-icon icon="eye-outline"></nb-icon>
             </a>

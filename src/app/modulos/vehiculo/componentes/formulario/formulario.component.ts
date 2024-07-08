@@ -4,7 +4,10 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
+  OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from "@angular/core";
 import {
@@ -22,6 +25,7 @@ import {
 } from "@nebular/theme";
 import { VehicleMapComponent } from "../../../../comun/componentes/vehicle-map/vehicle-map.component";
 import { RouterModule } from "@angular/router";
+import { General } from "../../../../comun/clases/general";
 
 @Component({
   selector: "app-formulario",
@@ -41,8 +45,8 @@ import { RouterModule } from "@angular/router";
   styleUrls: ["./formulario.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormularioComponent {
-  @Input() informacionVehiculo: any = [];
+export class FormularioComponent extends General implements OnChanges{
+  @Input() informacionVehiculo: any;
 
   @Input() visualizarBtnAtras: boolean = true;
   @Output() dataFormulario: EventEmitter<any> = new EventEmitter();
@@ -50,14 +54,25 @@ export class FormularioComponent {
 
   formularioVehiculo = new FormGroup({
     placa: new FormControl(
-      this.informacionVehiculo.placa,
+      '',
       Validators.compose([Validators.required])
     ),
     capacidad: new FormControl(
-      this.informacionVehiculo.capacidad,
+      '',
       Validators.compose([Validators.required])
     ),
   });
+
+  ngOnChanges(changes: SimpleChanges) {
+    
+    if(changes.informacionVehiculo.currentValue){
+      this.formularioVehiculo.patchValue({
+        placa : this.informacionVehiculo.placa,
+        capacidad: this.informacionVehiculo.capacidad
+      })
+    }
+    
+  }
 
   enviar() {
     if (this.formularioVehiculo.valid) {

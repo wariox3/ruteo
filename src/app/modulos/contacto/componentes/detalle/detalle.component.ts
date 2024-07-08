@@ -21,7 +21,7 @@ export class DetalleComponent implements OnInit {
 ngOnInit(): void {
   this.activatedRoute.queryParams.subscribe(
     (parametros) => {
-      console.log(parametros);
+
       
     }
   );
