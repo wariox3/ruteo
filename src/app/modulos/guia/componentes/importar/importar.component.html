@@ -8,6 +8,6 @@
       <input id="fileInput" type="file" (change)="onFileChange($event)" />
       <span class="file-name" *ngIf="fileName">{{ fileName }}</span>
     </div>
-    <button nbButton status="primary" (click)="uploadFile()">Importar</button>
+    <button nbButton status="primary" size="small" (click)="uploadFile()">Importar</button>
   </nb-card-body>
 </nb-card>
