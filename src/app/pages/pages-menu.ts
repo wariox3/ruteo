@@ -18,13 +18,25 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'Movimiento',
+    icon: 'book-outline',
+    children: [
+      {
+        icon: 'file-text-outline',
+        title: 'Guía',
+        link: 'guia/movimiento/lista',
+      },
+
+    ],
+  },
+  {
     title: 'Utilidad',
     icon: 'pantone-outline',
     children: [
       {
         icon: 'file-add-outline',
         title: 'Importar guias',
-        link: 'utilidad/importar',
+        link: 'guia/utilidad/importar',
       }
     ],
   }

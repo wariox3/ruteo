@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { NbButtonModule, NbCardModule, NbIconModule } from "@nebular/theme";
 import { General } from "../../../../comun/clases/general";
-import { ImportarService } from "../../servicios/importar.service";
+import { GuiaService } from "../../servicios/guia.service";
 
 @Component({
   selector: "app-importar",
@@ -13,7 +13,7 @@ import { ImportarService } from "../../servicios/importar.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImportarComponent extends General {
-  constructor(private importarService: ImportarService) {
+  constructor(private importarService: GuiaService) {
     super();
   }
 
@@ -29,7 +29,7 @@ export class ImportarComponent extends General {
       this.convertToBase64(file);
     }
   }
-  
+
   convertToBase64(file: File) {
     const reader = new FileReader();
     reader.readAsDataURL(file);
