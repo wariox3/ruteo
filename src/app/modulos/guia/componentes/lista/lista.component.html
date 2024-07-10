@@ -14,6 +14,7 @@
     <table>
       <thead>
         <tr>
+          <th></th>
           <th *ngFor="let encabezado of encabezados">
             {{ encabezado.nombre }}
           </th>
@@ -21,6 +22,19 @@
       </thead>
       <tbody>
         <tr *ngFor="let guia of arrGuia">
+          <td>
+            <ng-container *ngIf="guia.decodificado_error; else noError">
+              <span class="circle-red"></span>
+            </ng-container>
+            <ng-template #noError>
+              <ng-container *ngIf="guia.decodificado; else notDecoded">
+                <span class="circle-green"></span>
+              </ng-container>
+              <ng-template #notDecoded>
+                <span class="circle-yellow"></span>
+              </ng-template>
+            </ng-template>
+          </td>
           <td>{{ guia.id }}</td>
           <td>{{ guia.guia }}</td>
           <td>{{ guia.fecha }}</td>

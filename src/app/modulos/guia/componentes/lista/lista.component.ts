@@ -48,6 +48,8 @@ export class ListaComponent extends General implements OnInit {
       .subscribe((respuesta) => {
         //this.cantidad_registros = respuesta.cantidad_registros;
         this.arrGuia = respuesta;
+        console.log(this.arrGuia);
+        
         this.changeDetectorRef.detectChanges();
       });
   }

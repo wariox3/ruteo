@@ -41,7 +41,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         icon: 'file-add-outline',
         title: 'Importar visitas',
-        link: 'guia/utilidad/importar',
+        link: 'visita/utilidad/importar',
       }
     ],
   }
