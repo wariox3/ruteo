@@ -25,4 +25,8 @@ export class GuiaService {
     return this.http.post<any[]>(`ruteo/visita/importar/`, data);
   }
 
+  decodificar(){
+    return this.http.post<any[]>(`ruteo/visita/decodificar/`, '');
+  }
+
 }

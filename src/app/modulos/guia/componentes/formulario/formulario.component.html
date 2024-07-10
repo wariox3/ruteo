@@ -22,13 +22,18 @@
     <button nbButton type="submit" status="primary" #btnGuardar>Guardar</button>
   </div>
   <nb-card>
-    <nb-card-header>Nuevo guía</nb-card-header>
+    <nb-card-header>Nueva visita</nb-card-header>
     <nb-card-body>
       <div class="row mb-10">
         <div class="col-md-12 col-sm-12">
           <label class="label required">Fecha</label>
-          <input nbInput [nbDatepicker]="rangepicker" formControlName="fecha" fullWidth>
-<nb-rangepicker #rangepicker format="YYYY-MM-DD"></nb-rangepicker>
+          <input
+            nbInput
+            [nbDatepicker]="rangepicker"
+            formControlName="fecha"
+            fullWidth
+          />
+          <nb-rangepicker #rangepicker format="YYYY-MM-DD"></nb-rangepicker>
         </div>
       </div>
       <div class="row mb-10">
@@ -102,7 +107,9 @@
       </div>
       <div class="row mb-10">
         <div class="col-md-12 col-sm-12">
-          <nb-toggle status="basic"  formControlName="decodificado">Decodificado</nb-toggle>
+          <nb-toggle status="basic" formControlName="decodificado"
+            >Decodificado</nb-toggle
+          >
         </div>
       </div>
     </nb-card-body>
