@@ -74,13 +74,6 @@ export const mapeo: any = {
       ordenable: false,
     },
     {
-      nombre: "Decodificado",
-      campoTipo: "CharField",
-      visibleTabla: true,
-      visibleFiltro: false,
-      ordenable: false,
-    },
-    {
       nombre: "Latitud",
       campoTipo: "CharField",
       visibleTabla: true,

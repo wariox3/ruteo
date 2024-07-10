@@ -30,7 +30,7 @@ export class ListaComponent extends General implements OnInit {
     desplazar: 0,
     ordenamientos: [],
     limite_conteo: 10000,
-    modelo: "RutGuia",
+    modelo: "RutVisita",
   };
   cantidad_registros!: number;
   arrGuia: any[];
@@ -53,11 +53,11 @@ export class ListaComponent extends General implements OnInit {
   }
 
   detalleGuia(guia_id: Number) {
-    this.router.navigate([`guia/movimiento/detalle/`, guia_id]);
+    this.router.navigate([`visita/movimiento/detalle/`, guia_id]);
   }
 
   editarGuia(guia_id: Number){
-    this.router.navigate([`guia/movimiento/editar/`, guia_id]);
+    this.router.navigate([`visita/movimiento/editar/`, guia_id]);
   }
 
 }

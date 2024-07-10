@@ -9,20 +9,20 @@ export class GuiaService {
 
   lista(parametros: any) {
     return this.http.get<any>(
-      `ruteo/guia/`,
+      `ruteo/visita/`,
     );
   }
 
   guardarGuias(data: any){
-    return this.http.post<any[]>(`ruteo/guia/`, data);
+    return this.http.post<any[]>(`ruteo/visita/`, data);
   }
 
   consultarDetalle(id: number) {
-    return this.http.getDetalle<any>(`ruteo/guia/${id}/`);
+    return this.http.getDetalle<any>(`ruteo/visita/${id}/`);
   }
 
-  importarGuias(data: any) {
-    return this.http.post<any[]>(`ruteo/guia/importar/`, data);
+  importarVisitas(data: any) {
+    return this.http.post<any[]>(`ruteo/visita/importar/`, data);
   }
 
 }

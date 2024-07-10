@@ -2,6 +2,18 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
+    title: 'Movimiento',
+    icon: 'book-outline',
+    children: [
+      {
+        icon: 'file-text-outline',
+        title: 'Visita',
+        link: 'visita/movimiento/lista',
+      },
+
+    ],
+  },
+  {
     title: 'Administración',
     icon: 'edit-2-outline',
     children: [
@@ -14,19 +26,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
         icon: 'people-outline',
         title: 'Contactos',
         link: 'administracion/contacto',
-      }
-    ],
-  },
-  {
-    title: 'Movimiento',
-    icon: 'book-outline',
-    children: [
-      {
-        icon: 'file-text-outline',
-        title: 'Guía',
-        link: 'guia/movimiento/lista',
       },
-
+      {
+        icon: 'pin-outline',
+        title: 'Franja',
+        link: 'administracion/franja',
+      }
     ],
   },
   {
@@ -35,7 +40,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         icon: 'file-add-outline',
-        title: 'Importar guias',
+        title: 'Importar visitas',
         link: 'guia/utilidad/importar',
       }
     ],

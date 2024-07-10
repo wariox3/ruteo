@@ -32,9 +32,14 @@ const routes: Routes = [
           import("../modulos/vehiculo/vehiculo-routing").then((r) => r.routes),
       },
       {
-        path: "guia",
+        path: "administracion/franja",
         loadChildren: () =>
-          import("../modulos/guia/guia-routing").then((r) => r.routes),
+          import("../modulos/franja/franja-routing").then((r) => r.routes),
+      },
+      {
+        path: "visita",
+        loadChildren: () =>
+          import("../modulos/guia/visita-routing").then((r) => r.routes),
       },
       {
         path: "**",

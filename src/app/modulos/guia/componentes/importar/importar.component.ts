@@ -45,7 +45,7 @@ export class ImportarComponent extends General {
   uploadFile() {
     if (this.base64File) {
       this.importarService
-        .importarGuias({ archivo_base64: this.base64File })
+        .importarVisitas({ archivo_base64: this.base64File })
         .subscribe((response) => {
           this.alerta.mensajaExitoso(
             "Se han cargado las guias con éxito",
