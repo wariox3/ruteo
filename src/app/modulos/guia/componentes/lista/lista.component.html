@@ -7,6 +7,8 @@
 <nb-card>
   <nb-card-header class="d-flex justify-content-between align-items-center">
     <span>Guía</span>
+    <a nbButton status="primary" size="small" [routerLink]="['../nuevo']">Nuevo</a>
+
   </nb-card-header>
   <nb-card-body>
     <table>
@@ -32,6 +34,24 @@
           <td>{{ guia.decodificado? 'Si': 'No' }}</td>
           <td>{{ guia.latitud }}</td>
           <td>{{ guia.longitud }}</td>
+          <td>
+            <a
+              class="menu-link px-3"
+              style="cursor: pointer;"
+              (click)="editarGuia(guia.id)"
+            >
+              <nb-icon icon="edit-outline"></nb-icon>
+            </a>
+          </td>
+          <td>
+            <a
+              class="menu-link px-3"
+              style="cursor: pointer;"
+              (click)="detalleGuia(guia.id)"
+            >
+              <nb-icon icon="eye-outline"></nb-icon>
+            </a>
+          </td>
         </tr>
       </tbody>
     </table>

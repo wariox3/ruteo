@@ -1,0 +1,110 @@
+<form
+  (ngSubmit)="enviar()"
+  [formGroup]="formularioGuia"
+  #form="ngForm"
+  aria-labelledby="title"
+>
+  <div
+    class="fv-row d-flex"
+    [ngClass]="{
+      'justify-content-start': true
+    }"
+  >
+    <a
+      nbButton
+      status="control"
+      [routerLink]="['/guia/movimiento/lista']"
+      style="margin-right: 10px"
+    >
+      <nb-icon icon="arrow-back-outline"></nb-icon>
+      Atrás
+    </a>
+    <button nbButton type="submit" status="primary" #btnGuardar>Guardar</button>
+  </div>
+  <nb-card>
+    <nb-card-header>Nuevo guía</nb-card-header>
+    <nb-card-body>
+      <div class="row mb-10">
+        <div class="col-md-12 col-sm-12">
+          <label class="label required">Fecha</label>
+          <input nbInput [nbDatepicker]="rangepicker" formControlName="fecha" fullWidth>
+<nb-rangepicker #rangepicker format="YYYY-MM-DD"></nb-rangepicker>
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-12 col-sm-12">
+          <label class="label required">Documento</label>
+          <input nbInput formControlName="documento" fullWidth type="text" />
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-12 col-sm-12">
+          <label class="label required">Destinatario</label>
+          <input nbInput formControlName="destinatario" fullWidth type="text" />
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-12 col-sm-12">
+          <label class="label required">Destinatario dirección</label>
+          <input
+            nbInput
+            formControlName="destinatario_direccion"
+            fullWidth
+            type="text"
+          />
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-12 col-sm-12">
+          <label class="label required">Destinatario teléfono</label>
+          <input
+            nbInput
+            formControlName="destinatario_telefono"
+            fullWidth
+            type="text"
+          />
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-12 col-sm-12">
+          <label class="label required">Destinatario correo</label>
+          <input
+            nbInput
+            formControlName="destinatario_correo"
+            fullWidth
+            type="text"
+          />
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-12 col-sm-12">
+          <label class="label required">Peso</label>
+          <input nbInput formControlName="peso" fullWidth type="text" />
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-12 col-sm-12">
+          <label class="label required">Volumen</label>
+          <input nbInput formControlName="volumen" fullWidth type="text" />
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-12 col-sm-12">
+          <label class="label required">Latitud</label>
+          <input nbInput formControlName="latitud" fullWidth type="text" />
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-12 col-sm-12">
+          <label class="label required">Longitud</label>
+          <input nbInput formControlName="longitud" fullWidth type="text" />
+        </div>
+      </div>
+      <div class="row mb-10">
+        <div class="col-md-12 col-sm-12">
+          <nb-toggle status="basic"  formControlName="decodificado">Decodificado</nb-toggle>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</form>

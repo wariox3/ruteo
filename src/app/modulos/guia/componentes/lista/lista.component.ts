@@ -52,12 +52,12 @@ export class ListaComponent extends General implements OnInit {
       });
   }
 
-  detalleVehiculo(vehiculo_id: Number) {
-    this.router.navigate([`guia/administracion/detalle/`, vehiculo_id]);
+  detalleGuia(guia_id: Number) {
+    this.router.navigate([`guia/movimiento/detalle/`, guia_id]);
   }
 
-  editarVehiculo(vehiculo_id: Number){
-    this.router.navigate([`guia/administracion/editar/`, vehiculo_id]);
+  editarGuia(guia_id: Number){
+    this.router.navigate([`guia/movimiento/editar/`, guia_id]);
   }
 
 }

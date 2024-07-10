@@ -13,6 +13,14 @@ export class GuiaService {
     );
   }
 
+  guardarGuias(data: any){
+    return this.http.post<any[]>(`ruteo/guia/`, data);
+  }
+
+  consultarDetalle(id: number) {
+    return this.http.getDetalle<any>(`ruteo/guia/${id}/`);
+  }
+
   importarGuias(data: any) {
     return this.http.post<any[]>(`ruteo/guia/importar/`, data);
   }
