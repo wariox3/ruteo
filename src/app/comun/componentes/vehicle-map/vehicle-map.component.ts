@@ -81,7 +81,7 @@ export class VehicleMapComponent implements OnInit {
   }
 
   performSearch(searchText: string) {
-    const url = `https://autosuggest.search.hereapi.com/v1/autosuggest?at=6.2442,-75.5812&q=${searchText}&apikey=drHZ5_qZgCOmDxje-eml8a_XR1JkYL7uVk0aTSVbM94`;
+    const url = ``;
     return this.http.get(url);
   }
 
