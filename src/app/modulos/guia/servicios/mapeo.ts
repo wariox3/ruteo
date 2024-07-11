@@ -86,6 +86,20 @@ export const mapeo: any = {
       visibleTabla: true,
       visibleFiltro: false,
       ordenable: false,
-    }
+    },
+    {
+      nombre: "Orden",
+      campoTipo: "IntegerField",
+      visibleTabla: true,
+      visibleFiltro: true,
+      ordenable: true,
+    },
+    {
+      nombre: "Distancia",
+      campoTipo: "CharField",
+      visibleTabla: true,
+      visibleFiltro: true,
+      ordenable: true,
+    },
   ],
 };

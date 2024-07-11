@@ -29,4 +29,8 @@ export class GuiaService {
     return this.http.post<any[]>(`ruteo/visita/decodificar/`, '');
   }
 
+  ordenar(){
+    return this.http.post<any[]>(`ruteo/visita/ordenar/`, '');
+  }
+
 }

@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  inject,
   OnInit,
   TemplateRef,
   ViewChild,
@@ -22,6 +21,12 @@ import { BaseFiltroComponent } from "../../../../comun/componentes/base-filtro/b
 import { General } from "../../../../comun/clases/general";
 import { GuiaService } from "../../servicios/guia.service";
 import { mapeo } from "../../servicios/mapeo";
+import {
+  GoogleMapsModule,
+  MapInfoWindow,
+  MapMarker,
+  MapDirectionsService, MapDirectionsRenderer
+} from "@angular/google-maps";
 
 @Component({
   selector: "app-lista",
@@ -35,6 +40,7 @@ import { mapeo } from "../../servicios/mapeo";
     NbIconModule,
     NbDialogModule,
     NbWindowModule,
+    GoogleMapsModule,
   ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],
@@ -42,11 +48,13 @@ import { mapeo } from "../../servicios/mapeo";
 })
 export class ListaComponent extends General implements OnInit {
   @ViewChild("contentTemplate") contentTemplate: TemplateRef<any>;
-  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild("fileInput") fileInput: ElementRef;
+  @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow;
 
   constructor(
     private windowService: NbWindowService,
     private guiaService: GuiaService,
+    private directionsService: MapDirectionsService
   ) {
     super();
   }
@@ -64,7 +72,20 @@ export class ListaComponent extends General implements OnInit {
   };
   cantidad_registros!: number;
   arrGuia: any[];
+  arrGuiasOrdenadas: any [];
   encabezados: any[];
+
+  center: google.maps.LatLngLiteral = { lat: 6.200713725811437, lng: -75.58609508555918 };
+  zoom = 8;
+  markerPositions: google.maps.LatLngLiteral[] = [];
+  marcarPosicionesVisitasOrdenadas: google.maps.LatLngLiteral[] = [{lat: 6.200713725811437, lng: -75.58609508555918}];
+  polylineOptions: google.maps.PolylineOptions = {
+    strokeColor: "#FF0000",
+    strokeOpacity: 1.0,
+    strokeWeight: 3,
+  };
+  directionsResults: google.maps.DirectionsResult | undefined;
+
 
   ngOnInit() {
     this.consultaLista();
@@ -77,17 +98,38 @@ export class ListaComponent extends General implements OnInit {
     this.guiaService
       .lista(this.arrParametrosConsulta)
       .subscribe((respuesta) => {
-        //this.cantidad_registros = respuesta.cantidad_registros;
         this.arrGuia = respuesta;
+        respuesta.forEach((punto) => {
+          this.addMarker({ lat: punto.latitud, lng: punto.longitud });
+        });
         this.changeDetectorRef.detectChanges();
       });
+      if(this.arrGuiasOrdenadas?.length >= 1){
+        this.arrGuiasOrdenadas.forEach((punto) => {
+          this.addMarkerOrdenadas({ lat: punto.latitud, lng: punto.longitud });
+        });
+        this.calculateRoute();
+        this.changeDetectorRef.detectChanges();   
+      }
+
   }
 
   decodificar() {
     this.guiaService.decodificar().subscribe(() => {
-      this.consultaLista()
+      this.consultaLista();
       this.alerta.mensajaExitoso(
         "Se ha decodificado correctamente",
+        "Guardado con éxito."
+      );
+    });
+  }
+
+  ordenar() {
+    this.guiaService.ordenar().subscribe((respuesta: any) => {
+      this.arrGuiasOrdenadas = respuesta.visitas_ordenadas
+      this.consultaLista();
+      this.alerta.mensajaExitoso(
+        "Se ha ordenado correctamente",
         "Guardado con éxito."
       );
     });
@@ -133,7 +175,7 @@ export class ListaComponent extends General implements OnInit {
       this.guiaService
         .importarVisitas({ archivo_base64: this.base64File })
         .subscribe((response) => {
-          this.consultaLista()
+          this.consultaLista();
           this.alerta.mensajaExitoso(
             "Se han cargado las guias con éxito",
             "Guardado con éxito."
@@ -146,9 +188,52 @@ export class ListaComponent extends General implements OnInit {
   }
 
   resetFileInput() {
-    this.fileInput.nativeElement.value = '';
-    this.fileName = '';
-    this.base64File = '';
+    this.fileInput.nativeElement.value = "";
+    this.fileName = "";
+    this.base64File = "";
     this.changeDetectorRef.detectChanges();
+  }
+
+  addMarker(position: google.maps.LatLngLiteral) {
+    this.markerPositions.push(position);
+  }
+
+  addMarkerOrdenadas(position: google.maps.LatLngLiteral) {
+    this.marcarPosicionesVisitasOrdenadas.push(position);
+  }
+
+  openInfoWindow(marker: MapMarker) {
+    this.infoWindow.open(marker);
+  }
+
+  calculateRoute() {
+    if (this.marcarPosicionesVisitasOrdenadas.length < 2) {
+      console.error('Se necesitan al menos dos puntos para calcular la ruta.');
+      return;
+    }
+  
+    const origin = this.marcarPosicionesVisitasOrdenadas[0];
+    const destination = this.marcarPosicionesVisitasOrdenadas[this.marcarPosicionesVisitasOrdenadas.length - 1];
+  
+    const waypoints = this.marcarPosicionesVisitasOrdenadas.slice(1, -1).map(position => ({
+      location: new google.maps.LatLng(position.lat, position.lng),
+      stopover: true
+    }));
+  
+    const request: google.maps.DirectionsRequest = {
+      origin: new google.maps.LatLng(origin.lat, origin.lng),
+      destination: new google.maps.LatLng(destination.lat, destination.lng),
+      waypoints: waypoints,
+      travelMode: google.maps.TravelMode.DRIVING,
+      optimizeWaypoints: false // Cambia a true si quieres optimizar el orden de las paradas
+    };
+  
+    this.directionsService.route(request).subscribe({
+      next: (response) => {
+        this.directionsResults = response.result;
+        this.changeDetectorRef.detectChanges();  
+      },
+      error: (e) => console.error(e)
+    });
   }
 }

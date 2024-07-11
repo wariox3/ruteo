@@ -26,6 +26,8 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsApp, StoreApp } from './redux';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
+import { GoogleMapsModule } from '@angular/google-maps'; 
+import { googleMapsConfig } from '../environments/google-maps.config';
 
 
 @NgModule({
@@ -55,6 +57,7 @@ import { EffectsModule } from '@ngrx/effects';
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    GoogleMapsModule
   ],
   bootstrap: [AppComponent],
   providers: [provideHttpClient(withInterceptors([tokenInterceptor, errorhttpInterceptor])),

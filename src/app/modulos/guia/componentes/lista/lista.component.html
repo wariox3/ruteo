@@ -8,6 +8,9 @@
   <nb-card-header class="d-flex justify-content-between align-items-center">
     <span>Visita</span>
     <div class="d-flex">
+      <button nbButton status="primary" size="small" (click)="ordenar()">
+        Ordenar
+      </button>
       <button nbButton status="primary" size="small" (click)="openWindow()">
         Importar
       </button>
@@ -61,6 +64,8 @@
           <td>{{ guia.volumen }}</td>
           <td>{{ guia.latitud }}</td>
           <td>{{ guia.longitud }}</td>
+          <td>{{ guia.orden }}</td>
+          <td>{{ guia.distancia_proxima }}</td>
           <td>
             <a
               class="menu-link px-3"
@@ -84,13 +89,53 @@
     </table>
   </nb-card-body>
 </nb-card>
+<nb-card>
+  <nb-card-header>
+    Localización visitas
+  </nb-card-header>
+  <nb-card-body>
+    <google-map height="400px"
+                width="100%"
+                [center]="center"
+                [zoom]="zoom">
+      <map-marker *ngFor="let markerPosition of markerPositions"
+                  [position]="markerPosition"
+                  (mapClick)="openInfoWindow(marker)">
+      </map-marker>
+      <map-info-window>Info Window</map-info-window>
+    </google-map>
+  </nb-card-body>
+</nb-card>
+<nb-card>
+  <nb-card-header>
+    Ruta Ordenada
+  </nb-card-header>
+  <nb-card-body>
+    <google-map height="400px"
+                width="100%"
+                [center]="center"
+                [zoom]="zoom">
+      <map-marker *ngFor="let markerPosition of marcarPosicionesVisitasOrdenadas"
+                  
+                  (mapClick)="openInfoWindow(marker)">
+      </map-marker>
+      <map-info-window>Info Window</map-info-window>
+      <map-directions-renderer *ngIf="directionsResults" [directions]="directionsResults"></map-directions-renderer>
+    </google-map>
+  </nb-card-body>
+</nb-card>
 <ng-template #contentTemplate let-data>
   <nb-card-body>
     <div class="file-upload">
       <label class="file-upload-label" for="fileInput"
         >Seleccionar Archivo</label
       >
-      <input #fileInput id="fileInput" type="file" (change)="onFileChange($event)" />
+      <input
+        #fileInput
+        id="fileInput"
+        type="file"
+        (change)="onFileChange($event)"
+      />
       <span class="file-name" *ngIf="fileName">{{ fileName }}</span>
     </div>
     <button nbButton status="primary" size="small" (click)="uploadFile()">
