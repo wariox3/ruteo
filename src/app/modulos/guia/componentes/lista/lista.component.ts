@@ -28,6 +28,7 @@ import {
   MapDirectionsService, MapDirectionsRenderer
 } from "@angular/google-maps";
 
+
 @Component({
   selector: "app-lista",
   standalone: true,
@@ -50,6 +51,8 @@ export class ListaComponent extends General implements OnInit {
   @ViewChild("contentTemplate") contentTemplate: TemplateRef<any>;
   @ViewChild("fileInput") fileInput: ElementRef;
   @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow;
+
+  private windowRef: NbWindowRef | null = null;
 
   constructor(
     private windowService: NbWindowService,
@@ -144,7 +147,7 @@ export class ListaComponent extends General implements OnInit {
   }
 
   openWindow() {
-    this.windowService.open(this.contentTemplate, {
+    this.windowRef = this.windowService.open(this.contentTemplate, {
       title: "Importar visitas",
     });
   }
@@ -181,6 +184,9 @@ export class ListaComponent extends General implements OnInit {
             "Guardado con éxito."
           );
           this.resetFileInput();
+          if (this.windowRef) {
+            this.windowRef.close();
+          }
         });
     } else {
       this.alerta.mensajeError("No se ha seleccionado ningún archivo", "Error");

@@ -107,3 +107,11 @@
   font-size: 14px;
   color: #333;
 }
+
+.spaced-button {
+  margin-right: 8px; /* Ajusta el valor según el espacio que desees */
+}
+
+.spaced-button:last-child {
+  margin-right: 0; /* Elimina el margen del último botón */
+}
