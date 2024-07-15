@@ -41,17 +41,12 @@
 
 /* Estilos responsivos */
 @media screen and (max-width: 600px) {
-  :host ::ng-deep table {
-    display: block;
+  :host ::ng-deep .table-container {
     overflow-x: auto;
-    white-space: nowrap;
   }
-  :host ::ng-deep thead, 
-  :host ::ng-deep tbody, 
-  :host ::ng-deep th, 
-  :host ::ng-deep td, 
-  :host ::ng-deep tr {
-    display: table-cell;
+
+  :host ::ng-deep table {
+    min-width: 600px; /* Asegura que la tabla tenga una anchura mínima para el scroll horizontal */
   }
 }
 
@@ -109,9 +104,10 @@
 }
 
 .spaced-button {
-  margin-right: 8px; /* Ajusta el valor según el espacio que desees */
+  margin-right: 8px;
 }
 
 .spaced-button:last-child {
   margin-right: 0; /* Elimina el margen del último botón */
 }
+
