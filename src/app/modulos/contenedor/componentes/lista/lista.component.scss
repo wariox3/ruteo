@@ -93,22 +93,12 @@
   }
   
   @media screen and (max-width: 600px) {
-    :host ::ng-deep .table-responsive-sm {
+    .table-container {
       overflow-x: auto;
     }
   
-    :host ::ng-deep table {
-      display: block;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
-  
-    :host ::ng-deep thead, 
-    :host ::ng-deep tbody, 
-    :host ::ng-deep th, 
-    :host ::ng-deep td, 
-    :host ::ng-deep tr {
-      display: table-cell;
+    table {
+      min-width: 600px; /* Asegura que la tabla tenga una anchura mínima para el scroll horizontal */
     }
   }
   
