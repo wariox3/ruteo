@@ -1,0 +1,45 @@
+<nb-card>
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+    <span>Rutear visitas</span>
+    <div class="d-flex">
+      <button
+        nbButton
+        status="primary"
+        size="small"
+        (click)="rutear()"
+        class="spaced-button"
+      >
+        Rutear
+      </button>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <table>
+      <thead>
+        <tr>
+          <th *ngFor="let encabezado of encabezados">
+            {{ encabezado.nombre }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let guia of arrVisitas">
+          <td>{{ guia.id }}</td>
+          <td>{{ guia.guia }}</td>
+          <td>{{ guia.fecha }}</td>
+          <td>{{ guia.documento }}</td>
+          <td>{{ guia.destinatario }}</td>
+          <td>{{ guia.destinatario_direccion }}</td>
+          <td>{{ guia.destinatario_telefono }}</td>
+          <td>{{ guia.destinatario_correo }}</td>
+          <td>{{ guia.peso }}</td>
+          <td>{{ guia.volumen }}</td>
+          <td>{{ guia.latitud }}</td>
+          <td>{{ guia.longitud }}</td>
+          <td>{{ guia.orden }}</td>
+          <td>{{ guia.distancia_proxima }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </nb-card-body>
+</nb-card>

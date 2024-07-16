@@ -8,16 +8,40 @@
   <nb-card-header class="d-flex justify-content-between align-items-center">
     <span>Visita</span>
     <div class="d-flex">
-      <button nbButton status="primary" size="small" (click)="ordenar()" class="spaced-button">
-        Ordenar
-      </button>
-      <button nbButton status="primary" size="small" (click)="openWindow()" class="spaced-button">
+      <button
+        nbButton
+        status="primary"
+        size="small"
+        (click)="openWindow()"
+        class="spaced-button"
+      >
         Importar
       </button>
-      <button nbButton status="primary" size="small" (click)="decodificar()" class="spaced-button">
+      <button
+        nbButton
+        status="primary"
+        size="small"
+        (click)="decodificar()"
+        class="spaced-button"
+      >
         Decodificar
       </button>
-      <button nbButton status="primary" size="small" [routerLink]="['../nuevo']" class="spaced-button">
+      <button
+        nbButton
+        status="primary"
+        size="small"
+        (click)="ordenar()"
+        class="spaced-button"
+      >
+        Ordenar
+      </button>
+      <button
+        nbButton
+        status="primary"
+        size="small"
+        [routerLink]="['../nuevo']"
+        class="spaced-button"
+      >
         Nuevo
       </button>
     </div>
@@ -85,37 +109,33 @@
   </nb-card-body>
 </nb-card>
 <nb-card>
-  <nb-card-header>
-    Localización visitas
-  </nb-card-header>
+  <nb-card-header> Localización visitas </nb-card-header>
   <nb-card-body>
-    <google-map height="400px"
-                width="100%"
-                [center]="center"
-                [zoom]="zoom">
-      <map-marker *ngFor="let markerPosition of markerPositions"
-                  [position]="markerPosition"
-                  (mapClick)="openInfoWindow(marker)">
+    <google-map height="400px" width="100%" [center]="center" [zoom]="zoom">
+      <map-marker
+        *ngFor="let markerPosition of markerPositions"
+        [position]="markerPosition"
+        (mapClick)="openInfoWindow(marker)"
+      >
       </map-marker>
       <map-info-window>Info Window</map-info-window>
     </google-map>
   </nb-card-body>
 </nb-card>
 <nb-card>
-  <nb-card-header>
-    Ruta Ordenada
-  </nb-card-header>
+  <nb-card-header> Ruta Ordenada </nb-card-header>
   <nb-card-body>
-    <google-map height="400px"
-                width="100%"
-                [center]="center"
-                [zoom]="zoom">
-      <map-marker *ngFor="let markerPosition of marcarPosicionesVisitasOrdenadas"
-                  
-                  (mapClick)="openInfoWindow(marker)">
+    <google-map height="400px" width="100%" [center]="center" [zoom]="zoom">
+      <map-marker
+        *ngFor="let markerPosition of marcarPosicionesVisitasOrdenadas"
+        (mapClick)="openInfoWindow(marker)"
+      >
       </map-marker>
       <map-info-window>Info Window</map-info-window>
-      <map-directions-renderer *ngIf="directionsResults" [directions]="directionsResults"></map-directions-renderer>
+      <map-directions-renderer
+        *ngIf="directionsResults"
+        [directions]="directionsResults"
+      ></map-directions-renderer>
     </google-map>
   </nb-card-body>
 </nb-card>

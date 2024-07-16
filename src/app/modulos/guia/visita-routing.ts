@@ -36,4 +36,11 @@ export const routes: Route[] = [
         (m) => m.ImportarComponent
       ),
   },
+  {
+    path: "utilidad/rutear",
+    loadComponent: () =>
+      import("./componentes/rutear/rutear.component").then(
+        (m) => m.RutearComponent
+      ),
+  },
 ];

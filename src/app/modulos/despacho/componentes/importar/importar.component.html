@@ -1,0 +1,13 @@
+<nb-card>
+  <nb-card-header>Importar visitas</nb-card-header>
+  <nb-card-body>
+    <div class="file-upload">
+      <label class="file-upload-label" for="fileInput"
+        >Seleccionar Archivo</label
+      >
+      <input id="fileInput" type="file" (change)="onFileChange($event)" />
+      <span class="file-name" *ngIf="fileName">{{ fileName }}</span>
+    </div>
+    <button nbButton status="primary" size="small" (click)="uploadFile()">Importar</button>
+  </nb-card-body>
+</nb-card>

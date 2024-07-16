@@ -42,6 +42,11 @@ const routes: Routes = [
           import("../modulos/guia/visita-routing").then((r) => r.routes),
       },
       {
+        path: "despacho",
+        loadChildren: () =>
+          import("../modulos/despacho/despacho-routing").then((r) => r.routes),
+      },
+      {
         path: "**",
         component: NotFoundComponent,
       },

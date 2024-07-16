@@ -7,10 +7,12 @@ import { HttpService } from "../../../comun/servicios/http.service";
 export class GuiaService {
   constructor(private http: HttpService) {}
 
-  lista(parametros: any) {
-    return this.http.get<any>(
-      `ruteo/visita/`,
-    );
+  lista(data: any) {
+    return this.http.post<any[]>(`ruteo/visita/lista/`, data);
+  }
+
+  listarVisitas(data: any){
+    return this.http.post<any[]>(`ruteo/visita/lista/`, data);
   }
 
   guardarGuias(data: any){
@@ -31,6 +33,10 @@ export class GuiaService {
 
   ordenar(){
     return this.http.post<any[]>(`ruteo/visita/ordenar/`, '');
+  }
+
+  rutear(){
+    return this.http.post<any[]>(`ruteo/visita/rutear/`, '');
   }
 
 }

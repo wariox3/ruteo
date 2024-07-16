@@ -10,6 +10,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'Visita',
         link: 'visita/movimiento/lista',
       },
+      {
+        icon: 'file-text-outline',
+        title: 'Despacho',
+        link: 'despacho/movimiento/lista',
+      },
 
     ],
   },
@@ -42,7 +47,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
         icon: 'file-add-outline',
         title: 'Importar visitas',
         link: 'visita/utilidad/importar',
-      }
+      },
+      {
+        icon: 'file-add-outline',
+        title: 'Rutear visitas',
+        link: 'visita/utilidad/rutear',
+      },
     ],
   }
 ];
