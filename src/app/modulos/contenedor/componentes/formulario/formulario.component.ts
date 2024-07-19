@@ -133,6 +133,9 @@ export class FormularioComponent extends General implements OnInit {
         Validators.pattern(/^[0-9]+$/),
       ])
     ),
+    reddoc: new FormControl(
+      "0"
+    ),
   });
 
   constructor() {

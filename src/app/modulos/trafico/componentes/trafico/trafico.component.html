@@ -7,6 +7,7 @@
         status="primary"
         size="small"
         class="spaced-button"
+        (click)="despachoSeleccionado ? mostrarMapa(despachoSeleccionado.id) : alerta.mensajeError('No se ha seleccionado ningún despacho', 'Error')"
       >
         Mapa
       </button>
@@ -52,5 +53,24 @@
         </nb-card>
       </div>
     </div>
+  </nb-card-body>
+</nb-card>
+
+<!-- Card del Mapa -->
+<nb-card *ngIf="mostrarMapaFlag">
+  <nb-card-header> Ruta Ordenada </nb-card-header>
+  <nb-card-body>
+    <google-map height="400px" width="100%" [center]="center" [zoom]="zoom">
+      <map-marker
+        *ngFor="let markerPosition of marcarPosicionesVisitasOrdenadas"
+        (mapClick)="openInfoWindow(marker)"
+      >
+      </map-marker>
+      <map-info-window>Info Window</map-info-window>
+      <map-directions-renderer
+        *ngIf="directionsResults"
+        [directions]="directionsResults"
+      ></map-directions-renderer>
+    </google-map>
   </nb-card-body>
 </nb-card>
