@@ -22,6 +22,7 @@ import {
   NbCardModule,
   NbIconModule,
   NbInputModule,
+  NbToggleModule,
 } from "@nebular/theme";
 import { VehicleMapComponent } from "../../../../comun/componentes/vehicle-map/vehicle-map.component";
 import { RouterModule } from "@angular/router";
@@ -40,12 +41,13 @@ import { General } from "../../../../comun/clases/general";
     RouterModule,
     NbIconModule,
     NbButtonModule,
+    NbToggleModule,
   ],
   templateUrl: "./formulario.component.html",
   styleUrls: ["./formulario.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormularioComponent extends General implements OnChanges{
+export class FormularioComponent extends General implements OnChanges {
   @Input() informacionVehiculo: any;
 
   @Input() visualizarBtnAtras: boolean = true;
@@ -54,30 +56,24 @@ export class FormularioComponent extends General implements OnChanges{
 
   formularioVehiculo = new FormGroup({
     placa: new FormControl(
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.maxLength(6)
-      ])
+      "",
+      Validators.compose([Validators.required, Validators.maxLength(6)])
     ),
     capacidad: new FormControl(
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.pattern('^[0-9]*$')
-      ])
-    )
+      "",
+      Validators.compose([Validators.required, Validators.pattern("^[0-9]*$")])
+    ),
+    estado_activo: new FormControl(""),
   });
 
   ngOnChanges(changes: SimpleChanges) {
-    
-    if(changes.informacionVehiculo.currentValue){
+    if (changes.informacionVehiculo.currentValue) {
       this.formularioVehiculo.patchValue({
-        placa : this.informacionVehiculo.placa,
-        capacidad: this.informacionVehiculo.capacidad
-      })
+        placa: this.informacionVehiculo.placa,
+        capacidad: this.informacionVehiculo.capacidad,
+        estado_activo: this.informacionVehiculo.estado_activo,
+      });
     }
-    
   }
 
   enviar() {

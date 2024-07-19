@@ -14,7 +14,7 @@ export class vehiculoService {
     );
   }
 
-  listaAutocompletar(modelo:string) {
+  listaAutocompletar(modelo: string) {
     return this.http.post<{ cantidad_registros: number; registros: any[] }>(
       "general/funcionalidad/lista-autocompletar/",
       {

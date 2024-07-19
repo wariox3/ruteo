@@ -1,0 +1,46 @@
+<nb-card>
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+    <span>Tráfico</span>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <!-- Columna izquierda con Despachos -->
+      <div class="col-xxxl-3 col-xxl-4 col-md-5">
+        <!-- Despachos Card -->
+        <nb-card>
+          <nb-card-header>Despachos</nb-card-header>
+          <nb-list>
+            <nb-list-item
+              *ngFor="let despacho of arrDespachos"
+              (click)="seleccionarDespacho(despacho)"
+              [class.selected]="
+                despachoSeleccionado && despachoSeleccionado.id === despacho.id
+              "
+              class="list-item"
+            >
+              <span>{{ despacho.id }}</span>
+              <span>{{ despacho.vehiculo_placa }}</span>
+              <span>{{ despacho.peso }}</span>
+              <span>{{ despacho.volumen }}</span>
+            </nb-list-item>
+          </nb-list>
+        </nb-card>
+      </div>
+      <!-- Columna derecha con Visitas por Despacho -->
+      <div class="col-xxxl-3 col-xxl-4 col-md-5">
+        <!-- Visitas por Despacho Card -->
+        <nb-card>
+          <nb-card-header>Visitas por despacho</nb-card-header>
+          <nb-list>
+            <nb-list-item *ngFor="let visita of arrVisitasPorDespacho">
+              <span>{{ visita.id }}</span>
+              <span>{{ visita.nombre }}</span>
+              <span>{{ visita.direccion }}</span>
+              <span>{{ visita.horario }}</span>
+            </nb-list-item>
+          </nb-list>
+        </nb-card>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

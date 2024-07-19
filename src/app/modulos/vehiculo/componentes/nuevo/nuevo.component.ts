@@ -21,6 +21,7 @@ export class NuevoComponent extends General implements OnInit {
   informacionVehiculo: any = {
     placa: "",
     capacidad: "",
+    estado_activo: ""
 
   };
 

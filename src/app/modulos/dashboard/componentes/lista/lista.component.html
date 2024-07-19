@@ -1,0 +1,64 @@
+<div class="row">
+  <div class="col-xxxl-3 col-xxl-4 col-md-5">
+    <nb-card>
+      <nb-card-header>Flota</nb-card-header>
+      <nb-card-body>
+        <table>
+          <thead>
+            <tr>
+              <th>Placa</th>
+              <th>Capacidad</th>
+              <th>Activo</th>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vehiculo of arrVehiculos">
+              <td>{{ vehiculo.placa }}</td>
+              <td>{{ vehiculo.capacidad }}</td>
+              <td>
+                <ng-container *ngIf="vehiculo.estado_activo; else noTemplate">Si</ng-container>
+                <ng-template #noTemplate>No</ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-xxl-9">
+    <nb-card>
+      <nb-card-header>Visitas</nb-card-header>
+      <nb-card-body> 
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Guia</th>
+              <th>Fecha</th>
+              <th>Destinatario</th>
+              <th>Dirección</th>
+              <th>Peso</th>
+              <th>volumen</th>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let visita of arrVisitas">
+              <td>{{ visita.id }}</td>
+              <td>{{ visita.guia }}</td>
+              <td>{{ visita.fecha }}</td>
+              <td>{{ visita.destinatario }}</td>
+              <td>{{ visita.destinatario_direccion }}</td>
+              <td>{{ visita.peso }}</td>
+              <td>{{ visita.volumen }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

@@ -2,6 +2,21 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
+    title: 'Inicio',
+    icon: 'home-outline',
+    link: 'dashboard',
+  },
+  {
+    icon: 'activity-outline',
+    title: 'Rutear',
+    link: 'visita/utilidad/rutear',
+  },
+  {
+    icon: 'car-outline',
+    title: 'Tráfico',
+    link: 'trafico',
+  },
+  {
     title: 'Movimiento',
     icon: 'book-outline',
     children: [
@@ -47,12 +62,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         icon: 'file-add-outline',
         title: 'Importar visitas',
         link: 'visita/utilidad/importar',
-      },
-      {
-        icon: 'file-add-outline',
-        title: 'Rutear visitas',
-        link: 'visita/utilidad/rutear',
-      },
+      }
     ],
   }
 ];

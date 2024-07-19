@@ -58,7 +58,7 @@
             </p>
           </ng-container>
         </div>
-        
+
         <div class="col-md-6 col-sm-12">
           <label class="label required">Capacidad</label>
           <input
@@ -89,12 +89,13 @@
           </ng-container>
         </div>
       </div>
+      <div class="row mb-10">
+        <div class="col-md-12 col-sm-12 em-2">
+          <nb-toggle status="basic" formControlName="estado_activo"
+            >Activo</nb-toggle
+          >
+        </div>
+      </div>
     </nb-card-body>
   </nb-card>
-  <!-- <nb-card>
-    <nb-card-header>Ubicación</nb-card-header>
-    <nb-card-body>
-      <app-vehicle-map></app-vehicle-map>
-    </nb-card-body>
-  </nb-card> -->
 </form>

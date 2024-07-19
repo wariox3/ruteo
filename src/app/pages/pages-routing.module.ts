@@ -11,8 +11,17 @@ const routes: Routes = [
     children: [
       {
         path: "",
-        redirectTo: "dashboard",
-        pathMatch: "full",
+        loadChildren: () =>
+          import("../modulos/dashboard/dashboard-routing").then(
+            (r) => r.routes
+          ),
+      },
+      {
+        path: "trafico",
+        loadChildren: () =>
+          import("../modulos/trafico/trafico-routing").then(
+            (r) => r.routes
+          ),
       },
       {
         path: "contenedor",
