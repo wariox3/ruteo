@@ -1,63 +1,51 @@
-@import '../../../../@theme/styles/themes';
+nb-list {
+  overflow-x: hidden;
+}
 
-@include nb-install-component() {
-  nb-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: none;
-    padding-top: nb-theme(card-header-with-select-padding-top);
-    padding-bottom: nb-theme(card-header-with-select-padding-bottom);
+nb-list-item {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin: 0 -0.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+
+  &:hover {
+    background-color: #f0f0f0; /* Color claro para el hover */
+  }
+  
+  &.selected {
+    background-color: #2196f3; /* Color primario */
+    color: #ffffff; /* Texto blanco para mejor visibilidad */
+  }
+}
+
+.visited-date,
+.visited-pages-count,
+.visited-percentages {
+  flex: 1 0 auto;
+  margin: 0 0.25rem;
+}
+
+.value {
+  margin-top: 0.25rem;
+  color: #4caf50; /* Color de éxito */
+}
+
+.delta {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  &.down {
+    color: #f44336; /* Color de peligro */
   }
 
-  nb-list {
-    overflow-x: hidden;
+  &.up {
+    color: #4caf50; /* Color de éxito */
   }
 
-  nb-list-item {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin: 0 -0.25rem;
-    cursor: pointer;
-    
-    &:hover {
-      background-color: nb-theme(color-primary-light);
-    }
-    
-    &.selected {
-      background-color: nb-theme(color-primary);
-      color: nb-theme(color-text-primary);
-    }
-  }
-
-  .visited-date,
-  .visited-pages-count,
-  .visited-percentages {
-    flex: 1 0 auto;
-    margin: 0 0.25rem;
-  }
-
-  .value {
-    margin-top: 0.25rem;
-    color: nb-theme(color-success-default);
-  }
-
-  .delta {
-    display: flex;
-    align-items: center;
-    position: relative;
-
-    &.down {
-      color: nb-theme(color-danger-default);
-    }
-
-    &.up {
-      color: nb-theme(color-success-default);
-    }
-
-    nb-icon ::ng-deep svg {
-      vertical-align: top;
-    }
+  nb-icon ::ng-deep svg {
+    vertical-align: top;
   }
 }

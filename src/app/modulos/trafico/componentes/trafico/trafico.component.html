@@ -1,15 +1,25 @@
 <nb-card>
   <nb-card-header class="d-flex justify-content-between align-items-center">
     <span>Tráfico</span>
+    <div class="d-flex">
+      <button
+        nbButton
+        status="primary"
+        size="small"
+        class="spaced-button"
+      >
+        Mapa
+      </button>
+    </div>
   </nb-card-header>
-  <nb-card-body>
-    <div class="row">
+  <nb-card-body class="card-body-full-height">
+    <div class="row h-100">
       <!-- Columna izquierda con Despachos -->
-      <div class="col-xxxl-3 col-xxl-4 col-md-5">
+      <div class="col-xxxl-3 col-xxl-4 col-md-5 h-100">
         <!-- Despachos Card -->
-        <nb-card>
+        <nb-card class="h-100">
           <nb-card-header>Despachos</nb-card-header>
-          <nb-list>
+          <nb-list class="list-container">
             <nb-list-item
               *ngFor="let despacho of arrDespachos"
               (click)="seleccionarDespacho(despacho)"
@@ -27,16 +37,16 @@
         </nb-card>
       </div>
       <!-- Columna derecha con Visitas por Despacho -->
-      <div class="col-xxxl-3 col-xxl-4 col-md-5">
+      <div class="col-xxxl-9 col-xxl-8 col-md-7 h-100">
         <!-- Visitas por Despacho Card -->
-        <nb-card>
+        <nb-card class="h-100">
           <nb-card-header>Visitas por despacho</nb-card-header>
-          <nb-list>
+          <nb-list class="list-container">
             <nb-list-item *ngFor="let visita of arrVisitasPorDespacho">
               <span>{{ visita.id }}</span>
-              <span>{{ visita.nombre }}</span>
-              <span>{{ visita.direccion }}</span>
-              <span>{{ visita.horario }}</span>
+              <span>{{ visita.destinatario }}</span>
+              <span>{{ visita.ciudad }}</span>
+              <span>{{ visita.destinatario_direccion }}</span>
             </nb-list-item>
           </nb-list>
         </nb-card>
