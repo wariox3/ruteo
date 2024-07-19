@@ -134,7 +134,7 @@ export class FormularioComponent extends General implements OnInit {
       ])
     ),
     reddoc: new FormControl(
-      "0"
+      false
     ),
   });
 
