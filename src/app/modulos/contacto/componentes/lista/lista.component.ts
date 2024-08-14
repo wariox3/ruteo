@@ -24,7 +24,7 @@ export class ListaComponent extends General implements OnInit {
     desplazar: 0,
     ordenamientos: [],
     limite_conteo: 10000,
-    modelo: 'Contacto'
+    modelo: 'GenContacto'
   };
   cantidad_registros!: number;
   arrItems: any[];

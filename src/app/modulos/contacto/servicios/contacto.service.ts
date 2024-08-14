@@ -10,14 +10,14 @@ export class ContactoService {
 
   lista(parametros: any) {
     return this.http.post<any>(
-      `general/funcionalidad/lista-administrador/`,
+      `general/funcionalidad/lista/`,
       parametros
     );
   }
 
   listaAutocompletar(modelo:string) {
     return this.http.post<{ cantidad_registros: number; registros: any[] }>(
-      "general/funcionalidad/lista-autocompletar/",
+      "general/funcionalidad/autocompletar/",
       {
         filtros: [
           {
@@ -39,7 +39,7 @@ export class ContactoService {
 
   listaCiudades(arrFiltros: any) {
     return this.http.post<any[]>(
-      "general/funcionalidad/lista-autocompletar/",
+      "general/funcionalidad/autocompletar/",
       arrFiltros
     );
   }

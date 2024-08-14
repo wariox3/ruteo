@@ -215,10 +215,10 @@ export class FormularioComponent extends General implements OnInit {
 
   consultarInformacion() {
     zip(
-      this.contactoService.listaAutocompletar("TipoPersona"),
-      this.contactoService.listaAutocompletar("Identificacion"),
-      this.contactoService.listaAutocompletar("Regimen"),
-      this.contactoService.listaAutocompletar("PlazoPago")
+      this.contactoService.listaAutocompletar("GenTipoPersona"),
+      this.contactoService.listaAutocompletar("GenIdentificacion"),
+      this.contactoService.listaAutocompletar("GenRegimen"),
+      this.contactoService.listaAutocompletar("GenPlazoPago")
     ).subscribe((respuesta: any) => {
       this.arrTipoPersona = respuesta[0].registros;
       this.arrIdentificacion = respuesta[1].registros;
@@ -253,7 +253,7 @@ export class FormularioComponent extends General implements OnInit {
       desplazar: 0,
       ordenamientos: [],
       limite_conteo: 10000,
-      modelo: "Ciudad",
+      modelo: "GenCiudad",
     };
     this.contactoService
       .listaCiudades(arrFiltros)
@@ -269,17 +269,17 @@ export class FormularioComponent extends General implements OnInit {
 
   private filter(value: string): string[] {
     let arrCiudad = this.arrCiudades.find(
-      (ciudad: any) => ciudad.ciudad_nombre === value
+      (ciudad: any) => ciudad.nombre === value
     );
     if (arrCiudad) {
       this.formularioContacto.patchValue({
-        ciudad: arrCiudad?.ciudad_id,
-        ciudad_nombre: arrCiudad?.ciudad_nombre,
+        ciudad: arrCiudad?.id,
+        ciudad_nombre: arrCiudad?.nombre,
       });
     }
     const filterValue = value?.toLowerCase();
     return this.arrCiudades.filter((optionValue) =>
-      optionValue.ciudad_nombre.toLowerCase().includes(filterValue)
+      optionValue.nombre.toLowerCase().includes(filterValue)
     );
   }
 
