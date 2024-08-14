@@ -14,6 +14,7 @@ export class ContenedorService {
       `${environment.url_api}/contenedor/usuariocontenedor/consulta-usuario/`,
       {
         usuario_id,
+        ruteo: true
       }
     );
   }
@@ -27,7 +28,7 @@ export class ContenedorService {
         desplazar: 0,
         ordenamientos: [],
         limite_conteo: 10000,
-        modelo: 'ContenedorIdentificacion',
+        modelo: 'CtnIdentificacion',
       }
     );
   }

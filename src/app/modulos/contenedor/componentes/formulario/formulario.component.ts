@@ -136,6 +136,9 @@ export class FormularioComponent extends General implements OnInit {
     reddoc: new FormControl(
       false
     ),
+    ruteo: new FormControl(
+      true
+    ),
   });
 
   constructor() {
@@ -176,7 +179,7 @@ export class FormularioComponent extends General implements OnInit {
       desplazar: 0,
       ordenamientos: [],
       limite_conteo: 10000,
-      modelo: "ContenedorCiudad",
+      modelo: "CtnCiudad",
     };
     this.contenedorService
       .listaCiudades(arrFiltros)
@@ -208,10 +211,10 @@ export class FormularioComponent extends General implements OnInit {
         this.formularioContenedor.get(campo)?.setValue(null);
         this.formularioContenedor.get("ciudad_nombre")?.setValue(null);
       } else {
-        this.formularioContenedor.get(campo)?.setValue(dato.ciudad_id);
+        this.formularioContenedor.get(campo)?.setValue(dato.id);
         this.formularioContenedor
           .get("ciudad_nombre")
-          ?.setValue(dato.ciudad_nombre);
+          ?.setValue(dato.nombre);
       }
     }
     this.changeDetectorRef.detectChanges();
@@ -267,18 +270,20 @@ export class FormularioComponent extends General implements OnInit {
   }
 
   private filter(value: string): string[] {
+    console.log(this.arrCiudades);
+    
     let arrCiudad = this.arrCiudades.find(
-      (ciudad: any) => ciudad.ciudad_nombre === value
+      (ciudad: any) => ciudad.nombre === value
     );
     if (arrCiudad) {
       this.formularioContenedor.patchValue({
-        ciudad_id: arrCiudad?.ciudad_id,
-        ciudad_nombre: arrCiudad?.ciudad_nombre,
+        ciudad_id: arrCiudad?.id,
+        ciudad_nombre: arrCiudad?.nombre,
       });
     }
     const filterValue = value?.toLowerCase();
     return this.arrCiudades.filter((optionValue) =>
-      optionValue.ciudad_nombre.toLowerCase().includes(filterValue)
+      optionValue.nombre.toLowerCase().includes(filterValue)
     );
   }
 
@@ -299,8 +304,8 @@ export class FormularioComponent extends General implements OnInit {
 
   seleccionarCiudad(ciudad: any) {
     this.formularioContenedor.patchValue({
-      ciudad_id: ciudad?.ciudad_id,
-      ciudad_nombre: ciudad?.ciudad_nombre,
+      ciudad_id: ciudad?.id,
+      ciudad_nombre: ciudad?.nombre,
     });
   }
 }
