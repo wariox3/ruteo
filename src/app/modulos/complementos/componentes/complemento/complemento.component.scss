@@ -1,0 +1,15 @@
+.complementos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.complemento-card {
+  flex: 1 1 calc(25% - 1rem); /* Tres columnas con espacio entre ellas */
+  max-width: calc(25% - 1rem);
+  box-sizing: border-box;
+}
+
+.nb-card {
+  height: 100%;
+}

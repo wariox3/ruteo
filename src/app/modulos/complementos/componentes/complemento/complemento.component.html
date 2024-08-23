@@ -1,0 +1,22 @@
+<nb-card>
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+    <span>Complementos</span>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="complementos-grid">
+      <div *ngFor="let complemento of arrComplementos" class="complemento-card">
+        <nb-card>
+          <nb-card-header>
+            <nb-icon [icon]="complemento.instalado ? 'checkmark-circle-2-outline' : 'close-circle-outline'" status="{{ complemento.instalado ? 'success' : 'danger' }}"></nb-icon>
+            <span class="ml-2">{{ complemento.nombre }}</span>
+          </nb-card-header>
+          <nb-card-footer class="d-flex justify-content-end">
+            <button *ngIf="!complemento.instalado" nbButton size="small" status="success" (click)="instalar(complemento)">
+              Instalar
+            </button>
+          </nb-card-footer>
+        </nb-card>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

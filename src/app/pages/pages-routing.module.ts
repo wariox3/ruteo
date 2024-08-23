@@ -56,6 +56,13 @@ const routes: Routes = [
           import("../modulos/despacho/despacho-routing").then((r) => r.routes),
       },
       {
+        path: "complemento",
+        loadChildren: () =>
+          import("../modulos/complementos/complemento-routing").then(
+            (r) => r.routes
+          ),
+      },
+      {
         path: "**",
         component: NotFoundComponent,
       },

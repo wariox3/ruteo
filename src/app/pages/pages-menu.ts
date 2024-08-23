@@ -64,5 +64,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: 'visita/utilidad/importar',
       }
     ],
-  }
+  },
+  {
+    icon: 'plus-square-outline',
+    title: 'Complementos',
+    link: 'complemento',
+  },
 ];
