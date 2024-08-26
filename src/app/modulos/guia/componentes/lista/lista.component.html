@@ -8,40 +8,20 @@
   <nb-card-header class="d-flex justify-content-between align-items-center">
     <span>Visita</span>
     <div class="d-flex">
-      <button
-        nbButton
-        status="primary"
-        size="small"
-        (click)="openWindow()"
-        class="spaced-button"
-      >
+      <nb-select class="mr-2" placeholder="Importar" [(selected)]="metodoSeleccionado">
+        <nb-option value="0" (click)="openWindow()">Excel</nb-option>
+        <nb-option value="1" (click)="openWindow()">Complemento</nb-option>
+      </nb-select>
+      <!-- <button outline nbButton [nbContextMenu]="items">
         Importar
-      </button>
-      <button
-        nbButton
-        status="primary"
-        size="small"
-        (click)="decodificar()"
-        class="spaced-button"
-      >
+      </button> -->
+      <button nbButton status="primary" size="small" (click)="decodificar()" class="spaced-button">
         Decodificar
       </button>
-      <button
-        nbButton
-        status="primary"
-        size="small"
-        (click)="ordenar()"
-        class="spaced-button"
-      >
+      <button nbButton status="primary" size="small" (click)="ordenar()" class="spaced-button">
         Ordenar
       </button>
-      <button
-        nbButton
-        status="primary"
-        size="small"
-        [routerLink]="['../nuevo']"
-        class="spaced-button"
-      >
+      <button nbButton status="primary" size="small" [routerLink]="['../nuevo']" class="spaced-button">
         Nuevo
       </button>
     </div>
@@ -86,20 +66,12 @@
           <td>{{ guia.orden }}</td>
           <td>{{ guia.distancia_proxima }}</td>
           <td>
-            <a
-              class="menu-link px-3"
-              style="cursor: pointer"
-              (click)="editarGuia(guia.id)"
-            >
+            <a class="menu-link px-3" style="cursor: pointer" (click)="editarGuia(guia.id)">
               <nb-icon icon="edit-outline"></nb-icon>
             </a>
           </td>
           <td>
-            <a
-              class="menu-link px-3"
-              style="cursor: pointer"
-              (click)="detalleGuia(guia.id)"
-            >
+            <a class="menu-link px-3" style="cursor: pointer" (click)="detalleGuia(guia.id)">
               <nb-icon icon="eye-outline"></nb-icon>
             </a>
           </td>
@@ -143,19 +115,29 @@
 <ng-template #contentTemplate let-data>
   <nb-card-body>
     <div class="file-upload">
-      <label class="file-upload-label" for="fileInput"
-        >Seleccionar Archivo</label
-      >
-      <input
-        #fileInput
-        id="fileInput"
-        type="file"
-        (change)="onFileChange($event)"
-      />
+      <label class="file-upload-label" for="fileInput">Seleccionar archivo</label>
+      <input #fileInput id="fileInput" type="file" (change)="onFileChange($event)" />
       <span class="file-name" *ngIf="fileName">{{ fileName }}</span>
     </div>
     <button nbButton status="primary" size="small" (click)="uploadFile()">
       Importar
     </button>
   </nb-card-body>
+</ng-template>
+
+<ng-template #contentTemplateComplemento let-data>
+  <div>
+    <div class="d-flex flex-column mb-4">
+      <label>Registros:</label>
+      <input class="w-100" nbInput type="number" [(ngModel)]="numeroDeRegistrosAImportar">
+    </div>
+    <div>
+      <button disabled *ngIf="estaImportandoComplementos" nbButton status="primary" size="small" (click)="importarComplemento()">
+        Cargando...
+      </button>
+      <button *ngIf="!estaImportandoComplementos" nbButton status="primary" size="small" (click)="importarComplemento()">
+        Importar
+      </button>
+    </div>
+  </div>
 </ng-template>

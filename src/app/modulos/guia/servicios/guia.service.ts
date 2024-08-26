@@ -11,11 +11,11 @@ export class GuiaService {
     return this.http.post<any[]>(`ruteo/visita/lista/`, data);
   }
 
-  listarVisitas(data: any){
+  listarVisitas(data: any) {
     return this.http.post<any[]>(`ruteo/visita/lista/`, data);
   }
 
-  guardarGuias(data: any){
+  guardarGuias(data: any) {
     return this.http.post<any[]>(`ruteo/visita/`, data);
   }
 
@@ -27,16 +27,21 @@ export class GuiaService {
     return this.http.post<any[]>(`ruteo/visita/importar/`, data);
   }
 
-  decodificar(){
-    return this.http.post<any[]>(`ruteo/visita/decodificar/`, '');
+  decodificar() {
+    return this.http.post<any[]>(`ruteo/visita/decodificar/`, "");
   }
 
-  ordenar(){
-    return this.http.post<any[]>(`ruteo/visita/ordenar/`, '');
+  ordenar() {
+    return this.http.post<any[]>(`ruteo/visita/ordenar/`, "");
   }
 
-  rutear(){
-    return this.http.post<any[]>(`ruteo/visita/rutear/`, '');
+  rutear() {
+    return this.http.post<any[]>(`ruteo/visita/rutear/`, "");
   }
 
+  importarComplementos(registros: number) {
+    return this.http.post(`ruteo/visita/importar-complemento/`, {
+      limite: registros,
+    });
+  }
 }

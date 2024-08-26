@@ -28,8 +28,7 @@ export class ListaComponent extends General implements OnInit {
 
   arrParametrosConsultaVisita: any = {
     filtros: [
-      {"propiedad": "decodificado", "valor1": true},
-      {"propiedad": "decodificado_error", "valor1": false},
+      {"propiedad": "estado_decodificado", "valor1": true},
     ],
     limite: 50,
     desplazar: 0,
