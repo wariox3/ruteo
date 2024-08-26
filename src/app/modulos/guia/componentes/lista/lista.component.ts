@@ -16,6 +16,7 @@ import {
   NbIconModule,
   NbInputModule,
   NbMenuModule,
+  NbMenuService,
   NbSelectModule,
   NbWindowModule,
   NbWindowRef,
@@ -68,7 +69,8 @@ export class ListaComponent extends General implements OnInit {
   constructor(
     private windowService: NbWindowService,
     private guiaService: GuiaService,
-    private directionsService: MapDirectionsService
+    private directionsService: MapDirectionsService,
+    private menuService: NbMenuService
   ) {
     super();
   }
@@ -77,7 +79,6 @@ export class ListaComponent extends General implements OnInit {
   estaImportandoComplementos: boolean = false;
   items = [{ title: "Por excel" }, { title: "Por complemento" }];
   formularioComplementos: FormGroup;
-  metodoSeleccionado: string;
   selectedFile: File | null = null;
   base64File: string | null = null;
   fileName: string = "";
@@ -116,6 +117,25 @@ export class ListaComponent extends General implements OnInit {
     this.encabezados = mapeo.datos.filter(
       (titulo) => titulo.visibleTabla === true
     );
+
+    // menu
+    this.menuService.onItemClick().subscribe((evento) => {
+      switch (evento.item.title) {
+        case "Por excel":
+          this.windowRef = this.windowService.open(this.contentTemplate, {
+            title: "Importar excel",
+          });
+          break;
+        case "Por complemento":
+          this.windowRef = this.windowService.open(
+            this.contentTemplateComplemento,
+            {
+              title: "Importar complemento",
+            }
+          );
+          break;
+      }
+    });
   }
 
   inicializarFormulario() {
@@ -198,23 +218,6 @@ export class ListaComponent extends General implements OnInit {
     this.router.navigate([`visita/movimiento/editar/`, guia_id]);
   }
 
-  openWindow() {
-    switch (this.metodoSeleccionado) {
-      case "0":
-        this.windowRef = this.windowService.open(this.contentTemplate, {
-          title: "Importar excel",
-        });
-        break;
-      case "1":
-        this.windowRef = this.windowService.open(
-          this.contentTemplateComplemento,
-          {
-            title: "Importar complemento",
-          }
-        );
-        break;
-    }
-  }
 
   onFileChange(event: any) {
     const file = event.target.files[0];

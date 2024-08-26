@@ -8,13 +8,9 @@
   <nb-card-header class="d-flex justify-content-between align-items-center">
     <span>Visita</span>
     <div class="d-flex">
-      <nb-select class="mr-2" placeholder="Importar" [(selected)]="metodoSeleccionado">
-        <nb-option value="0" (click)="openWindow()">Excel</nb-option>
-        <nb-option value="1" (click)="openWindow()">Complemento</nb-option>
-      </nb-select>
-      <!-- <button outline nbButton [nbContextMenu]="items">
+      <button status="primary" size="small" nbButton [nbContextMenu]="items" class="spaced-button" >
         Importar
-      </button> -->
+      </button>
       <button nbButton status="primary" size="small" (click)="decodificar()" class="spaced-button">
         Decodificar
       </button>
