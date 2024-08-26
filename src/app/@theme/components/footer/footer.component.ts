@@ -4,16 +4,12 @@ import { Component } from '@angular/core';
   selector: 'ngx-footer',
   styleUrls: ['./footer.component.scss'],
   template: `
-    <span class="created-by">
-      Created with ♥ by <b><a href="https://akveo.page.link/8V2f" target="_blank">Akveo</a></b> 2019
-    </span>
-    <div class="socials">
-      <a href="#" target="_blank" class="ion ion-social-github"></a>
-      <a href="#" target="_blank" class="ion ion-social-facebook"></a>
-      <a href="#" target="_blank" class="ion ion-social-twitter"></a>
-      <a href="#" target="_blank" class="ion ion-social-linkedin"></a>
-    </div>
+    <div class="text-dark order-2 order-md-1">
+    <span class="text-muted fw-semibold me-1">{{currentDateStr}}&copy;</span>
+    <a href="http://www.semantica.com.co/rubidio/public/index.php" target="_blank" class="text-gray-800 text-hover-primary"> Semantica Digital SAS</a>
+  </div>
   `,
 })
 export class FooterComponent {
+  currentDateStr: string = new Date().getFullYear().toString();
 }
