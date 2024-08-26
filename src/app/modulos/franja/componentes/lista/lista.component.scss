@@ -54,3 +54,11 @@
     display: table-cell;
   }
 }
+
+.clicable-card {
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(230, 230, 230);
+  }
+}

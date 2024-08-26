@@ -1,55 +1,223 @@
-import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Inject, OnInit, inject } from "@angular/core";
-import { NbButtonModule, NbCardModule, NbIconModule } from "@nebular/theme";
+import { AsyncPipe, CommonModule } from "@angular/common";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  inject,
+} from "@angular/core";
+import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
+import { GoogleMapsModule } from "@angular/google-maps";
+import { RouterModule } from "@angular/router";
+import {
+  NbButtonModule,
+  NbCardModule,
+  NbIconModule,
+  NbWindowService,
+} from "@nebular/theme";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
+import { General } from "../../../../comun/clases/general";
 import { BaseFiltroComponent } from "../../../../comun/componentes/base-filtro/base-filtro.component";
 import { TablaComponent } from "../../../../comun/componentes/tabla/tabla.component";
-import { General } from "../../../../comun/clases/general";
-import { RouterModule } from "@angular/router";
 import { KeysPipe } from "../../../../comun/pipe/keys.pipe";
-import { franjaService } from "../../servicios/vehiculo.service";
+import { Franja } from "../../../../interfaces/franja/franja.interface";
 import { mapeo } from "../../mapeo";
+import { franjaService } from "../../servicios/vehiculo.service";
+import { FormularioComponent } from "../formulario/formulario.component";
 
 @Component({
   selector: "app-lista",
   standalone: true,
-  imports: [CommonModule, NbCardModule, BaseFiltroComponent, TablaComponent, RouterModule, NbButtonModule, KeysPipe, NbIconModule],
+  imports: [
+    CommonModule,
+    NbCardModule,
+    BaseFiltroComponent,
+    TablaComponent,
+    RouterModule,
+    NbButtonModule,
+    KeysPipe,
+    NbIconModule,
+    GoogleMapsModule,
+    AsyncPipe,
+    FormularioComponent,
+  ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListaComponent extends General implements OnInit {
+  @ViewChild("contentTemplate") contentTemplate: TemplateRef<any>;
+  center: google.maps.LatLngLiteral = {
+    lat: 6.200713725811437,
+    lng: -75.58609508555918,
+  };
+  zoom = 12;
+  markerPositions: google.maps.LatLngLiteral[] = [];
+  polylineOptions: google.maps.PolylineOptions = {
+    strokeColor: "#FF0000",
+    strokeOpacity: 1.0,
+    strokeWeight: 3,
+    editable: true,
+    draggable: true,
+  };
   arrParametrosConsulta: any = {
     filtros: [],
     limite: 50,
     desplazar: 0,
     ordenamientos: [],
     limite_conteo: 10000,
-    modelo: 'RutFranja'
+    modelo: "RutFranja",
   };
   cantidad_registros!: number;
   arrItems: any[];
   encabezados: any[];
+  nuevaVertice: google.maps.LatLngLiteral[] = [];
+  franjas$: Observable<Franja[]>;
+  franjasTotales: number;
+  estaCreando: boolean = false;
+  franjaSeleccionada: any;
+  selectedFile: File | null = null;
+  base64Data: string | null = null;
+
+  formularioFranja = new FormGroup({
+    codigo: new FormControl("", Validators.compose([Validators.required])),
+    nombre: new FormControl("", Validators.compose([Validators.required])),
+    coordenadas: new FormArray([]),
+  });
 
   private franjaService = inject(franjaService);
+  private windowService = inject(NbWindowService);
 
-  ngOnInit(){
-    this.consultarLista();    
-    this.encabezados = mapeo.datos.filter((titulo) => titulo.visibleTabla === true)
+  ngOnInit() {
+    this.consultarLista();
+    this.consultarFranjas();
+    this.encabezados = mapeo.datos.filter(
+      (titulo) => titulo.visibleTabla === true
+    );
   }
 
-  consultarLista(){
-    this.franjaService.lista(this.arrParametrosConsulta).subscribe((respuesta)=> {
-      this.cantidad_registros = respuesta.cantidad_registros;
-      this.arrItems = respuesta.registros;
-      this.changeDetectorRef.detectChanges();
-    })
+  abrirModal() {
+    this.windowService.open(this.contentTemplate, {
+      title: "Importar franjas",
+    });
+  }
+
+  consultarFranjas() {
+    this.franjas$ = this.franjaService.consultarFranjas().pipe(
+      tap((respuesta) => {
+        this.franjasTotales = respuesta.length;
+      })
+    );
+  }
+
+  consultarLista() {
+    this.franjaService
+      .lista(this.arrParametrosConsulta)
+      .subscribe((respuesta) => {
+        this.cantidad_registros = respuesta.cantidad_registros;
+        this.arrItems = respuesta.registros;
+        this.changeDetectorRef.detectChanges();
+      });
   }
 
   detalleEmpresa(franja_id: Number) {
     this.router.navigate([`/administracion/franja/detalle/${franja_id}`]);
   }
 
-  editarVehiculo(franja_id: Number){
+  editarVehiculo(franja_id: Number) {
     this.router.navigate([`/administracion/franja/editar/`, franja_id]);
+  }
+
+  addMarker(position: google.maps.LatLngLiteral) {
+    this.markerPositions.push(position);
+  }
+
+  enviarFormulario(event: any) {
+    console.log(event);
+  }
+
+  clickMap(evento: any) {
+    const coordenadasFormArray = this.formularioFranja.get(
+      "coordenadas"
+    ) as FormArray;
+
+    if (this.estaCreando) {
+      this.nuevaVertice = [...this.nuevaVertice, evento.latLng.toJSON()];
+
+      this.nuevaVertice.forEach((vertex) => {
+        coordenadasFormArray.push(new FormControl(vertex));
+      });
+    }
+
+    if (this.nuevaVertice.length === 3 && this.estaCreando) {
+      this.formularioFranja.patchValue({
+        codigo: `franja-${this.franjasTotales + 1}`,
+        nombre: `franja-${this.franjasTotales + 1}`,
+      });
+
+      this.franjaService
+        .guardarFranja(this.formularioFranja.value)
+        .subscribe((respuesta: any) => {
+          this.alerta.mensajaExitoso(
+            "Se ha creado franja exitosamente.",
+            "Guardado con éxito."
+          );
+          this.consultarLista();
+          this.consultarFranjas();
+          this.estaCreando = false;
+          this.nuevaVertice = [];
+          coordenadasFormArray.clear();
+          this.changeDetectorRef.detectChanges();
+        });
+    }
+  }
+
+  seleccionarFranja(item: any) {
+    this.franjaSeleccionada = item;
+    this.changeDetectorRef.detectChanges();
+  }
+
+  toggleEstaCreando() {
+    this.estaCreando = !this.estaCreando;
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
+
+  async toBase64(file: File) {
+    try {
+      const reader = new FileReader();
+      const base64ConMetadatos: any = await new Promise((resolve, reject) => {
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+      });
+
+      return base64ConMetadatos.split(",")[1];
+    } catch (error) {
+      throw new Error("Error al convertir el archivo a base64");
+    }
+  }
+
+  async subirArchivo() {
+    const archivoEnBase64 = await this.toBase64(this.selectedFile);
+
+    this.franjaService
+      .importarArchivoKML(archivoEnBase64)
+      .subscribe((respuesta) => {
+        this.consultarLista();
+        this.consultarFranjas();
+        this.alerta.mensajaExitoso(
+          "Se han importado las franjas exitosamente.",
+          "Guardado con éxito."
+        );
+        this.changeDetectorRef.detectChanges();
+      });
   }
 }

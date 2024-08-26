@@ -1,49 +1,66 @@
-<nb-card>
-  <nb-card-header>Filtros</nb-card-header>
-  <nb-card-body>
-    <app-base-filtro></app-base-filtro>
-  </nb-card-body>
-</nb-card>
-<nb-card>
+<nb-card class="h-100">
   <nb-card-header class="d-flex justify-content-between align-items-center">
-    <span>Franja</span>
-    <a nbButton status="primary" size="small" [routerLink]="['../nuevo']">Nuevo</a>
+    <span>Franjas</span>
   </nb-card-header>
-  <nb-card-body>
-    <table>
-      <thead>
-        <tr>
-          <th *ngFor="let encabezado of encabezados">
-            {{ encabezado.nombre }}
-          </th>
-        </tr>
-        <tr></tr>
-        <tr></tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let franja of arrItems">
-          <td>{{ franja.id }}</td>
-          <td>{{ franja.nombre }}</td>
-          <td>{{ franja.coordenadas }}</td>
-          <td>
-            <a
-              class="menu-link px-3"
-              style="cursor: pointer;"
-              (click)="editarFranja(franja.id)"
-            >
-              <nb-icon icon="edit-outline"></nb-icon>
-            </a>
-          </td>
-          <td>
-            <a
-              class="menu-link px-3 cursor-pointer"
-              (click)="detalleEmpresa(franja.id)"
-            >
-              <nb-icon icon="eye-outline"></nb-icon>
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+
+  <nb-card-body class="nb-card-body-full-height">
+    <div class="row">
+      <!-- Columna izquierda con Zonas -->
+      <div class="col-xxxl-3 col-xxl-4 col-md-5">
+        <!-- Flota Card -->
+        <nb-card size="large" class="mb-0">
+          <nb-card-header class="d-flex justify-content-between align-items-center">
+            <div class="d-flex">
+              <button nbButton status="primary" size="small" class="spaced-button" (click)="abrirModal()">
+                Importar
+              </button>
+              <button nbButton status="primary" size="small" class="spaced-button" (click)="toggleEstaCreando()">
+                Nuevo
+              </button>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="d-flex flex-column h-100">
+              <nb-card *ngFor="let franja of franjas$ | async" class="mb-2">
+                <nb-card-body (click)="seleccionarFranja(franja)" class="clicable-card">
+                  {{ franja.nombre }}
+                </nb-card-body>
+              </nb-card>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+
+      <!-- Columna derecha con Mapa -->
+      <div class="col-xxxl-9 col-xxl-8 col-md-7 map-container">
+        <nb-card class="full-height full-width">
+          <nb-card-header>Mapa</nb-card-header>
+          <nb-card-body class="full-height full-width">
+            <google-map id="map" height="100%" width="100%" [center]="center" [zoom]="zoom"
+              (mapClick)="clickMap($event)">
+              <map-polygon *ngFor="let franja of franjas$ | async" [paths]="franja.coordenadas" />
+              <map-polygon *ngIf="estaCreando" [paths]="nuevaVertice" [options]="polylineOptions"></map-polygon>
+              <map-marker *ngFor="let markerPosition of markerPositions" [position]="markerPosition"
+                (mapClick)="openInfoWindow(marker)">
+              </map-marker>
+              <map-info-window>Info Window</map-info-window>
+            </google-map>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
   </nb-card-body>
 </nb-card>
+
+<ng-template #contentTemplate let-data>
+  <div>
+    <div class="d-flex align-items-center justify-content-between">
+      <input class="d-none" type="file" #fileInput (change)="onFileSelected($event)" accept=".kml" />
+      <button type="button" class="btn btn-outline btn-outline-dashed btn-outline-dark btn-active-light-dark"
+        (click)="fileInput.click()">
+        Seleccionar archivo
+      </button>
+      <button *ngIf="selectedFile" class="btn btn-success" (click)="subirArchivo()">Subir archivo</button>
+    </div>
+  </div>
+</ng-template>

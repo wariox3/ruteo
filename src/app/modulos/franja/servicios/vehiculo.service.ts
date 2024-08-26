@@ -8,13 +8,10 @@ export class franjaService {
   constructor(private http: HttpService) {}
 
   lista(parametros: any) {
-    return this.http.post<any>(
-      `general/funcionalidad/lista/`,
-      parametros
-    );
+    return this.http.post<any>(`general/funcionalidad/lista/`, parametros);
   }
 
-  listaAutocompletar(modelo:string) {
+  listaAutocompletar(modelo: string) {
     return this.http.post<{ cantidad_registros: number; registros: any[] }>(
       "general/funcionalidad/autocompletar/",
       {
@@ -53,5 +50,15 @@ export class franjaService {
 
   consultarDetalle(id: number) {
     return this.http.getDetalle<any>(`ruteo/franja/${id}/`);
+  }
+
+  consultarFranjas() {
+    return this.http.getDetalle<any>(`ruteo/franja/`);
+  }
+
+  importarArchivoKML(archivoEnBase64: string) {
+    return this.http.post("ruteo/franja/importar/", {
+      base64: archivoEnBase64,
+    });
   }
 }

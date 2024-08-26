@@ -142,3 +142,10 @@ button{
   flex: 1;
   position: relative;
 }
+
+.window {
+  width: 90%;
+  height: 100%;
+  max-width: 74rem;
+  overflow-y: auto;
+}
