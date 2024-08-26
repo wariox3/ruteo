@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import {
   NbMediaBreakpointsService,
   NbMenuService,
@@ -14,6 +14,7 @@ import { AuthService } from "../../../modulos/auth/servicios/auth.service";
 import { Store } from "@ngrx/store";
 import { obtenerUsuarioNombreCorto } from "../../../redux/selectos/usuario.selector";
 import { obtenerContenedorSeleccion } from "../../../redux/selectos/contenedor.selectors";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "ngx-header",
@@ -21,12 +22,14 @@ import { obtenerContenedorSeleccion } from "../../../redux/selectos/contenedor.s
   templateUrl: "./header.component.html",
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   user: any;
   usuarioNombreCorto$ = this.store.select(obtenerUsuarioNombreCorto);
   usuarioNombreCorto = "";
   iconoMenuVisible$ = this.store.select(obtenerContenedorSeleccion);
+  
   
 
   themes = [
@@ -50,7 +53,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = "default";
 
-  userMenu = [{ title: "Profile" }, { title: "Log out" }];
+  userMenu = [{ title: "Perfil" }, { title: "Contenedores"}, { title: "Cerrar sesión" }];
 
   constructor(
     private sidebarService: NbSidebarService,
@@ -94,8 +97,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe((themeName) => (this.currentTheme = themeName));
 
     this.menuService.onItemClick().subscribe((evento) => {
-      if (evento.item.title == "Log out") {
-        this.authService.logout();
+      switch(evento.item.title) {
+        case "Cerrar sesión":
+          this.authService.logout();
+          break;
+        case "Contenedores": 
+          this.router.navigate(['/contenedor/lista']);
+        break
       }
     });
   }
