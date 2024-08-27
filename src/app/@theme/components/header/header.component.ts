@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = "default";
 
-  userMenu = [{ title: "Perfil" }, { title: "Contenedores" }, { title: "Cerrar sesión" }];
+  userMenu = [{ title: "Contenedores" }, { title: "Cerrar sesión" }];
 
   constructor(
     private sidebarService: NbSidebarService,
@@ -54,18 +54,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.usuarioNombreCorto$.subscribe((nombre: any) => (this.usuarioNombreCorto = nombre));
     this.currentTheme = this.themeService.currentTheme;
-
+  
     this.userService.getUsers().pipe(takeUntil(this.destroy$)).subscribe((users: any) => (this.user = users.nick));
-
+  
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
       .pipe(map(([, currentBreakpoint]) => currentBreakpoint.width < xl), takeUntil(this.destroy$))
       .subscribe((isLessThanXl: boolean) => (this.userPictureOnly = isLessThanXl));
-
+  
     this.themeService.onThemeChange()
       .pipe(map(({ name }) => name), takeUntil(this.destroy$))
       .subscribe((themeName) => (this.currentTheme = themeName));
-
+  
     // Suscribirse a los eventos de navegación para actualizar el menú según la ruta
     this.router.events
       .pipe(takeUntil(this.destroy$))
@@ -74,7 +74,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.updateMenu();
         }
       });
-
+  
+    // Llamar a updateMenu para verificar la ruta actual al cargar el componente por primera vez
+    this.updateMenu();
+  
     this.menuService.onItemClick().subscribe((evento) => {
       switch (evento.item.title) {
         case "Cerrar sesión":
@@ -112,7 +115,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const currentUrl = this.router.url;
 
     // Restablecer el menú a su estado original
-    this.userMenu = [{ title: "Perfil" }, { title: "Contenedores" }, { title: "Cerrar sesión" }];
+    this.userMenu = [{ title: "Contenedores" }, { title: "Cerrar sesión" }];
 
     // Si estamos en la ruta /contenedor/lista, eliminamos el ítem de "Contenedores"
     if (currentUrl === '/contenedor/lista') {
