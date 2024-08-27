@@ -85,7 +85,7 @@ export class TraficoComponent extends General implements OnInit {
         formGroup.controls.datos_json.addControl(
           campo.nombre,
           new FormControl(
-            complemento.datos_json[campo.nombre],
+            complemento?.datos_json?.[campo.nombre] || '',
             Validators.compose([Validators.required])
           )
         );
