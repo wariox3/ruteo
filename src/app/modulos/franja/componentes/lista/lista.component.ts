@@ -206,6 +206,7 @@ export class ListaComponent extends General implements OnInit {
       this.formularioFranja.patchValue({
         codigo: `franja-${this.franjasTotales + 1}`,
         nombre: `franja-${this.franjasTotales + 1}`,
+        color: '4d25a8f9'
       });
 
       this.franjaService
