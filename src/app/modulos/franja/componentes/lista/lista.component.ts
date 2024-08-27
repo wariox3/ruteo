@@ -7,13 +7,21 @@ import {
   ViewChild,
   inject,
 } from "@angular/core";
-import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
+import {
+  FormArray,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { GoogleMapsModule } from "@angular/google-maps";
 import { RouterModule } from "@angular/router";
 import {
   NbButtonModule,
   NbCardModule,
   NbIconModule,
+  NbInputModule,
+  NbWindowRef,
   NbWindowService,
 } from "@nebular/theme";
 import { Observable } from "rxjs";
@@ -25,7 +33,6 @@ import { KeysPipe } from "../../../../comun/pipe/keys.pipe";
 import { Franja } from "../../../../interfaces/franja/franja.interface";
 import { mapeo } from "../../mapeo";
 import { franjaService } from "../../servicios/vehiculo.service";
-import { FormularioComponent } from "../formulario/formulario.component";
 
 @Component({
   selector: "app-lista",
@@ -41,7 +48,8 @@ import { FormularioComponent } from "../formulario/formulario.component";
     NbIconModule,
     GoogleMapsModule,
     AsyncPipe,
-    FormularioComponent,
+    NbInputModule,
+    ReactiveFormsModule,
   ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],
@@ -49,6 +57,8 @@ import { FormularioComponent } from "../formulario/formulario.component";
 })
 export class ListaComponent extends General implements OnInit {
   @ViewChild("contentTemplate") contentTemplate: TemplateRef<any>;
+  @ViewChild("editarFranja") editarFranja: TemplateRef<any>;
+  @ViewChild("eliminarFranjaTemplate") eliminarFranjaTemplate: TemplateRef<any>;
   center: google.maps.LatLngLiteral = {
     lat: 6.200713725811437,
     lng: -75.58609508555918,
@@ -80,15 +90,23 @@ export class ListaComponent extends General implements OnInit {
   franjaSeleccionada: any;
   selectedFile: File | null = null;
   base64Data: string | null = null;
+  windowRef: NbWindowRef;
 
-  formularioFranja = new FormGroup({
-    codigo: new FormControl("", Validators.compose([Validators.required])),
-    nombre: new FormControl("", Validators.compose([Validators.required])),
-    coordenadas: new FormArray([]),
-  });
+  formularioFranja: FormGroup;
 
   private franjaService = inject(franjaService);
   private windowService = inject(NbWindowService);
+
+  constructor() {
+    super();
+    this.formularioFranja = new FormGroup({
+      id: new FormControl("", Validators.compose([Validators.required])),
+      codigo: new FormControl("", Validators.compose([Validators.required])),
+      color: new FormControl(""),
+      nombre: new FormControl("", Validators.compose([Validators.required])),
+      coordenadas: new FormArray([]),
+    });
+  }
 
   ngOnInit() {
     this.consultarLista();
@@ -96,10 +114,11 @@ export class ListaComponent extends General implements OnInit {
     this.encabezados = mapeo.datos.filter(
       (titulo) => titulo.visibleTabla === true
     );
+    this.changeDetectorRef.detectChanges();
   }
 
   abrirModal() {
-    this.windowService.open(this.contentTemplate, {
+    this.windowRef = this.windowService.open(this.contentTemplate, {
       title: "Importar franjas",
     });
   }
@@ -134,8 +153,40 @@ export class ListaComponent extends General implements OnInit {
     this.markerPositions.push(position);
   }
 
-  enviarFormulario(event: any) {
-    console.log(event);
+  actualizarFranja() {
+    const franjaId = this.formularioFranja.get("id")?.value;
+    this.franjaService
+      .actualizarFranja(franjaId, this.formularioFranja.value)
+      .subscribe((respuesta) => {
+        this.windowRef.close();
+        this.alerta.mensajaExitoso(
+          "Se ha actualizado la franja exitosamente.",
+          "Guardado con éxito."
+        );
+        this.consultarLista();
+        this.consultarFranjas();
+      });
+  }
+
+  abrirModalConfirmacionEliminar(franja: any) {
+    this.windowRef = this.windowService.open(this.eliminarFranjaTemplate, {
+      title: `Eliminar franja ${franja.nombre}`,
+      context: {
+        franja,
+      },
+    });
+  }
+
+  eliminarFranja(item: any) {
+    this.franjaService.eliminarFranja(item.id).subscribe(() => {
+      this.alerta.mensajaExitoso(
+        "Se ha eliminado la franja exitosamente.",
+        "Guardado con éxito."
+      );
+      this.windowRef.close();
+      this.consultarLista();
+      this.consultarFranjas();
+    });
   }
 
   clickMap(evento: any) {
@@ -176,7 +227,34 @@ export class ListaComponent extends General implements OnInit {
 
   seleccionarFranja(item: any) {
     this.franjaSeleccionada = item;
+    const coordenadasArray = this.formularioFranja.get(
+      "coordenadas"
+    ) as FormArray;
+    coordenadasArray.clear();
+
+    this.formularioFranja.patchValue({
+      codigo: item.codigo,
+      id: item.id,
+      color: item.color,
+      nombre: item.nombre,
+    });
+
+    item.coordenadas.forEach((coordenada: any) => {
+      coordenadasArray.push(new FormControl(coordenada));
+    });
+
     this.changeDetectorRef.detectChanges();
+
+    this.windowRef = this.windowService.open(this.editarFranja, {
+      title: "Editar franja",
+      context: {
+        franja: "item",
+      },
+    });
+  }
+
+  cerrarModal() {
+    this.windowRef.close()
   }
 
   toggleEstaCreando() {
@@ -217,6 +295,7 @@ export class ListaComponent extends General implements OnInit {
           "Se han importado las franjas exitosamente.",
           "Guardado con éxito."
         );
+        this.windowRef.close();
         this.changeDetectorRef.detectChanges();
       });
   }

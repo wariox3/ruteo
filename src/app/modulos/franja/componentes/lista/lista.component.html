@@ -22,8 +22,16 @@
           <nb-card-body>
             <div class="d-flex flex-column h-100">
               <nb-card *ngFor="let franja of franjas$ | async" class="mb-2">
-                <nb-card-body (click)="seleccionarFranja(franja)" class="clicable-card">
+                <nb-card-body class="d-flex justify-content-between">
                   {{ franja.nombre }}
+                  <div>
+                    <button class="border-0 bg-transparent" (click)="seleccionarFranja(franja)">
+                      <nb-icon icon="edit-2-outline"></nb-icon>
+                    </button>
+                    <button class="border-0 bg-transparent" (click)="abrirModalConfirmacionEliminar(franja)">
+                      <nb-icon icon="trash-2-outline"></nb-icon>
+                    </button>
+                  </div>
                 </nb-card-body>
               </nb-card>
             </div>
@@ -61,6 +69,77 @@
         Seleccionar archivo
       </button>
       <button *ngIf="selectedFile" class="btn btn-success" (click)="subirArchivo()">Subir archivo</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #editarFranja let-data>
+  <div>
+    <form [formGroup]="formularioFranja">
+      <div class="d-flex flex-column mb-3">
+        <label>Nombre:</label>
+        <input formControlName="nombre" nbInput type="text" fullWidth [status]="
+        formularioFranja.get('nombre').dirty
+          ? formularioFranja.get('nombre').invalid
+            ? 'danger'
+            : 'success'
+          : 'basic'
+      " [attr.aria-invalid]="
+        formularioFranja.get('nombre').invalid &&
+        formularioFranja.get('nombre').touched
+          ? true
+          : null
+      ">
+        <ng-container *ngIf="
+        formularioFranja.get('nombre').invalid &&
+        formularioFranja.get('nombre').touched
+      ">
+          <p class="caption status-danger" *ngIf="formularioFranja.get('nombre').errors?.required">
+            El campo es requerido!
+          </p>
+        </ng-container>
+      </div>
+      <div class="d-flex flex-column mb-3">
+        <label>Código:</label>
+        <input formControlName="codigo" nbInput type="text" fullWidth [status]="
+        formularioFranja.get('codigo').dirty
+          ? formularioFranja.get('codigo').invalid
+            ? 'danger'
+            : 'success'
+          : 'basic'
+      " [attr.aria-invalid]="
+        formularioFranja.get('codigo').invalid &&
+        formularioFranja.get('codigo').touched
+          ? true
+          : null
+      ">
+        <ng-container *ngIf="
+        formularioFranja.get('codigo').invalid &&
+        formularioFranja.get('codigo').touched
+      ">
+          <p class="caption status-danger" *ngIf="formularioFranja.get('codigo').errors?.required">
+            El campo es requerido!
+          </p>
+        </ng-container>
+      </div>
+    </form>
+    <div class="d-flex justify-content-end">
+      <button nbButton size="small" status="success" (click)="actualizarFranja()">
+        Guardar
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #eliminarFranjaTemplate let-data>
+  <div>
+    <div class="d-flex justify-content-end">
+      <button nbButton size="small" status="basic" class="mr-2" (click)="cerrarModal()">
+        Cancelar
+      </button>
+      <button nbButton size="small" status="danger" (click)="eliminarFranja(data.franja)">
+        Eliminar
+      </button>
     </div>
   </div>
 </ng-template>

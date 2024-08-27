@@ -47,6 +47,14 @@ export class franjaService {
   actualizarDatosVehiculo(id: number, data: any) {
     return this.http.put<any>(`ruteo/franja/${id}/`, data);
   }
+  
+  actualizarFranja(id: number, data: any) {
+    return this.http.put<any>(`ruteo/franja/${id}/`, data);
+  }
+
+  eliminarFranja(id: number) {
+    return this.http.delete(`ruteo/franja/${id}/`, {});
+  }
 
   consultarDetalle(id: number) {
     return this.http.getDetalle<any>(`ruteo/franja/${id}/`);
