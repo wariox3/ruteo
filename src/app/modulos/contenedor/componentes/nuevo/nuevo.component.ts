@@ -13,7 +13,7 @@ import { obtenerUsuarioId } from "../../../../redux/selectos/usuario.selector";
   standalone: true,
   imports: [CommonModule, FormularioComponent, NbCardModule],
   templateUrl: "./nuevo.component.html",
-  styleUrls: ["./nuevo.component.css"],
+  styleUrls: ["./nuevo.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NuevoComponent extends General implements OnInit {
