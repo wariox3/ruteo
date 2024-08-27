@@ -48,6 +48,7 @@ export class NuevoComponent extends General implements OnInit {
   }
 
   enviarFormulario(formulario: any) {
+    this.procesando = true;
     this.contenedorService
       .consultarNombre(formulario.subdominio)
       .pipe(
@@ -61,6 +62,7 @@ export class NuevoComponent extends General implements OnInit {
           if(respuestaNuevo.contenedor){
             this.alerta.mensajaExitoso('Se ha creado el contenedor exitosamente.', 'Guardado con éxito.')
             this.router.navigate(['/contenedor/lista']);
+            this.procesando = false;
           }
         })
       )

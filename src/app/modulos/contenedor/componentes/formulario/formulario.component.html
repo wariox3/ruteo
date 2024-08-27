@@ -1,262 +1,67 @@
-<form
-  (ngSubmit)="enviar()"
-  [formGroup]="formularioContenedor"
-  #form="ngForm"
-  aria-labelledby="title"
->
+<form (ngSubmit)="enviar()" [formGroup]="formularioContenedor" #form="ngForm" aria-labelledby="title">
   <div class="row mb-10">
     <div class="col-md-12 col-sm-12">
+      <label class="label required">Nombre</label>
+      <input nbInput fullWidth formControlName="nombre" type="text" autocomplete="off" [status]="
+        formularioContenedor.get('nombre').dirty
+          ? formularioContenedor.get('nombre').invalid
+            ? 'danger'
+            : 'success'
+          : 'basic'
+      " [attr.aria-invalid]="
+        formularioContenedor.get('nombre').invalid &&
+        formularioContenedor.get('nombre').touched
+          ? true
+          : null
+      " (keyup)="modificarCampoFormulario('subdominio', $event)" />
+      <small id="emailHelp" class="form-text text-muted" *ngIf="nombreEmpresa !== ''">{{
+        nombreEmpresa.toLocaleLowerCase() }}{{ dominioApp }}
+        <a class="btn btn-icon btn-link btn-sm btn-color-gray-500 btn-active-color-primary" (click)="editarSubdominio()"
+          data-bs-toggle="tooltip" data-bs-placement="right" title="Editar"><nb-icon icon="edit-outline"></nb-icon></a>
+      </small>
+      <ng-container *ngIf="
+        formularioContenedor.get('nombre').invalid &&
+        formularioContenedor.get('nombre').touched
+      ">
+        <p class="caption status-danger" *ngIf="formularioContenedor.get('nombre').errors?.required">
+          El campo es requerido!
+        </p>
+      </ng-container>
+    </div>
+  </div>
+  <div class="row mb-10" *ngIf="visualizarCampoSubdominio">
+    <div class="col-md-12 col-sm-12">
       <label class="label required">Subdominio</label>
-      <input
-        nbInput
-        fullWidth
-        formControlName="subdominio"
-        type="text"
-        autocomplete="off"
-        (keyup)="cambiarTextoAMinusculas()"
-        [status]="
+      <input nbInput fullWidth formControlName="subdominio" type="text" autocomplete="off"
+        (keyup)="cambiarTextoAMinusculas()" [status]="
           formularioContenedor.get('subdominio').dirty
             ? formularioContenedor.get('subdominio').invalid
               ? 'danger'
               : 'success'
             : 'basic'
-        "
-        [attr.aria-invalid]="
+        " [attr.aria-invalid]="
           formularioContenedor.get('subdominio').invalid &&
           formularioContenedor.get('subdominio').touched
             ? true
             : null
-        "
-      />
-      <ng-container
-        *ngIf="
+        " />
+      <ng-container *ngIf="
           formularioContenedor.get('subdominio').invalid &&
           formularioContenedor.get('subdominio').touched
-        "
-      >
-        <p
-          class="caption status-danger"
-          *ngIf="formularioContenedor.get('subdominio').errors?.required"
-        >
+        ">
+        <p class="caption status-danger" *ngIf="formularioContenedor.get('subdominio').errors?.required">
           El campo es requerido!
         </p>
       </ng-container>
-      <ng-container
-        *ngIf="
+      <ng-container *ngIf="
           formularioContenedor.get('subdominio').invalid &&
           formularioContenedor.get('subdominio').touched
-        "
-      >
-        <p
-          class="caption status-danger"
-          *ngIf="
+        ">
+        <p class="caption status-danger" *ngIf="
             formularioContenedor.get('subdominio').errors?.minlength ||
             formularioContenedor.get('subdominio').errors?.maxlength
-          "
-        >
+          ">
           El subdominio debe contener entre 3 y 100 caracteres
-        </p>
-      </ng-container>
-    </div>
-  </div>
-  <div class="row mb-10">
-    <div class="col-md-12 col-sm-12">
-      <label class="label required">Nombre</label>
-      <input
-        nbInput
-        fullWidth
-        formControlName="nombre"
-        type="text"
-        autocomplete="off"
-        [status]="
-          formularioContenedor.get('nombre').dirty
-            ? formularioContenedor.get('nombre').invalid
-              ? 'danger'
-              : 'success'
-            : 'basic'
-        "
-        [attr.aria-invalid]="
-          formularioContenedor.get('nombre').invalid &&
-          formularioContenedor.get('nombre').touched
-            ? true
-            : null
-        "
-      />
-      <ng-container
-        *ngIf="
-          formularioContenedor.get('nombre').invalid &&
-          formularioContenedor.get('nombre').touched
-        "
-      >
-        <p
-          class="caption status-danger"
-          *ngIf="formularioContenedor.get('nombre').errors?.required"
-        >
-          El campo es requerido!
-        </p>
-      </ng-container>
-    </div>
-  </div>
-  <div class="row mb-10">
-    <div class="col-md-4 col-sm-12">
-      <label class="label required">Número de identificación</label>
-      <input
-        nbInput
-        fullWidth
-        formControlName="numero_identificacion"
-        type="text"
-        autocomplete="off"
-        (blur)="calcularDigitoVerificacion()"
-        [status]="
-          formularioContenedor.get('numero_identificacion').dirty
-            ? formularioContenedor.get('numero_identificacion').invalid
-              ? 'danger'
-              : 'success'
-            : 'basic'
-        "
-        [attr.aria-invalid]="
-          formularioContenedor.get('numero_identificacion').invalid &&
-          formularioContenedor.get('numero_identificacion').touched
-            ? true
-            : null
-        "
-      />
-      <ng-container
-        *ngIf="
-          formularioContenedor.get('numero_identificacion').invalid &&
-          formularioContenedor.get('numero_identificacion').touched
-        "
-      >
-        <p
-          class="caption status-danger"
-          *ngIf="
-            formularioContenedor.get('numero_identificacion').errors?.required
-          "
-        >
-          El campo es requerido!
-        </p>
-      </ng-container>
-    </div>
-    <div class="col-md-2 col-sm-12">
-      <label class="label required">Digito verificación</label>
-      <input
-        nbInput
-        fullWidth
-        formControlName="digito_verificacion"
-        type="text"
-        autocomplete="off"
-        readonly
-        [status]="
-          formularioContenedor.get('digito_verificacion').dirty
-            ? formularioContenedor.get('digito_verificacion').invalid
-              ? 'danger'
-              : 'success'
-            : 'basic'
-        "
-        [attr.aria-invalid]="
-          formularioContenedor.get('digito_verificacion').invalid &&
-          formularioContenedor.get('digito_verificacion').touched
-            ? true
-            : null
-        "
-      />
-    </div>
-    <div class="col-md-6 col-sm-12">
-      <label class="label required">Tipo identificación</label>
-      <nb-select
-        placeholder="Seleccione un tipo"
-        [formControl]="formularioContenedor.get('identificacion_id')"
-        fullWidth
-      >
-        <nb-option
-          *ngFor="let identificacion of arrIdentificacion"
-          [value]="identificacion.identificacion_id"
-          >{{ identificacion.identificacion_nombre }}</nb-option
-        >
-      </nb-select>
-      <ng-container
-        *ngIf="
-          formularioContenedor.get('identificacion_id').invalid &&
-          formularioContenedor.get('identificacion_id').touched
-        "
-      >
-        <p
-          class="caption status-danger"
-          *ngIf="formularioContenedor.get('identificacion_id').errors?.required"
-        >
-          El campo es requerido!
-        </p>
-      </ng-container>
-    </div>
-  </div>
-  <div class="row mb-10">
-    <div class="col-md-6 col-sm-12">
-      <label class="label required">Ciudad</label>
-      <input
-        nbInput
-        fullWidth
-        #autoInput
-        formControlName="ciudad_nombre"
-        type="text"
-        (input)="onChange()"
-        [nbAutocomplete]="auto"
-      />
-      <nb-autocomplete #auto (selectedChange)="onSelectionChange($event)">
-        <nb-option
-          (click)="seleccionarCiudad(option)"
-          *ngFor="let option of filteredOptions$ | async"
-          [value]="option.nombre"
-        >
-          {{ option.nombre }}
-        </nb-option>
-      </nb-autocomplete>
-      <ng-container
-        *ngIf="
-          formularioContenedor.get('ciudad_id').invalid &&
-          formularioContenedor.get('ciudad_id').touched
-        "
-      >
-        <p
-          class="caption status-danger"
-          *ngIf="formularioContenedor.get('ciudad_id').errors?.required"
-        >
-          El campo es requerido!
-        </p>
-      </ng-container>
-    </div>
-    <div class="col-md-6 col-sm-12">
-      <label class="label required">Dirección</label>
-      <input
-        nbInput
-        fullWidth
-        formControlName="direccion"
-        type="text"
-        autocomplete="off"
-        [status]="
-          formularioContenedor.get('direccion').dirty
-            ? formularioContenedor.get('direccion').invalid
-              ? 'danger'
-              : 'success'
-            : 'basic'
-        "
-        [attr.aria-invalid]="
-          formularioContenedor.get('direccion').invalid &&
-          formularioContenedor.get('direccion').touched
-            ? true
-            : null
-        "
-      />
-      <ng-container
-        *ngIf="
-          formularioContenedor.get('direccion').invalid &&
-          formularioContenedor.get('direccion').touched
-        "
-      >
-        <p
-          class="caption status-danger"
-          *ngIf="formularioContenedor.get('direccion').errors?.required"
-        >
-          El campo es requerido!
         </p>
       </ng-container>
     </div>
@@ -264,101 +69,67 @@
   <div class="row mb-10">
     <div class="col-md-6 col-sm-12">
       <label class="label required">Correo</label>
-      <input
-        nbInput
-        fullWidth
-        formControlName="correo"
-        type="text"
-        autocomplete="off"
-        [status]="
+      <input nbInput fullWidth formControlName="correo" type="text" autocomplete="off" [status]="
           formularioContenedor.get('correo').dirty
             ? formularioContenedor.get('correo').invalid
               ? 'danger'
               : 'success'
             : 'basic'
-        "
-        [attr.aria-invalid]="
+        " [attr.aria-invalid]="
           formularioContenedor.get('correo').invalid &&
           formularioContenedor.get('correo').touched
             ? true
             : null
-        "
-      />
-      <ng-container
-        *ngIf="
+        " />
+      <ng-container *ngIf="
           formularioContenedor.get('correo').invalid &&
           formularioContenedor.get('correo').touched
-        "
-      >
-        <p
-          class="caption status-danger"
-          *ngIf="formularioContenedor.get('correo').errors?.required"
-        >
+        ">
+        <p class="caption status-danger" *ngIf="formularioContenedor.get('correo').errors?.required">
           El campo es requerido!
         </p>
       </ng-container>
     </div>
     <div class="col-md-6 col-sm-12">
       <label class="label required">Teléfono</label>
-      <input
-        nbInput
-        fullWidth
-        formControlName="telefono"
-        type="text"
-        autocomplete="off"
-        [status]="
+      <input nbInput fullWidth formControlName="telefono" type="text" autocomplete="off" [status]="
           formularioContenedor.get('telefono').dirty
             ? formularioContenedor.get('telefono').invalid
               ? 'danger'
               : 'success'
             : 'basic'
-        "
-        [attr.aria-invalid]="
+        " [attr.aria-invalid]="
           formularioContenedor.get('telefono').invalid &&
           formularioContenedor.get('telefono').touched
             ? true
             : null
-        "
-      />
-      <ng-container
-      *ngIf="
+        " />
+      <ng-container *ngIf="
         formularioContenedor.get('telefono').invalid &&
         formularioContenedor.get('telefono').touched
-      "
-    >
-      <p
-        class="caption status-danger"
-        *ngIf="formularioContenedor.get('telefono').errors?.required"
-      >
-        El campo es requerido!
-      </p>
-    </ng-container>
+      ">
+        <p class="caption status-danger" *ngIf="formularioContenedor.get('telefono').errors?.required">
+          El campo es requerido!
+        </p>
+      </ng-container>
     </div>
   </div>
-  <div class="row mb-10">
-    <div class="col-md-12 col-sm-12">
-      <label class="label required">Planes </label>
-      <nb-radio-group
-        *ngFor="let plan of arrPlanes"
-        [formControl]="formularioContenedor.get('plan_id')"
-      >
-        <nb-radio
-          [checked]="plan.id === formularioContenedor.get('plan_id')"
-          [value]="plan.id"
-        >
-          {{ plan.nombre }}
-        </nb-radio>
-      </nb-radio-group>
-    </div>
-  </div>
-  <div
-    class="fv-row d-flex"
-    [ngClass]="{
+  <br>
+  <div class="fv-row d-flex" [ngClass]="{
       'justify-content-between': visualizarBtnAtras === true,
       'justify-content-end': visualizarBtnAtras === false
-    }"
-  >
+    }">
     <a nbButton status="basic" [routerLink]="['../lista']">Atrás </a>
     <button nbButton type="submit" status="primary" #btnGuardar>Guardar</button>
   </div>
 </form>
+<ng-template #formError let-control="control" let-message="message" let-validation="validation"
+  let-cantidadCaracteres="cantidadCaracteres">
+  <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+    <div class="fv-plugins-message-container">
+      <div class="fv-help-block">
+        <span role="alert"> {{ message }} {{ cantidadCaracteres }} </span>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

@@ -26,6 +26,7 @@ import {
   NbAlertModule,
   NbAutocompleteModule,
   NbButtonModule,
+  NbIconModule,
   NbInputModule,
   NbRadioModule,
   NbSelectModule,
@@ -45,6 +46,7 @@ import {
     NbAlertModule,
     NbRadioModule,
     NbButtonModule,
+    NbIconModule,
   ],
   templateUrl: "./formulario.component.html",
   styleUrls: ["./formulario.component.css"],
@@ -61,9 +63,10 @@ export class FormularioComponent extends General implements OnInit {
   arrCiudades: any[] = [];
   planSeleccionado: Number = 2;
   procesando = false;
+  nombreEmpresa = '';
   @Input() informacionContenedor: any = [];
-  @Input() visualizarCampoSubdominio: boolean = true;
   @Input() visualizarBtnAtras: boolean = true;
+  @Input() visualizarCampoSubdominio: boolean = false;
   @Output() dataFormulario: EventEmitter<any> = new EventEmitter();
 
   @ViewChild("autoInput") input;
@@ -88,12 +91,7 @@ export class FormularioComponent extends General implements OnInit {
       ])
     ),
     plan_id: new FormControl(
-      this.planSeleccionado,
-      Validators.compose([Validators.required])
-    ),
-    direccion: new FormControl(
-      this.informacionContenedor.direccion,
-      Validators.compose([Validators.required, Validators.maxLength(50)])
+      8
     ),
     correo: new FormControl(
       this.informacionContenedor.correo,
@@ -102,27 +100,6 @@ export class FormularioComponent extends General implements OnInit {
         Validators.maxLength(255),
         Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
       ])
-    ),
-    ciudad_nombre: new FormControl(this.informacionContenedor.ciudad_nombre),
-    ciudad_id: new FormControl(
-      this.informacionContenedor.ciudad,
-      Validators.compose([Validators.required])
-    ),
-    numero_identificacion: new FormControl(
-      this.informacionContenedor.numero_identificacion,
-      Validators.compose([
-        Validators.required,
-        Validators.maxLength(20),
-        Validators.pattern(/^[0-9]+$/),
-      ])
-    ),
-    digito_verificacion: new FormControl(
-      this.informacionContenedor.digito_verificacion,
-      Validators.compose([Validators.required, Validators.maxLength(1)])
-    ),
-    identificacion_id: new FormControl(
-      this.informacionContenedor.identificacion,
-      Validators.compose([Validators.required])
     ),
     telefono: new FormControl(
       this.informacionContenedor.telefono,
@@ -146,51 +123,17 @@ export class FormularioComponent extends General implements OnInit {
   }
 
   ngOnInit(): void {
-    this.planSeleccionado =
-      this.informacionContenedor.plan_id !== 0
-        ? this.informacionContenedor.plan_id
-        : this.planSeleccionado;
     this.consultarInformacion();
-    this.consultarCiudad(null);
   }
 
   consultarInformacion() {
     zip(
-      this.contenedorService.listaTipoIdentificacion(),
       this.contenedorService.listaPlanes()
     ).subscribe((respuesta: any) => {
       this.arrIdentificacion = respuesta[0].registros;
       this.arrPlanes = respuesta[1];
       this.changeDetectorRef.detectChanges();
     });
-  }
-
-  consultarCiudad(valor: any) {
-    let arrFiltros = {
-      filtros: [
-        {
-          operador: "__icontains",
-          propiedad: "nombre__icontains",
-          valor1: valor !== null ? valor : "",
-          valor2: "",
-        },
-      ],
-      limite: 10,
-      desplazar: 0,
-      ordenamientos: [],
-      limite_conteo: 10000,
-      modelo: "CtnCiudad",
-    };
-    this.contenedorService
-      .listaCiudades(arrFiltros)
-      .pipe(
-        throttleTime(300, asyncScheduler, { leading: true, trailing: true }),
-        tap((respuesta: any) => {
-          this.arrCiudades = respuesta.registros;
-          this.filteredOptions$ = of(this.arrCiudades);
-        })
-      )
-      .subscribe();
   }
 
   enviar() {
@@ -206,15 +149,16 @@ export class FormularioComponent extends General implements OnInit {
   modificarCampoFormulario(campo: string, dato: any) {
     this.formularioContenedor?.markAsDirty();
     this.formularioContenedor?.markAsTouched();
-    if (campo === "ciudad_id") {
-      if (dato === null) {
-        this.formularioContenedor.get(campo)?.setValue(null);
-        this.formularioContenedor.get("ciudad_nombre")?.setValue(null);
-      } else {
-        this.formularioContenedor.get(campo)?.setValue(dato.id);
-        this.formularioContenedor
-          .get("ciudad_nombre")
-          ?.setValue(dato.nombre);
+    if (campo === 'subdominio') {
+      if (!this.visualizarCampoSubdominio) {
+        this.nombreEmpresa = this.formularioContenedor.get('nombre')!.value;
+        this.nombreEmpresa = this.nombreEmpresa.replace(/ñ/gi, 'n');
+        this.nombreEmpresa = this.nombreEmpresa.replace(/[^a-zA-Z0-9]/g, '');
+        this.nombreEmpresa = this.nombreEmpresa
+          .substring(0, 25)
+          .toLocaleLowerCase();
+        this.formularioContenedor.get(campo)?.setValue(this.nombreEmpresa);
+        this.changeDetectorRef.detectChanges();
       }
     }
     this.changeDetectorRef.detectChanges();
@@ -224,15 +168,6 @@ export class FormularioComponent extends General implements OnInit {
     return this.formularioContenedor.controls;
   }
 
-  formSubmit() {
-    if (this.formularioContenedor.valid) {
-      this.procesando = true;
-
-      return this.dataFormulario.emit(this.formularioContenedor.value);
-    } else {
-      this.formularioContenedor.markAllAsTouched();
-    }
-  }
 
   cambiarTextoAMinusculas() {
     this.formFields.subdominio.setValue(
@@ -253,59 +188,9 @@ export class FormularioComponent extends General implements OnInit {
     }
   }
 
-  seleccionarPlan(plan_id: Number) {
-    this.planSeleccionado = plan_id;
+  editarSubdominio() {
+    this.visualizarCampoSubdominio = true;
     this.changeDetectorRef.detectChanges();
   }
 
-  calcularDigitoVerificacion() {
-    if (this.formularioContenedor.get("numero_identificacion").value) {
-      let digito = this.devuelveDigitoVerificacionService.digitoVerificacion(
-        this.formularioContenedor.get("numero_identificacion")?.value
-      );
-      this.formularioContenedor.patchValue({
-        digito_verificacion: digito,
-      });
-    }
-  }
-
-  private filter(value: string): string[] {
-    console.log(this.arrCiudades);
-    
-    let arrCiudad = this.arrCiudades.find(
-      (ciudad: any) => ciudad.nombre === value
-    );
-    if (arrCiudad) {
-      this.formularioContenedor.patchValue({
-        ciudad_id: arrCiudad?.id,
-        ciudad_nombre: arrCiudad?.nombre,
-      });
-    }
-    const filterValue = value?.toLowerCase();
-    return this.arrCiudades.filter((optionValue) =>
-      optionValue.nombre.toLowerCase().includes(filterValue)
-    );
-  }
-
-  getFilteredOptions(value: string): Observable<string[]> {
-    return of(value).pipe(map((filterString) => this.filter(filterString)));
-  }
-
-  onChange() {
-    this.consultarCiudad(this.input.nativeElement.value);
-    this.filteredOptions$ = this.getFilteredOptions(
-      this.input.nativeElement.value
-    );
-  }
-
-  onSelectionChange($event) {
-    this.filteredOptions$ = this.getFilteredOptions($event);
-  }
-
-  seleccionarCiudad(ciudad: any) {
-    this.formularioContenedor.patchValue({
-      ciudad_id: ciudad?.id,
-      ciudad_nombre: ciudad?.nombre,
-    });
-  }
 }
