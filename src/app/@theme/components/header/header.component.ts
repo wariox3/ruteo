@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = "default";
 
-  userMenu = [{ title: "Contenedores" }, { title: "Cerrar sesión" }];
+  userMenu = [{ title: "Mis contenedores" }, { title: "Cerrar sesión" }];
 
   constructor(
     private sidebarService: NbSidebarService,
@@ -83,7 +83,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         case "Cerrar sesión":
           this.authService.logout();
           break;
-        case "Contenedores":
+        case "Mis contenedores":
           this.router.navigate(['/contenedor/lista']);
           break;
       }
@@ -115,11 +115,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const currentUrl = this.router.url;
 
     // Restablecer el menú a su estado original
-    this.userMenu = [{ title: "Contenedores" }, { title: "Cerrar sesión" }];
+    this.userMenu = [{ title: "Mis contenedores" }, { title: "Cerrar sesión" }];
 
     // Si estamos en la ruta /contenedor/lista, eliminamos el ítem de "Contenedores"
     if (currentUrl === '/contenedor/lista') {
-      this.userMenu = this.userMenu.filter(item => item.title !== 'Contenedores');
+      this.userMenu = this.userMenu.filter(item => item.title !== 'Mis contenedores');
     }
   }
 }
