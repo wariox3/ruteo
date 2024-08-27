@@ -14,4 +14,8 @@ export class ComplementoService {
   instalarComplemento(id: any, data: any) {
     return this.http.put<any>(`general/complemento/${id}/`, data);
   }
+
+  actualizarComplemento(id: any, data: any) {
+    return this.http.put<any>(`general/complemento/${id}/`, data);
+  }
 }

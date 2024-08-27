@@ -125,7 +125,7 @@
   <div>
     <div class="d-flex flex-column mb-4">
       <label>Registros:</label>
-      <input class="w-100" nbInput type="number" [(ngModel)]="numeroDeRegistrosAImportar">
+      <input appSoloNumeros class="w-100" nbInput type="number" [(ngModel)]="numeroDeRegistrosAImportar">
     </div>
     <div>
       <button disabled *ngIf="estaImportandoComplementos" nbButton status="primary" size="small" (click)="importarComplemento()">

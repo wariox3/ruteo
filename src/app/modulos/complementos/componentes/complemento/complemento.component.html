@@ -4,15 +4,22 @@
   </nb-card-header>
   <nb-card-body>
     <div class="complementos-grid">
-      <div *ngFor="let complemento of arrComplementos" class="complemento-card">
+      <div *ngFor="let complemento of arrComplementos; let i = index" class="complemento-card">
         <nb-card>
           <nb-card-header>
-            <nb-icon [icon]="complemento.instalado ? 'checkmark-circle-2-outline' : 'close-circle-outline'" status="{{ complemento.instalado ? 'success' : 'danger' }}"></nb-icon>
+            <nb-icon [icon]="complemento.instalado ? 'checkmark-circle-2-outline' : 'close-circle-outline'"
+              status="{{ complemento.instalado ? 'success' : 'danger' }}"></nb-icon>
             <span class="ml-2">{{ complemento.nombre }}</span>
           </nb-card-header>
+          
           <nb-card-footer class="d-flex justify-content-end">
-            <button *ngIf="!complemento.instalado" nbButton size="small" status="success" (click)="instalar(complemento)">
+            <button *ngIf="!complemento.instalado" nbButton size="small" status="success"
+              (click)="instalar(complemento)">
               Instalar
+            </button>
+            <button *ngIf="complemento.instalado" nbButton size="small" status="primary" (click)="openWindow(i, complemento.nombre)">
+              Configurar
+              <nb-icon icon="settings"></nb-icon>
             </button>
           </nb-card-footer>
         </nb-card>
@@ -20,3 +27,41 @@
     </div>
   </nb-card-body>
 </nb-card>
+
+<ng-template #contentTemplate let-data>
+  <div>
+    <form [formGroup]="formularios[data.indexFormulario]">
+      <div formGroupName="datos_json">
+        <div class="d-flex flex-column mb-3" *ngFor="let campo of arrComplementos[data.indexFormulario]?.estructura_json">
+          <label>{{ campo.nombre }}:</label>
+          <input [id]="campo.nombre" [formControlName]="campo.nombre" nbInput type="text" fullWidth [status]="
+          formularios[data.indexFormulario].get('datos_json.' + campo.nombre).dirty
+            ? formularios[data.indexFormulario].get('datos_json.' + campo.nombre).invalid
+              ? 'danger'
+              : 'success'
+            : 'basic'
+        " [attr.aria-invalid]="
+          formularios[data.indexFormulario].get('datos_json.' + campo.nombre).invalid &&
+          formularios[data.indexFormulario].get('datos_json.' + campo.nombre).touched
+            ? true
+            : null
+        ">
+          <ng-container *ngIf="
+          formularios[data.indexFormulario].get('datos_json.' + campo.nombre).invalid &&
+          formularios[data.indexFormulario].get('datos_json.' + campo.nombre).touched
+        ">
+            <p class="caption status-danger"
+              *ngIf="formularios[data.indexFormulario].get('datos_json.' + campo.nombre).errors?.required">
+              El campo es requerido!
+            </p>
+          </ng-container>
+        </div>
+      </div>
+    </form>
+    <div class="d-flex justify-content-end">
+      <button nbButton size="small" status="success" (click)="guardarInformacion(data.indexFormulario)">
+        Guardar
+      </button>
+    </div>
+  </div>
+</ng-template>

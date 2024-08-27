@@ -35,6 +35,7 @@ import {
 } from "@angular/google-maps";
 import { FormControl, FormGroup, FormsModule } from "@angular/forms";
 import { finalize } from "rxjs/operators";
+import { SoloNumerosDirective } from "../../../../comun/directivas/solo-numeros.directive";
 
 @Component({
   selector: "app-lista",
@@ -53,6 +54,7 @@ import { finalize } from "rxjs/operators";
     FormsModule,
     NbInputModule,
     NbContextMenuModule,
+    SoloNumerosDirective
   ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],

@@ -1,15 +1,29 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from "@angular/core";
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
+import { GoogleMapsModule } from "@angular/google-maps";
 import {
   NbButtonModule,
   NbCardModule,
   NbIconModule,
+  NbInputModule,
   NbListModule,
+  NbWindowRef,
+  NbWindowService,
 } from "@nebular/theme";
 import { General } from "../../../../comun/clases/general";
-import { GoogleMapsModule, MapDirectionsService } from "@angular/google-maps";
-import { DespachoService } from "../../../despacho/servicios/despacho.service";
-import { GuiaService } from "../../../guia/servicios/guia.service";
+import { RespuestaComplemento } from "../../../../interfaces/complemento/complemento.interface";
 import { ComplementoService } from "../../servicios/complemento.service";
 
 @Component({
@@ -22,34 +36,96 @@ import { ComplementoService } from "../../servicios/complemento.service";
     NbIconModule,
     NbListModule,
     GoogleMapsModule,
+    NbInputModule,
+    ReactiveFormsModule,
   ],
   templateUrl: "./complemento.component.html",
   styleUrls: ["./complemento.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TraficoComponent extends General implements OnInit {
+  @ViewChild("contentTemplate") contentTemplate: TemplateRef<any>;
+  formularioDinamico: FormGroup;
+  formularios: FormGroup[] = [];
+  formControls: any[] = [];
+  windowRef: NbWindowRef;
+
   constructor(
-    private complementoService: ComplementoService
+    private complementoService: ComplementoService,
+    private windowService: NbWindowService
   ) {
     super();
   }
 
-  arrComplementos: any
+  arrComplementos: RespuestaComplemento[];
 
   ngOnInit(): void {
     this.consultaLista();
   }
 
-  consultaLista(){
+  openWindow(indexFormulario: number, nombreFormulario: string) {
+    this.windowRef = this.windowService.open(this.contentTemplate, {
+      title: `Configurar ${nombreFormulario}`,
+      context: {
+        indexFormulario
+      }
+    });
+  }
+
+  crearFormulario() {
+    this.arrComplementos.forEach((complemento) => {
+      const formGroup = new FormGroup({
+        id: new FormControl(complemento.id),
+        nombre: new FormControl(complemento.nombre),
+        estructura_json: new FormControl(complemento.estructura_json),
+        datos_json: new FormGroup({}),
+      });
+
+      complemento.estructura_json.forEach((campo) => {
+        formGroup.controls.datos_json.addControl(
+          campo.nombre,
+          new FormControl(
+            complemento.datos_json[campo.nombre],
+            Validators.compose([Validators.required])
+          )
+        );
+      });
+
+      this.formularios.push(formGroup);
+    });
+
+    this.changeDetectorRef.detectChanges();
+  }
+
+  guardarInformacion(indexFormulario: string) {
+    if (this.formularios[indexFormulario].valid) {
+      const id = this.formularios[indexFormulario].get("id")?.value;
+      this.complementoService
+        .actualizarComplemento(id, this.formularios[indexFormulario].value)
+        .subscribe(() => {
+          this.consultaLista();
+          this.alerta.mensajaExitoso(
+            "Se actualizó correctamente el complemento.",
+            "Guardado con éxito."
+          );
+          this.windowRef.close()
+          this.changeDetectorRef.detectChanges();
+        });
+    }
+  }
+
+  consultaLista() {
     this.complementoService.listarComplementos().subscribe((respuesta) => {
-      this.arrComplementos = respuesta
+      this.arrComplementos = respuesta;
+      this.crearFormulario();
       this.changeDetectorRef.detectChanges();
-    })
+    });
   }
 
   instalar(complemento: any) {
     const complementoModificado = { ...complemento, instalado: true };
-    this.complementoService.instalarComplemento(complementoModificado.id, complementoModificado)
+    this.complementoService
+      .instalarComplemento(complementoModificado.id, complementoModificado)
       .subscribe((respuesta) => {
         this.consultaLista();
         this.changeDetectorRef.detectChanges();
