@@ -19,16 +19,10 @@
 
   <div class="form-control-group">
     <label class="label" for="input-username">Correo:</label>
-    <input nbInput
-           formControlName="username"
-           fullWidth
-           name="username"
-           id="input-username"
-           pattern=".+@.+\..+"
-           placeholder="Correo"
-           fieldSize="large"
-           [status]="formulario.get('username').dirty ? (formulario.get('username').invalid  ? 'danger' : 'success') : 'basic'"
-           [attr.aria-invalid]="formulario.get('username').invalid && formulario.get('username').touched ? true : null">
+    <input nbInput formControlName="username" fullWidth name="username" id="input-username" pattern=".+@.+\..+"
+      placeholder="Correo" fieldSize="large"
+      [status]="formulario.get('username').dirty ? (formulario.get('username').invalid  ? 'danger' : 'success') : 'basic'"
+      [attr.aria-invalid]="formulario.get('username').invalid && formulario.get('username').touched ? true : null">
     <ng-container *ngIf="formulario.get('username').invalid && formulario.get('username').touched">
       <p class="caption status-danger" *ngIf="formulario.get('username').errors?.required">
         El correo es requerido
@@ -44,38 +38,31 @@
       <label class="label" for="input-password">Contraseña:</label>
       <a class="forgot-password caption-2" routerLink="/auth/reset-password">¿Olvidaste tu contraseña?</a>
     </span>
-    <input nbInput
-        formControlName="password"
-        id="input-contrasena"
-        name="contrasena"
-        placeholder="Contraseña"
-        fullWidth
-        fieldSize="large"
-        type="password"
-        [status]="formulario.get('password').dirty ? (formulario.get('password').invalid  ? 'danger' : 'success') : 'basic'"
-        [attr.aria-invalid]="formulario.get('password').invalid && formulario.get('password').touched ? true : null">
-        <ng-container *ngIf="formulario.get('password').invalid && formulario.get('password').touched">
-          <p class="caption status-danger" *ngIf="formulario.get('password').errors?.required">
-            La contraseña es requerida!
-          </p>
+    <input nbInput formControlName="password" id="input-contrasena" name="contrasena" placeholder="Contraseña" fullWidth
+      fieldSize="large" type="password"
+      [status]="formulario.get('password').dirty ? (formulario.get('password').invalid  ? 'danger' : 'success') : 'basic'"
+      [attr.aria-invalid]="formulario.get('password').invalid && formulario.get('password').touched ? true : null">
+    <ng-container *ngIf="formulario.get('password').invalid && formulario.get('password').touched">
+      <p class="caption status-danger" *ngIf="formulario.get('password').errors?.required">
+        La contraseña es requerida!
+      </p>
     </ng-container>
     <ng-container *ngIf="formulario.get('password').invalid && formulario.get('password').touched">
-      <p class="caption status-danger" *ngIf="formulario.get('password').errors?.minlength || formulario.get('password').errors?.maxlength">
+      <p class="caption status-danger"
+        *ngIf="formulario.get('password').errors?.minlength || formulario.get('password').errors?.maxlength">
         La contraseña debe contener entre 8 y 20 caracteres
       </p>
     </ng-container>
   </div>
 
-  <button nbButton
-          fullWidth
-          status="primary"
-          size="large"
-          [disabled]="submitted || !form.valid"
-          [class.btn-pulse]="submitted">
-    Ingresar
+  <button nbButton fullWidth status="primary" size="large" [disabled]="submitted || !formulario.valid || isLoading">
+    <nb-icon *ngIf="isLoading" icon="spinner-outline" pack="eva" class="pr-2"
+      [options]="{ animation: { type: 'pulse' } }"></nb-icon>
+    <span *ngIf="!isLoading">Ingresar</span>
+    <span *ngIf="isLoading">Cargando...</span>
   </button>
 </form>
 
 <section class="another-action" aria-label="Register">
-  ¿Aún no tienes una cuenta?  <a class="text-link" routerLink="../register">Regístrate</a>
+  ¿Aún no tienes una cuenta? <a class="text-link" routerLink="../register">Regístrate</a>
 </section>
