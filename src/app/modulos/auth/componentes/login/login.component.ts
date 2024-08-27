@@ -19,6 +19,7 @@ import { TokenService } from "../../servicios/token.service";
 import { AuthService } from "../../servicios/auth.service";
 import { Store } from "@ngrx/store";
 import { usuarioIniciar } from "../../../../redux/actions/usuario.actions";
+import { finalize } from "rxjs/operators";
 
 @Component({
   selector: "ngx-login",
@@ -59,8 +60,14 @@ export class NgxLoginComponent extends NbLoginComponent {
       return;
     }
     this.isLoading = true; // Mostrar loading
-    this.authService.login(this.formulario.value).subscribe(
-      (resultado: any) => {
+    this.authService
+      .login(this.formulario.value)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe((resultado: any) => {
         if (resultado.token) {
           let calcularTiempo = new Date(
             new Date().getTime() + 3 * 60 * 60 * 1000
@@ -73,13 +80,6 @@ export class NgxLoginComponent extends NbLoginComponent {
           this.tokenService.guardar(resultado.token, calcularTiempo);
           this.router.navigate(["contenedor"]);
         }
-      },
-      (error) => {
-        this.isLoading = false;
-      },
-      () => {
-        this.isLoading = false;
-      }
-    );
+      });
   }
 }
