@@ -23,7 +23,7 @@
             <div class="d-flex flex-column h-100">
               <nb-card *ngFor="let franja of franjas$ | async" class="mb-2">
                 <nb-card-body class="d-flex justify-content-between">
-                  {{ franja.nombre }}
+                  <div>{{ franja.nombre }} <span *ngIf="franja.codigo"> [{{ franja.codigo }}]</span></div>
                   <div>
                     <button class="border-0 bg-transparent" (click)="seleccionarFranja(franja)">
                       <nb-icon icon="edit-2-outline"></nb-icon>
