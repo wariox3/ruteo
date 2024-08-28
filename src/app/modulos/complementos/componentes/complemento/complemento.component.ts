@@ -92,11 +92,11 @@ export class TraficoComponent extends General implements OnInit {
           const valor = campo?.[0]?.valor || "";
           datosJSON.push(
             new FormGroup({
-              nombre: new FormControl(estructuraDatos.nombre),
               valor: new FormControl(
                 valor,
                 Validators.compose([Validators.required])
               ),
+              nombre: new FormControl(estructuraDatos.nombre),
             })
           );
         });
