@@ -15,14 +15,14 @@ import { obtenerUsuarioNombreCorto } from "../../../redux/selectos/usuario.selec
 import { obtenerContenedorSeleccion } from "../../../redux/selectos/contenedor.selectors";
 import { Router, NavigationEnd } from "@angular/router";
 import { ContenedorActionBorrarInformacion } from "../../../redux/actions/contenedor.actions";
+import { General } from "../../../comun/clases/general";
 
 @Component({
   selector: "ngx-header",
   styleUrls: ["./header.component.scss"],
   templateUrl: "./header.component.html",
 })
-export class HeaderComponent implements OnInit, OnDestroy {
-  private router = inject(Router);
+export class HeaderComponent extends General implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   user: any;
@@ -49,8 +49,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private layoutService: LayoutService,
     private breakpointService: NbMediaBreakpointsService,
     private authService: AuthService,
-    private store: Store
-  ) {}
+  ) {
+    super()
+  }
 
   ngOnInit() {
     this.usuarioNombreCorto$.subscribe((nombre: any) => (this.usuarioNombreCorto = nombre));
@@ -85,6 +86,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.authService.logout();
           break;
         case "Mis contenedores":
+          alert('Prueba de mis contenedores')
           this.store.dispatch(ContenedorActionBorrarInformacion())
           this.router.navigate(['/contenedor/lista']);
           break;
