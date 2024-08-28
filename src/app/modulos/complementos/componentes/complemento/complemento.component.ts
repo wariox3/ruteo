@@ -84,7 +84,7 @@ export class TraficoComponent extends General implements OnInit {
 
       const datosJSON = formGroup.get("datos_json") as FormArray;
 
-      if (Array.isArray(complemento?.datos_json)) {
+      if (Array.isArray(complemento?.datos_json) || complemento?.datos_json === null) {
         complemento.estructura_json?.forEach((estructuraDatos) => {
           const campo = complemento?.datos_json?.filter(
             (campoDatos) => campoDatos.nombre === estructuraDatos.nombre

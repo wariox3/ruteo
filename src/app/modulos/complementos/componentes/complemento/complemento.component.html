@@ -32,7 +32,6 @@
 <ng-template #contentTemplate let-data>
   <div>
     <form [formGroup]="formularios[data.indexFormulario]">
-      <pre>{{ formularios[data.indexFormulario].value | json }}</pre>
       <div formArrayName="datos_json">
         <div class="d-flex flex-column mb-3"
           *ngFor="let control of formularios[data.indexFormulario].get('datos_json').controls; let j = index"
