@@ -12,7 +12,7 @@ import { Subject } from "rxjs";
 import { AuthService } from "../../../modulos/auth/servicios/auth.service";
 import { Store } from "@ngrx/store";
 import { obtenerUsuarioNombreCorto } from "../../../redux/selectos/usuario.selector";
-import { obtenerContenedorSeleccion } from "../../../redux/selectos/contenedor.selectors";
+import { obtenerContenedorSeleccion, obtenerContenedorSubdominio } from "../../../redux/selectos/contenedor.selectors";
 import { Router, NavigationEnd } from "@angular/router";
 import { ContenedorActionBorrarInformacion } from "../../../redux/actions/contenedor.actions";
 import { General } from "../../../comun/clases/general";
@@ -29,6 +29,7 @@ export class HeaderComponent extends General implements OnInit, OnDestroy {
   usuarioNombreCorto$ = this.store.select(obtenerUsuarioNombreCorto);
   usuarioNombreCorto = "";
   iconoMenuVisible$ = this.store.select(obtenerContenedorSeleccion);
+  tituloMenu: string = ""
 
   themes = [
     { value: "default", name: "Light" },
@@ -51,6 +52,9 @@ export class HeaderComponent extends General implements OnInit, OnDestroy {
     private authService: AuthService,
   ) {
     super()
+    this.store.select(obtenerContenedorSubdominio).subscribe((respuesta) => {
+      this.tituloMenu = respuesta
+    }); 
   }
 
   ngOnInit() {
