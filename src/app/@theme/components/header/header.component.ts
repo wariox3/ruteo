@@ -14,6 +14,7 @@ import { Store } from "@ngrx/store";
 import { obtenerUsuarioNombreCorto } from "../../../redux/selectos/usuario.selector";
 import { obtenerContenedorSeleccion } from "../../../redux/selectos/contenedor.selectors";
 import { Router, NavigationEnd } from "@angular/router";
+import { ContenedorActionBorrarInformacion } from "../../../redux/actions/contenedor.actions";
 
 @Component({
   selector: "ngx-header",
@@ -84,6 +85,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.authService.logout();
           break;
         case "Mis contenedores":
+          this.store.dispatch(ContenedorActionBorrarInformacion())
           this.router.navigate(['/contenedor/lista']);
           break;
       }

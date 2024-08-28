@@ -1,7 +1,7 @@
 import { Store } from "@ngrx/store";
 import { environment } from "../../../environments/environment";
 import { obtenerContenedorSubdominio } from "../../redux/selectos/contenedor.selectors";
-import { inject, Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 
 export class Subdomino {
 
