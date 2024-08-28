@@ -94,7 +94,7 @@ export class HeaderComponent extends General implements OnInit, OnDestroy {
 
   ejecturarCambioContenedor() {
     this.store.dispatch(ContenedorActionBorrarInformacion())
-    this.router.navigate(['/contenedor/lista']);
+    // this.router.navigate(['/contenedor/lista']);
   }
 
   ngOnDestroy() {
