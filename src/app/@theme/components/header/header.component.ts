@@ -86,12 +86,16 @@ export class HeaderComponent extends General implements OnInit, OnDestroy {
           this.authService.logout();
           break;
         case "Mis contenedores":
-          alert('Prueba de mis contenedores')
-          this.store.dispatch(ContenedorActionBorrarInformacion())
-          this.router.navigate(['/contenedor/lista']);
+          this.prueba()
+          // this.router.navigate(['/contenedor/lista']);
           break;
       }
     });
+  }
+
+  prueba() {
+    alert('Prueba de mis contenedores')
+    this.store.dispatch(ContenedorActionBorrarInformacion())
   }
 
   ngOnDestroy() {
