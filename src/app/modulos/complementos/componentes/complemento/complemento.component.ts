@@ -7,6 +7,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import {
+  FormArray,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -67,8 +68,8 @@ export class TraficoComponent extends General implements OnInit {
     this.windowRef = this.windowService.open(this.contentTemplate, {
       title: `Configurar ${nombreFormulario}`,
       context: {
-        indexFormulario
-      }
+        indexFormulario,
+      },
     });
   }
 
@@ -78,18 +79,30 @@ export class TraficoComponent extends General implements OnInit {
         id: new FormControl(complemento.id),
         nombre: new FormControl(complemento.nombre),
         estructura_json: new FormControl(complemento.estructura_json),
-        datos_json: new FormGroup({}),
+        datos_json: new FormArray([]),
       });
 
-      complemento.estructura_json.forEach((campo) => {
-        formGroup.controls.datos_json.addControl(
-          campo.nombre,
-          new FormControl(
-            complemento?.datos_json?.[campo.nombre] || '',
-            Validators.compose([Validators.required])
-          )
-        );
-      });
+      const datosJSON = formGroup.get("datos_json") as FormArray;
+
+      if (Array.isArray(complemento?.datos_json)) {
+        complemento.estructura_json?.forEach((estructuraDatos) => {
+          const campo = complemento?.datos_json?.filter(
+            (campoDatos) => campoDatos.nombre === estructuraDatos.nombre
+          );
+          const valor = campo?.[0]?.valor || "";
+          datosJSON.push(
+            new FormGroup({
+              nombre: new FormControl(estructuraDatos.nombre),
+              valor: new FormControl(
+                valor,
+                Validators.compose([Validators.required])
+              ),
+            })
+          );
+        });
+      } else {
+        console.error("datos_json debe ser de tipo Array");
+      }
 
       this.formularios.push(formGroup);
     });
@@ -108,7 +121,7 @@ export class TraficoComponent extends General implements OnInit {
             "Se actualizó correctamente el complemento.",
             "Guardado con éxito."
           );
-          this.windowRef.close()
+          this.windowRef.close();
           this.changeDetectorRef.detectChanges();
         });
     }

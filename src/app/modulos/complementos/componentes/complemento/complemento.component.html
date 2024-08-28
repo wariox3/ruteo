@@ -11,13 +11,14 @@
               status="{{ complemento.instalado ? 'success' : 'danger' }}"></nb-icon>
             <span class="ml-2">{{ complemento.nombre }}</span>
           </nb-card-header>
-          
+
           <nb-card-footer class="d-flex justify-content-end">
             <button *ngIf="!complemento.instalado" nbButton size="small" status="success"
               (click)="instalar(complemento)">
               Instalar
             </button>
-            <button *ngIf="complemento.instalado" nbButton size="small" status="primary" (click)="openWindow(i, complemento.nombre)">
+            <button *ngIf="complemento.instalado" nbButton size="small" status="primary"
+              (click)="openWindow(i, complemento.nombre)">
               Configurar
               <nb-icon icon="settings"></nb-icon>
             </button>
@@ -31,27 +32,29 @@
 <ng-template #contentTemplate let-data>
   <div>
     <form [formGroup]="formularios[data.indexFormulario]">
-      <div formGroupName="datos_json">
-        <div class="d-flex flex-column mb-3" *ngFor="let campo of arrComplementos[data.indexFormulario]?.estructura_json">
-          <label>{{ campo.nombre }}:</label>
-          <input [id]="campo.nombre" [formControlName]="campo.nombre" nbInput type="text" fullWidth [status]="
-          formularios[data.indexFormulario].get('datos_json.' + campo.nombre).dirty
-            ? formularios[data.indexFormulario].get('datos_json.' + campo.nombre).invalid
+      <pre>{{ formularios[data.indexFormulario].value | json }}</pre>
+      <div formArrayName="datos_json">
+        <div class="d-flex flex-column mb-3"
+          *ngFor="let control of formularios[data.indexFormulario].get('datos_json').controls; let j = index"
+          [formGroupName]="j">
+          <label>{{ control.get('nombre').value }}:</label>
+          <input formControlName="valor" nbInput type="text" fullWidth [status]="
+          control.get('valor').dirty
+            ? control.get('valor').invalid
               ? 'danger'
               : 'success'
             : 'basic'
         " [attr.aria-invalid]="
-          formularios[data.indexFormulario].get('datos_json.' + campo.nombre).invalid &&
-          formularios[data.indexFormulario].get('datos_json.' + campo.nombre).touched
+          control.get('valor').invalid &&
+          control.get('valor').touched
             ? true
             : null
-        ">
+        " />
           <ng-container *ngIf="
-          formularios[data.indexFormulario].get('datos_json.' + campo.nombre).invalid &&
-          formularios[data.indexFormulario].get('datos_json.' + campo.nombre).touched
+          control.get('valor').invalid &&
+          control.get('valor').touched
         ">
-            <p class="caption status-danger"
-              *ngIf="formularios[data.indexFormulario].get('datos_json.' + campo.nombre).errors?.required">
+            <p class="caption status-danger" *ngIf="control.get('valor').errors?.required">
               El campo es requerido!
             </p>
           </ng-container>
