@@ -47,7 +47,6 @@ export const contenedorReducer = createReducer(
     };
   }),
   on(ContenedorActionBorrarInformacion, (state) => {
-    alert('aaaa')
     return {
       ...state,
       ...{
