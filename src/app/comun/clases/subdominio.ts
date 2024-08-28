@@ -5,12 +5,13 @@ import { inject } from '@angular/core';
 
 export class Subdomino {
 
-  private store = inject(Store)
+  private store = inject(Store);
 
-  urlSubDominio: string = environment.url_api_subdominio;
+  urlSubDominio: string;
 
   constructor() {
     this.store.select(obtenerContenedorSubdominio).subscribe((respuesta) => {
+      this.urlSubDominio = environment.url_api_subdominio;
       this.urlSubDominio = this.urlSubDominio.replace("subdominio", respuesta);
     }); 
   }
