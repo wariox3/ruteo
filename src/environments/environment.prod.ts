@@ -5,6 +5,6 @@
  */
 export const environment = {
   production: true,
-  url_api : 'http://reddocapi.online',
-  url_api_subdominio: 'http://subdominio.reddocapi.online'
+  url_api : 'https://reddocapi.co',
+  url_api_subdominio: 'https://subdominio.reddocapi.co'
 };
