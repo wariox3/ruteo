@@ -36,6 +36,7 @@ import {
 import { FormControl, FormGroup, FormsModule } from "@angular/forms";
 import { finalize } from "rxjs/operators";
 import { SoloNumerosDirective } from "../../../../comun/directivas/solo-numeros.directive";
+import { PaginacionComponent } from "../../../../comun/componentes/paginacion/paginacion.component";
 
 @Component({
   selector: "app-lista",
@@ -54,7 +55,8 @@ import { SoloNumerosDirective } from "../../../../comun/directivas/solo-numeros.
     FormsModule,
     NbInputModule,
     NbContextMenuModule,
-    SoloNumerosDirective
+    SoloNumerosDirective,
+    PaginacionComponent,
   ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],
@@ -84,6 +86,7 @@ export class ListaComponent extends General implements OnInit {
   selectedFile: File | null = null;
   base64File: string | null = null;
   fileName: string = "";
+  cantidadRegistros: number;
   arrParametrosConsulta: any = {
     filtros: [],
     limite: 50,
@@ -114,7 +117,7 @@ export class ListaComponent extends General implements OnInit {
   directionsResults: google.maps.DirectionsResult | undefined;
 
   ngOnInit() {
-    this.consultaLista();
+    this.consultaLista(this.arrParametrosConsulta);
     this.inicializarFormulario();
     this.encabezados = mapeo.datos.filter(
       (titulo) => titulo.visibleTabla === true
@@ -147,11 +150,28 @@ export class ListaComponent extends General implements OnInit {
     this.changeDetectorRef.detectChanges();
   }
 
-  consultaLista() {
+  recibirPaginacion(event: { desplazamiento: number; limite: number }) {
+    this.arrParametrosConsulta = {
+      ...this.arrParametrosConsulta,
+      desplazar: event.desplazamiento,
+      limite: event.limite,
+    }
+    this.consultaLista({
+      filtros: [],
+      desplazar: event.desplazamiento,
+      limite: event.limite,
+      ordenamientos: [],
+      limite_conteo: 10000,
+      modelo: "RutVisita",
+    });
+  }
+
+  consultaLista(filtros: any) {
     this.guiaService
-      .lista(this.arrParametrosConsulta)
+      .lista(filtros)
       .subscribe((respuesta) => {
         this.arrGuia = respuesta;
+        this.cantidadRegistros = respuesta?.length;
         respuesta.forEach((punto) => {
           this.addMarker({ lat: punto.latitud, lng: punto.longitud });
         });
@@ -168,7 +188,7 @@ export class ListaComponent extends General implements OnInit {
 
   decodificar() {
     this.guiaService.decodificar().subscribe(() => {
-      this.consultaLista();
+      this.consultaLista(this.arrParametrosConsulta);
       this.alerta.mensajaExitoso(
         "Se ha decodificado correctamente",
         "Guardado con éxito."
@@ -179,7 +199,7 @@ export class ListaComponent extends General implements OnInit {
   ordenar() {
     this.guiaService.ordenar().subscribe((respuesta: any) => {
       this.arrGuiasOrdenadas = respuesta.visitas_ordenadas;
-      this.consultaLista();
+      this.consultaLista(this.arrParametrosConsulta);
       this.alerta.mensajaExitoso(
         "Se ha ordenado correctamente",
         "Guardado con éxito."
@@ -200,7 +220,7 @@ export class ListaComponent extends General implements OnInit {
         })
       )
       .subscribe((respuesta: { mensaje: string }) => {
-        this.consultaLista();
+        this.consultaLista(this.arrParametrosConsulta);
         this.alerta.mensajaExitoso(
           respuesta?.mensaje || "Se han importado las visitas con éxito",
           "Importado con éxito."
@@ -219,7 +239,6 @@ export class ListaComponent extends General implements OnInit {
   editarGuia(guia_id: Number) {
     this.router.navigate([`visita/movimiento/editar/`, guia_id]);
   }
-
 
   onFileChange(event: any) {
     const file = event.target.files[0];
@@ -247,7 +266,7 @@ export class ListaComponent extends General implements OnInit {
       this.guiaService
         .importarVisitas({ archivo_base64: this.base64File })
         .subscribe((response) => {
-          this.consultaLista();
+          this.consultaLista(this.arrParametrosConsulta);
           this.alerta.mensajaExitoso(
             "Se han cargado las guias con éxito",
             "Guardado con éxito."

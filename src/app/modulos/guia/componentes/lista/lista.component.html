@@ -6,9 +6,12 @@
 </nb-card>
 <nb-card>
   <nb-card-header class="d-flex justify-content-between align-items-center">
-    <span>Visita</span>
+    <div class="d-flex align-items-center">
+      <span class="mr-2">Visita</span>
+      <ngx-paginacion [cantidadRegistros]="cantidadRegistros" (emitirPaginacion)="recibirPaginacion($event)"></ngx-paginacion>
+    </div>
     <div class="d-flex">
-      <button status="primary" size="small" nbButton [nbContextMenu]="items" class="spaced-button" >
+      <button status="primary" size="small" nbButton [nbContextMenu]="items" class="spaced-button">
         Importar
       </button>
       <button nbButton status="primary" size="small" (click)="decodificar()" class="spaced-button">
@@ -134,7 +137,8 @@
       <button disabled *ngIf="estaImportandoComplementos" nbButton status="primary" size="small">
         Cargando...
       </button>
-      <button *ngIf="!estaImportandoComplementos" nbButton status="primary" size="small" (click)="importarComplemento()">
+      <button *ngIf="!estaImportandoComplementos" nbButton status="primary" size="small"
+        (click)="importarComplemento()">
         Importar
       </button>
     </div>

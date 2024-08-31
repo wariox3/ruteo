@@ -26,7 +26,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsApp, StoreApp } from './redux';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
-import { GoogleMapsModule } from '@angular/google-maps'; 
+import { GoogleMapsModule } from '@angular/google-maps';
 
 
 @NgModule({
