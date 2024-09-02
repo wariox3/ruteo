@@ -10,7 +10,7 @@
       'justify-content-start': true
     }"
   >
-    <a
+    <button
       nbButton
       status="control"
       [routerLink]="['/visita/movimiento/lista']"
@@ -18,38 +18,34 @@
     >
       <nb-icon icon="arrow-back-outline"></nb-icon>
       Atrás
-    </a>
+    </button>
     <button nbButton type="submit" status="primary" #btnGuardar>Guardar</button>
   </div>
   <nb-card>
     <nb-card-header>Nueva visita</nb-card-header>
     <nb-card-body>
-      <div class="row mb-10">
-        <div class="col-md-12 col-sm-12">
-          <label class="label required">Fecha</label>
-          <input
-            nbInput
-            [nbDatepicker]="rangepicker"
-            formControlName="fecha"
-            fullWidth
-          />
-          <nb-rangepicker #rangepicker format="YYYY-MM-DD"></nb-rangepicker>
-        </div>
-      </div>
-      <div class="row mb-10">
-        <div class="col-md-12 col-sm-12">
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-12">
           <label class="label required">Documento</label>
           <input nbInput formControlName="documento" fullWidth type="text" />
         </div>
+        <div class="col-md-6 col-sm-12">
+          <label class="label required">Fecha</label>
+          <input
+            nbInput
+            [nbDatepicker]="dateTimePicker"
+            formControlName="fecha"
+            fullWidth
+          />
+          <nb-datepicker #dateTimePicker format="dd-MM-yyyy"></nb-datepicker>
+        </div>
       </div>
-      <div class="row mb-10">
-        <div class="col-md-12 col-sm-12">
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-12">
           <label class="label required">Destinatario</label>
           <input nbInput formControlName="destinatario" fullWidth type="text" />
         </div>
-      </div>
-      <div class="row mb-10">
-        <div class="col-md-12 col-sm-12">
+        <div class="col-md-6 col-sm-12">
           <label class="label required">Destinatario dirección</label>
           <input
             nbInput
@@ -59,8 +55,8 @@
           />
         </div>
       </div>
-      <div class="row mb-10">
-        <div class="col-md-12 col-sm-12">
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-12">
           <label class="label required">Destinatario teléfono</label>
           <input
             nbInput
@@ -69,9 +65,7 @@
             type="text"
           />
         </div>
-      </div>
-      <div class="row mb-10">
-        <div class="col-md-12 col-sm-12">
+        <div class="col-md-6 col-sm-12">
           <label class="label required">Destinatario correo</label>
           <input
             nbInput
@@ -81,32 +75,28 @@
           />
         </div>
       </div>
-      <div class="row mb-10">
-        <div class="col-md-12 col-sm-12">
-          <label class="label required">Peso</label>
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-12">
+          <label class="label required" required>Peso</label>
           <input nbInput formControlName="peso" fullWidth type="text" />
         </div>
-      </div>
-      <div class="row mb-10">
-        <div class="col-md-12 col-sm-12">
+        <div class="col-md-6 col-sm-12">
           <label class="label required">Volumen</label>
           <input nbInput formControlName="volumen" fullWidth type="text" />
         </div>
       </div>
-      <div class="row mb-10">
-        <div class="col-md-12 col-sm-12">
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-12">
           <label class="label required">Latitud</label>
           <input nbInput formControlName="latitud" fullWidth type="text" />
         </div>
-      </div>
-      <div class="row mb-10">
-        <div class="col-md-12 col-sm-12">
+        <div class="col-md-6 col-sm-12">
           <label class="label required">Longitud</label>
           <input nbInput formControlName="longitud" fullWidth type="text" />
         </div>
       </div>
-      <div class="row mb-10">
-        <div class="col-md-12 col-sm-12">
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-12">
           <nb-toggle status="basic" formControlName="decodificado"
             >Decodificado</nb-toggle
           >

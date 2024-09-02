@@ -38,10 +38,17 @@
       <label class="label" for="input-password">Contraseña:</label>
       <a class="forgot-password caption-2" routerLink="/auth/reset-password">¿Olvidaste tu contraseña?</a>
     </span>
-    <input nbInput formControlName="password" id="input-contrasena" name="contrasena" placeholder="Contraseña" fullWidth
-      fieldSize="large" type="password"
-      [status]="formulario.get('password').dirty ? (formulario.get('password').invalid  ? 'danger' : 'success') : 'basic'"
-      [attr.aria-invalid]="formulario.get('password').invalid && formulario.get('password').touched ? true : null">
+    <nb-form-field>
+      <input nbInput formControlName="password" id="input-contrasena" name="contrasena" placeholder="Contraseña"
+        fullWidth fieldSize="large" [type]="tipoClaveInput"
+        [status]="formulario.get('password').dirty ? (formulario.get('password').invalid  ? 'danger' : 'success') : 'basic'"
+        [attr.aria-invalid]="formulario.get('password').invalid && formulario.get('password').touched ? true : null">
+      <button nbSuffix nbButton ghost (click)="toggleMostrarClave()">
+        <nb-icon [icon]="tipoClaveInput === 'text' ? 'eye-outline' : 'eye-off-2-outline'" pack="eva"
+          [attr.aria-label]="tipoClaveInput === 'text' ? 'hide password' : 'show password'">
+        </nb-icon>
+      </button>
+    </nb-form-field>
     <ng-container *ngIf="formulario.get('password').invalid && formulario.get('password').touched">
       <p class="caption status-danger" *ngIf="formulario.get('password').errors?.required">
         La contraseña es requerida!

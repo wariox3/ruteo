@@ -1,39 +1,49 @@
 <nb-card>
   <nb-card-header class="d-flex justify-content-between align-items-center">
-    <span>Contenedores</span>
-    <a nbButton status="primary" [routerLink]="['../nuevo']">Nuevo</a>
+    <span class="font-weight-bold">Contenedores</span>
+    <button nbButton status="primary" [routerLink]="['../nuevo']">Nuevo</button>
   </nb-card-header>
   <nb-card-body>
     <div class="table-responsive-sm">
-      <table class="table table-row-dashed table-row-gray-300">
+      <table>
         <thead *ngIf="arrContenedores.length > 0">
           <tr>
             <th></th>
             <th class="min-w-120px"></th>
-            <th class="min-w-150px text-center">Plan</th>
+            <th class=" text-center">Plan</th>
             <th class="min-w-100px text-center">Usuarios</th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <ng-container *ngIf="arrContenedores.length > 0; else sinContenedores">
-            <tr *ngFor="let contenedor of arrContenedores; let i = index" appAnimationFadeinUp [animacionDelay]="i + 1" style="height: calc(82px - 0.6rem) !important">
+            <tr *ngFor="let contenedor of arrContenedores; let i = index" appAnimationFadeinUp [animacionDelay]="i + 1"
+              style="height: calc(82px - 0.6rem) !important">
               <td style="width: 120px">
                 <ng-container *ngIf="contenedor.imagen">
-                  <img [ngSrc]="contenedor.imagen" [alt]="'Error al cargar logo'" width="120" height="120" style="min-width: 120px" class="img-thumbnail" />
+                  <img [ngSrc]="contenedor.imagen" [alt]="'Error al cargar logo'" width="120" height="120"
+                    style="min-width: 120px" class="img-thumbnail" />
                 </ng-container>
               </td>
               <td>
-                <div class="h-100 d-flex flex-column justify-content-center">
-                  <p class="text-dark fw-bolder fs-6">
+                <div class="d-flex flex-column align-items-start">
+                  <span class="text-dark font-weight-bold fs-6">
                     {{ contenedor.nombre }}
-                    <small class="badge badge-light-primary fs-8 fw-bold">{{ contenedor.rol }}</small>
-                  </p>
-                  <span class="text-muted fw-bold text-muted d-block fs-7">{{ contenedor.subdominio }}{{ dominioApp }}</span>
+                  </span>
+                  <span class="text-muted mb-3">{{ contenedor.subdominio }}{{
+                    dominioApp
+                    }}</span>
+                  <div>
+                    <span class="badge badge-info w-auto">{{ contenedor.rol }}</span>
+                  </div>
                 </div>
               </td>
-              <td class="w-150px">
-                <div class="h-100 d-flex flex-column justify-content-center">
-                  <span class="badge badge-light-info fs-8 fw-bold">{{ contenedor.plan_nombre }}</span>
+              <td>
+                <div class="d-flex justify-content-center position-relative">
+                  <nb-badge [text]="contenedor.plan_nombre" status="info">
+                    {{ contenedor.plan_nombre }}
+                  </nb-badge>
                 </div>
               </td>
               <td>
@@ -42,14 +52,16 @@
                 </div>
               </td>
               <td>
-                <div>
-                  <button nbButton href="#" status="primary" (click)="seleccionarEmpresa(contenedor.contenedor_id)">Conectar</button>
+                <div class="d-flex justify-content-center">
+                  <button nbButton href="#" status="primary"
+                    (click)="seleccionarEmpresa(contenedor.contenedor_id)">Conectar</button>
                 </div>
               </td>
               <td>
                 <div>
                   <div *ngIf="contenedor.rol === 'propietario'">
-                    <button nbButton type="button" [nbContextMenu]="items" nbContextMenuTrigger="click" (click)="onMenuItemClick(contenedor)">
+                    <button nbButton type="button" [nbContextMenu]="items" nbContextMenuTrigger="click"
+                      (click)="onMenuItemClick(contenedor)">
                       <nb-icon icon="more-vertical-outline"></nb-icon>
                     </button>
                   </div>

@@ -13,13 +13,16 @@ import {
   NbAlertModule,
   NbButtonModule,
   NbCheckboxModule,
+  NbFormFieldModule,
+  NbIconModule,
   NbInputModule,
 } from "@nebular/theme";
-import { TokenService } from "../../servicios/token.service";
-import { AuthService } from "../../servicios/auth.service";
 import { Store } from "@ngrx/store";
+import { of } from "rxjs";
+import { catchError } from "rxjs/operators";
 import { usuarioIniciar } from "../../../../redux/actions/usuario.actions";
-import { finalize } from "rxjs/operators";
+import { AuthService } from "../../servicios/auth.service";
+import { TokenService } from "../../servicios/token.service";
 
 @Component({
   selector: "ngx-login",
@@ -34,12 +37,18 @@ import { finalize } from "rxjs/operators";
     NbButtonModule,
     NbCheckboxModule,
     ReactiveFormsModule,
+    NbFormFieldModule,
+    NbIconModule,
   ],
 })
 export class NgxLoginComponent extends NbLoginComponent {
   private tokenService = inject(TokenService);
   private authService = inject(AuthService);
   private store = inject(Store);
+
+  public isLoading: boolean = false;
+  public mostrarClave: boolean = false;
+  public tipoClaveInput: "text" | "password" = "password";
 
   formulario = new FormGroup({
     username: new FormControl("", Validators.required),
@@ -53,7 +62,10 @@ export class NgxLoginComponent extends NbLoginComponent {
     ),
   });
 
-  isLoading = false;
+  toggleMostrarClave() {
+    this.tipoClaveInput =
+      this.tipoClaveInput === "password" ? "text" : "password";
+  }
 
   enviar() {
     if (this.formulario.invalid) {
@@ -63,8 +75,9 @@ export class NgxLoginComponent extends NbLoginComponent {
     this.authService
       .login(this.formulario.value)
       .pipe(
-        finalize(() => {
+        catchError(() => {
           this.isLoading = false;
+          return of(null);
         })
       )
       .subscribe((resultado: any) => {

@@ -36,7 +36,7 @@ import { ContenedorActionInit } from "../../../../redux/actions/contenedor.actio
     NbContextMenuModule,
     NbEvaIconsModule,
     NbIconModule,
-    NbBadgeModule,
+    NbBadgeModule
   ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],
