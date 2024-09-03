@@ -22,7 +22,7 @@ import { catchError, switchMap, tap } from "rxjs/operators";
 import { of } from "rxjs";
 import { NbEvaIconsModule } from "@nebular/eva-icons";
 import { EliminarComponent } from "../eliminar/eliminar.component";
-import { ContenedorActionInit } from "../../../../redux/actions/contenedor.actions";
+import { ContenedorActionBorrarInformacion, ContenedorActionInit } from "../../../../redux/actions/contenedor.actions";
 
 @Component({
   selector: "app-lista",
@@ -58,6 +58,12 @@ export class ListaComponent extends General implements OnInit {
   ngOnInit() {
     this.consultarLista();
     this.menu();
+    this.limpiarContenedores()
+  }
+
+  limpiarContenedores() {
+    this.store.dispatch(ContenedorActionBorrarInformacion())
+    this.changeDetectorRef.detectChanges();
   }
 
   menu() {

@@ -9,7 +9,7 @@ let estadoInicializado: any = {
     nombre: '',
     imagen: '',
     contenedor_id: 0,
-    id: 0,
+    id: null,
     subdominio: '',
     usuario_id: 0,
     seleccion: false,

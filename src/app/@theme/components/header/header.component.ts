@@ -12,7 +12,10 @@ import { Subject } from "rxjs";
 import { AuthService } from "../../../modulos/auth/servicios/auth.service";
 import { Store } from "@ngrx/store";
 import { obtenerUsuarioNombreCorto } from "../../../redux/selectos/usuario.selector";
-import { obtenerContenedorSeleccion, obtenerContenedorSubdominio } from "../../../redux/selectos/contenedor.selectors";
+import {
+  obtenerContenedorSeleccion,
+  obtenerContenedorSubdominio,
+} from "../../../redux/selectos/contenedor.selectors";
 import { Router, NavigationEnd } from "@angular/router";
 import { ContenedorActionBorrarInformacion } from "../../../redux/actions/contenedor.actions";
 import { General } from "../../../comun/clases/general";
@@ -29,7 +32,7 @@ export class HeaderComponent extends General implements OnInit, OnDestroy {
   usuarioNombreCorto$ = this.store.select(obtenerUsuarioNombreCorto);
   usuarioNombreCorto = "";
   iconoMenuVisible$ = this.store.select(obtenerContenedorSeleccion);
-  tituloMenu: string = ""
+  tituloMenu: string = "";
 
   themes = [
     { value: "default", name: "Light" },
@@ -49,57 +52,68 @@ export class HeaderComponent extends General implements OnInit, OnDestroy {
     private userService: UserData,
     private layoutService: LayoutService,
     private breakpointService: NbMediaBreakpointsService,
-    private authService: AuthService,
+    private authService: AuthService
   ) {
-    super()
+    super();
     this.store.select(obtenerContenedorSubdominio).subscribe((respuesta) => {
-      this.tituloMenu = respuesta
-    }); 
+      this.tituloMenu = respuesta;
+    });
   }
 
   ngOnInit() {
-    this.usuarioNombreCorto$.subscribe((nombre: any) => (this.usuarioNombreCorto = nombre));
+    this.usuarioNombreCorto$.subscribe(
+      (nombre: any) => (this.usuarioNombreCorto = nombre)
+    );
     this.currentTheme = this.themeService.currentTheme;
-  
-    this.userService.getUsers().pipe(takeUntil(this.destroy$)).subscribe((users: any) => (this.user = users.nick));
-  
-    const { xl } = this.breakpointService.getBreakpointsMap();
-    this.themeService.onMediaQueryChange()
-      .pipe(map(([, currentBreakpoint]) => currentBreakpoint.width < xl), takeUntil(this.destroy$))
-      .subscribe((isLessThanXl: boolean) => (this.userPictureOnly = isLessThanXl));
-  
-    this.themeService.onThemeChange()
-      .pipe(map(({ name }) => name), takeUntil(this.destroy$))
-      .subscribe((themeName) => (this.currentTheme = themeName));
-  
-    // Suscribirse a los eventos de navegación para actualizar el menú según la ruta
-    this.router.events
+
+    this.userService
+      .getUsers()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(event => {
-        if (event instanceof NavigationEnd) {
-          this.updateMenu();
-        }
-      });
-  
+      .subscribe((users: any) => (this.user = users.nick));
+
+    const { xl } = this.breakpointService.getBreakpointsMap();
+    this.themeService
+      .onMediaQueryChange()
+      .pipe(
+        map(([, currentBreakpoint]) => currentBreakpoint.width < xl),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(
+        (isLessThanXl: boolean) => (this.userPictureOnly = isLessThanXl)
+      );
+
+    this.themeService
+      .onThemeChange()
+      .pipe(
+        map(({ name }) => name),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((themeName) => (this.currentTheme = themeName));
+
+    // Suscribirse a los eventos de navegación para actualizar el menú según la ruta
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.updateMenu();
+      }
+    });
+
     // Llamar a updateMenu para verificar la ruta actual al cargar el componente por primera vez
     this.updateMenu();
-  
+
     this.menuService.onItemClick().subscribe((evento) => {
       switch (evento.item.title) {
         case "Cerrar sesión":
           this.authService.logout();
           break;
         case "Mis contenedores":
-          this.ejecturarCambioContenedor()
+          this.ejecturarCambioContenedor();
           break;
       }
     });
   }
 
   ejecturarCambioContenedor() {
-    this.store.dispatch(ContenedorActionBorrarInformacion())
-    this.changeDetectorRef.detectChanges();
-    this.router.navigate(['/contenedor/lista']);
+    this.router.navigate(["/contenedor/lista"]);
   }
 
   ngOnDestroy() {
@@ -130,8 +144,10 @@ export class HeaderComponent extends General implements OnInit, OnDestroy {
     this.userMenu = [{ title: "Mis contenedores" }, { title: "Cerrar sesión" }];
 
     // Si estamos en la ruta /contenedor/lista, eliminamos el ítem de "Contenedores"
-    if (currentUrl === '/contenedor/lista') {
-      this.userMenu = this.userMenu.filter(item => item.title !== 'Mis contenedores');
+    if (currentUrl === "/contenedor/lista") {
+      this.userMenu = this.userMenu.filter(
+        (item) => item.title !== "Mis contenedores"
+      );
     }
   }
 }

@@ -14,7 +14,9 @@ import {
   NbAlertModule,
   NbButtonModule,
   NbCheckboxModule,
+  NbFormFieldModule,
   NbGlobalPhysicalPosition,
+  NbIconModule,
   NbInputModule,
   NbToastrService,
 } from "@nebular/theme";
@@ -24,6 +26,9 @@ import { FormControl } from "@angular/forms";
 import { AlertaService } from "../../../../comun/servicios/alerta.service";
 import { catchError } from "rxjs/operators";
 import { of } from "rxjs";
+
+type TipoClaveInput = "text" | "password";
+type TipoInput = "clave" | "confimarClave";
 
 @Component({
   selector: "ngx-register",
@@ -38,11 +43,15 @@ import { of } from "rxjs";
     NbButtonModule,
     NbCheckboxModule,
     ReactiveFormsModule,
+    NbFormFieldModule,
+    NbIconModule,
   ],
 })
 export class NgxRegistroComponent extends NbRegisterComponent {
   private authService = inject(AuthService);
   private alerta = inject(AlertaService);
+  public tipoClaveInput: TipoClaveInput = "password";
+  public tipoConfirmarClaveInput: TipoClaveInput = "password";
   registrando: boolean = false;
 
   validarContrasena(): ValidatorFn {
@@ -73,6 +82,18 @@ export class NgxRegistroComponent extends NbRegisterComponent {
       Validators.compose([Validators.requiredTrue])
     ),
   });
+
+  toggleMostrarClave(tipo: TipoInput) {
+    switch (tipo) {
+      case "clave":
+        this.tipoClaveInput =
+          this.tipoClaveInput === "password" ? "text" : "password";
+        break;
+      case "confimarClave":
+        this.tipoConfirmarClaveInput =
+          this.tipoConfirmarClaveInput === "password" ? "text" : "password";
+    }
+  }
 
   enviar() {
     this.registrando = true;
