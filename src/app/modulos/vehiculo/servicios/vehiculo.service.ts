@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpService } from "../../../comun/servicios/http.service";
+import { GeneralLista } from "@/interfaces/general/general.interface";
+import { Vehiculo } from "@/interfaces/vehiculo/vehiculo.interface";
 
 @Injectable({
   providedIn: "root",
@@ -8,7 +10,7 @@ export class vehiculoService {
   constructor(private http: HttpService) {}
 
   lista(parametros: any) {
-    return this.http.post<any>(
+    return this.http.post<GeneralLista<Vehiculo>>(
       `general/funcionalidad/lista/`,
       parametros
     );

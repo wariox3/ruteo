@@ -8,6 +8,9 @@ import { forkJoin } from "rxjs";
 import { tap } from "rxjs/operators";
 import { vehiculoService } from "../../../vehiculo/servicios/vehiculo.service";
 import { GoogleMapsModule, MapInfoWindow, MapMarker } from "@angular/google-maps";
+import { ParametrosConsulta } from "@/interfaces/general/general.interface";
+import { Visita } from "@/interfaces/visita/visita.interface";
+import { Vehiculo } from "@/interfaces/vehiculo/vehiculo.interface";
 
 @Component({
   selector: "app-rutear",
@@ -35,7 +38,7 @@ export class RutearComponent extends General implements OnInit {
   };
   directionsResults: google.maps.DirectionsResult | undefined;
 
-  arrParametrosConsulta: any = {
+  arrParametrosConsulta: ParametrosConsulta = {
     filtros: [],
     limite: 50,
     desplazar: 0,
@@ -44,7 +47,7 @@ export class RutearComponent extends General implements OnInit {
     modelo: "RutVehiculo",
   };
 
-  arrParametrosConsultaVisita: any = {
+  arrParametrosConsultaVisita: ParametrosConsulta = {
     filtros: [
       {"propiedad":"estado_despacho","valor1": false},
       {"propiedad": "decodificado", "valor1": true},
@@ -57,8 +60,8 @@ export class RutearComponent extends General implements OnInit {
     modelo: "RutVisita",
   };
 
-  arrVehiculos: any[] = [];
-  arrVisitas: any[];
+  arrVehiculos: Vehiculo[] = [];
+  arrVisitas: Visita[];
 
   ngOnInit(): void {
     this.consultaLista()

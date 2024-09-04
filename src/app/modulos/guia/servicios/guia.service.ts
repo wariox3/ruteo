@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpService } from "../../../comun/servicios/http.service";
+import { Visita } from "@/interfaces/visita/visita.interface";
 
 @Injectable({
   providedIn: "root",
@@ -8,7 +9,7 @@ export class GuiaService {
   constructor(private http: HttpService) {}
 
   lista(data: any) {
-    return this.http.post<any[]>(`ruteo/visita/lista/`, data);
+    return this.http.post<Visita[]>(`ruteo/visita/lista/`, data);
   }
 
   listarVisitas(data: any) {
