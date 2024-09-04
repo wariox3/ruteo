@@ -1,8 +1,9 @@
 import { createAction, props } from '@ngrx/store';
+import { Contenedor } from '@/interfaces/contenedor/contenedor.interface';
 
 export const ContenedorActionInit = createAction(
   '[Contenedor] informacion',
-  props<{contenedor: any}>()
+  props<{contenedor: Contenedor}>()
 );
 
 export const ContenedorGuardarAction = createAction(

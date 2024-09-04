@@ -1,3 +1,4 @@
+import { Contenedor, ContenedorDetalle, ListaContenedoresRespuesta } from "@/interfaces/contenedor/contenedor.interface";
 import { CommonModule, NgOptimizedImage } from "@angular/common";
 import {
   ChangeDetectionStrategy,
@@ -5,9 +6,8 @@ import {
   OnInit,
   inject,
 } from "@angular/core";
-import { ContenedorService } from "../../servicios/contenedor.service";
-import { General } from "../../../../comun/clases/general";
 import { RouterModule } from "@angular/router";
+import { NbEvaIconsModule } from "@nebular/eva-icons";
 import {
   NbBadgeModule,
   NbButtonModule,
@@ -17,12 +17,13 @@ import {
   NbMenuService,
   NbWindowService,
 } from "@nebular/theme";
-import { obtenerUsuarioId } from "../../../../redux/selectos/usuario.selector";
-import { catchError, switchMap, tap } from "rxjs/operators";
 import { of } from "rxjs";
-import { NbEvaIconsModule } from "@nebular/eva-icons";
-import { EliminarComponent } from "../eliminar/eliminar.component";
+import { catchError, switchMap, tap } from "rxjs/operators";
+import { General } from "../../../../comun/clases/general";
 import { ContenedorActionBorrarInformacion, ContenedorActionInit } from "../../../../redux/actions/contenedor.actions";
+import { obtenerUsuarioId } from "../../../../redux/selectos/usuario.selector";
+import { ContenedorService } from "../../servicios/contenedor.service";
+import { EliminarComponent } from "../eliminar/eliminar.component";
 
 @Component({
   selector: "app-lista",
@@ -88,10 +89,10 @@ export class ListaComponent extends General implements OnInit {
     this.store
       .select(obtenerUsuarioId)
       .pipe(
-        switchMap((respuestaUsuarioId) =>
+        switchMap((respuestaUsuarioId: string) =>
           this.contenedorService.lista(respuestaUsuarioId)
         ),
-        tap((respuestaLista) => {
+        tap((respuestaLista: ListaContenedoresRespuesta) => {
           this.arrContenedores = respuestaLista.contenedores;
           this.changeDetectorRef.detectChanges();
         }),
@@ -108,28 +109,23 @@ export class ListaComponent extends General implements OnInit {
 
   seleccionarEmpresa(contenedor_id: string) {
     this.contenedorService.detalle(contenedor_id).subscribe(
-      (respuesta) => {
-        const contenedor: any = {
+      (respuesta: ContenedorDetalle) => {
+        const contenedor: Contenedor = {
           nombre: respuesta.nombre,
-          imagen:
-            'https://es.expensereduction.com/wp-content/uploads/2018/02/logo-placeholder.png',
+          imagen: respuesta.imagen,
           contenedor_id: respuesta.id,
           subdominio: respuesta.subdominio,
           id: respuesta.id,
-          usuario_id: 1,
+          usuario_id: respuesta.usuario_id,
           seleccion: true,
-          rol: respuesta.rol,
-          plan_id: null,
-          plan_nombre: null,
-          usuarios: 1,
-          usuarios_base: 0,
-          ciudad: 0,
-          correo: '',
-          direccion: '',
-          identificacion: 0,
-          nombre_corto: '',
-          numero_identificacion: 0,
-          telefono: '',
+          rol: '',
+          plan_id: respuesta.plan_id,
+          plan_nombre: respuesta.plan_nombre,
+          usuarios: respuesta.plan_limite_usuarios,
+          usuarios_base: respuesta.plan_usuarios_base,
+          reddoc: respuesta.reddoc,
+          ruteo: respuesta.ruteo,
+          acceso_restringido: respuesta.acceso_restringido
         };
         this.store.dispatch(ContenedorActionInit({ contenedor }));
         this.router.navigateByUrl("/dashboard");

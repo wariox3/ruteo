@@ -1,3 +1,4 @@
+import { RespuestaLogin } from "@/interfaces/auth/auth.interface";
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import {
@@ -80,7 +81,7 @@ export class NgxLoginComponent extends NbLoginComponent {
           return of(null);
         })
       )
-      .subscribe((resultado: any) => {
+      .subscribe((resultado: RespuestaLogin) => {
         if (resultado.token) {
           let calcularTiempo = new Date(
             new Date().getTime() + 3 * 60 * 60 * 1000

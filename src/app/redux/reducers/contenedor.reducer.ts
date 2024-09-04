@@ -1,36 +1,34 @@
-import { createReducer, on } from '@ngrx/store';
-import { getCookie } from 'typescript-cookie';
-import { ContenedorActionBorrarInformacion, ContenedorActionInit, ContenedorSeleccionAction } from '../actions/contenedor.actions';
+import { createReducer, on } from "@ngrx/store";
+import { getCookie } from "typescript-cookie";
+import {
+  ContenedorActionBorrarInformacion,
+  ContenedorActionInit,
+  ContenedorSeleccionAction,
+} from "../actions/contenedor.actions";
+import { Contenedor } from "@/interfaces/contenedor/contenedor.interface";
 
-let contenedorDatos: any;
-contenedorDatos = getCookie('contenedor');
+let contenedorDatos: string = getCookie("contenedor");
+let estadoInicializado: Contenedor = {
+  nombre: "",
+  imagen: "",
+  contenedor_id: 0,
+  id: null,
+  subdominio: "",
+  usuario_id: 0,
+  seleccion: false,
+  rol: "",
+  plan_id: null,
+  plan_nombre: null,
+  usuarios: 1,
+  usuarios_base: 0,
+  acceso_restringido: false,
+  reddoc: false,
+  ruteo: true,
+};
 
-let estadoInicializado: any = {
-    nombre: '',
-    imagen: '',
-    contenedor_id: 0,
-    id: null,
-    subdominio: '',
-    usuario_id: 0,
-    seleccion: false,
-    rol: '',
-    plan_id: null,
-    plan_nombre: null,
-    usuarios: 1,
-    usuarios_base: 0,
-    ciudad: 0,
-    correo: '',
-    direccion: '',
-    identificacion: 0,
-    nombre_corto: '',
-    numero_identificacion: 0,
-    telefono: ''
-  };
-
-export const initialState: any = contenedorDatos
+export const initialState: Contenedor = contenedorDatos
   ? JSON.parse(contenedorDatos)
   : estadoInicializado;
-
 
 export const contenedorReducer = createReducer(
   initialState,
@@ -49,28 +47,7 @@ export const contenedorReducer = createReducer(
   on(ContenedorActionBorrarInformacion, (state) => {
     return {
       ...state,
-      ...{
-        nombre: '',
-        imagen: '',
-        contenedor_id: 0,
-        id: 0,
-        subdominio: '',
-        usuario_id: 0,
-        seleccion: false,
-        rol: '',
-        plan_id: 0,
-        plan_nombre: null,
-        usuarios: 1,
-        usuarios_base: 0,
-        ciudad: 0,
-        correo: '',
-        direccion: '',
-        identificacion: 0,
-        nombre_corto: '',
-        numero_identificacion: 0,
-        telefono: '',
-        acceso_restringido: false
-      },
+      ...estadoInicializado,
     };
   })
 );

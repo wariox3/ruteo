@@ -1,3 +1,4 @@
+import { ContenedorDetalle, ListaContenedoresRespuesta } from '@/interfaces/contenedor/contenedor.interface';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
@@ -9,8 +10,8 @@ export class ContenedorService {
 
   constructor(private http : HttpClient,) { }
 
-  lista(usuario_id: any) {
-    return this.http.post<any>(
+  lista(usuario_id: string) {
+    return this.http.post<ListaContenedoresRespuesta>(
       `${environment.url_api}/contenedor/usuariocontenedor/consulta-usuario/`,
       {
         usuario_id,
@@ -66,7 +67,7 @@ export class ContenedorService {
   }
 
   detalle(codigoContenedor: string) {
-    return this.http.get<any>(
+    return this.http.get<ContenedorDetalle>(
       `${environment.url_api}/contenedor/contenedor/${codigoContenedor}/`
     );
   }

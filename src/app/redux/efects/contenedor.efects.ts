@@ -3,6 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { tap } from "rxjs/operators";
 import { removeCookie, setCookie } from "typescript-cookie";
 import { ContenedorActionBorrarInformacion, ContenedorActionInit } from "../actions/contenedor.actions";
+import { Contenedor } from "@/interfaces/contenedor/contenedor.interface";
 
 @Injectable()
 export class ContenedorEffects {
@@ -10,7 +11,7 @@ export class ContenedorEffects {
     () =>
       this.actions$.pipe(
         ofType(ContenedorActionInit),
-        tap((action:any) => {
+        tap((action: {contenedor: Contenedor}) => {
           let calcularTresHoras = new Date(
             new Date().getTime() + 3 * 60 * 60 * 1000
           );

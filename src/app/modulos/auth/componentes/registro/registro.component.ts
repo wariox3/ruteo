@@ -1,12 +1,14 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import {
+  AbstractControl,
+  FormControl,
   FormGroup,
   FormsModule,
-  Validators,
-  ValidatorFn,
-  AbstractControl,
+  ReactiveFormsModule,
   ValidationErrors,
+  ValidatorFn,
+  Validators,
 } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { NbRegisterComponent } from "@nebular/auth";
@@ -15,17 +17,14 @@ import {
   NbButtonModule,
   NbCheckboxModule,
   NbFormFieldModule,
-  NbGlobalPhysicalPosition,
   NbIconModule,
-  NbInputModule,
-  NbToastrService,
+  NbInputModule
 } from "@nebular/theme";
-import { AuthService } from "../../servicios/auth.service";
-import { ReactiveFormsModule } from "@angular/forms";
-import { FormControl } from "@angular/forms";
-import { AlertaService } from "../../../../comun/servicios/alerta.service";
-import { catchError } from "rxjs/operators";
 import { of } from "rxjs";
+import { catchError } from "rxjs/operators";
+import { AlertaService } from "../../../../comun/servicios/alerta.service";
+import { AuthService } from "../../servicios/auth.service";
+import { RespuestaRegistro } from "@/interfaces/auth/auth.interface";
 
 type TipoClaveInput = "text" | "password";
 type TipoInput = "clave" | "confimarClave";
@@ -105,7 +104,7 @@ export class NgxRegistroComponent extends NbRegisterComponent {
           return of(null);
         })
       )
-      .subscribe((resultado: any) => {
+      .subscribe((resultado: RespuestaRegistro) => {
         if (resultado.usuario.id) {
           this.alerta.mensajaExitoso(
             "Se ha creado el usuario exitosamente.",

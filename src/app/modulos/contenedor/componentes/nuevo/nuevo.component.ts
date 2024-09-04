@@ -1,12 +1,18 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, OnInit, inject } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  inject,
+} from "@angular/core";
 import { General } from "../../../../comun/clases/general";
 import { FormularioComponent } from "../formulario/formulario.component";
 import { NbCardModule } from "@nebular/theme";
 import { ContenedorService } from "../../servicios/contenedor.service";
 import { of } from "rxjs";
-import { switchMap, tap } from "rxjs/operators";
+import { catchError, finalize, switchMap, tap } from "rxjs/operators";
 import { obtenerUsuarioId } from "../../../../redux/selectos/usuario.selector";
+import { ContenedorFormulario, NuevoContenedorRespuesta } from "@/interfaces/contenedor/contenedor.interface";
 
 @Component({
   selector: "app-nuevo",
@@ -19,22 +25,17 @@ import { obtenerUsuarioId } from "../../../../redux/selectos/usuario.selector";
 export class NuevoComponent extends General implements OnInit {
   private contenedorService = inject(ContenedorService);
   procesando = false;
-  codigoUsuario = '';
+  codigoUsuario = "";
 
-  informacionContenedor: any = {
+  informacionContenedor: ContenedorFormulario = {
     nombre: "",
     subdominio: "",
     plan_id: 0,
-    imagen: null,
-    ciudad: "",
     correo: "",
-    direccion: "",
-    identificacion: "",
-    nombre_corto: "",
-    numero_identificacion: "",
     telefono: "",
-    ciudad_nombre: "",
-    digito_verificacion: "",
+    reddoc: false,
+    ruteo: true,
+    usuario_id: "",
   };
 
   ngOnInit(): void {
@@ -58,12 +59,20 @@ export class NuevoComponent extends General implements OnInit {
           }
           return of(null);
         }),
-        tap((respuestaNuevo) => {
-          if(respuestaNuevo.contenedor){
-            this.alerta.mensajaExitoso('Se ha creado el contenedor exitosamente.', 'Guardado con éxito.')
-            this.router.navigate(['/contenedor/lista']);
+        tap((respuestaNuevo: NuevoContenedorRespuesta) => {
+          if (respuestaNuevo.contenedor) {
+            this.alerta.mensajaExitoso(
+              "Se ha creado el contenedor exitosamente.",
+              "Guardado con éxito."
+            );
+            this.router.navigate(["/contenedor/lista"]);
             this.procesando = false;
           }
+        }),
+        catchError(() => {
+          this.procesando = false;
+          this.changeDetectorRef.detectChanges();
+          return of(null);
         })
       )
       .subscribe();
