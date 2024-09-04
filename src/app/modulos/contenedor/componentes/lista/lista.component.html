@@ -18,7 +18,7 @@
         </thead>
         <tbody>
           <ng-container *ngIf="arrContenedores.length > 0; else sinContenedores">
-            <tr *ngFor="let contenedor of arrContenedores; let i = index" appAnimationFadeinUp [animacionDelay]="i + 1"
+            <tr *ngFor="let contenedor of arrContenedores; let i = index" appAnimationFadeinUp
               style="height: calc(82px - 0.6rem) !important">
               <td style="width: 120px">
                 <ng-container *ngIf="contenedor.imagen">
@@ -52,9 +52,25 @@
                 </div>
               </td>
               <td>
+                <!-- <div class="d-flex justify-content-center">
+                  <button *ngIf="!arrConectando[index]; else botonCargando" nbButton href="#" status="primary"
+                    (click)="seleccionarEmpresa(contenedor.contenedor_id, index)">Conectar</button>
+                  <ng-template #botonCargando>
+                    <button nbButton href="#" status="primary" disabled>
+                      <span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span>
+                      <span>Cargando...</span>
+                    </button>
+                  </ng-template>
+                </div> -->
                 <div class="d-flex justify-content-center">
-                  <button nbButton href="#" status="primary"
-                    (click)="seleccionarEmpresa(contenedor.contenedor_id)">Conectar</button>
+                  <button *ngIf="arrConectando[i]; else botonCargando" nbButton href="#" status="primary" disabled>
+                    <span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span>
+                    <span>Cargando</span>
+                  </button>
+                  <ng-template #botonCargando>
+                    <button nbButton href="#" status="primary"
+                      (click)="seleccionarEmpresa(contenedor.contenedor_id, i)">Conectar</button>
+                  </ng-template>
                 </div>
               </td>
               <td>

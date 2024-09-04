@@ -28,6 +28,7 @@ import { TokenService } from "../../servicios/token.service";
 @Component({
   selector: "ngx-login",
   templateUrl: "./login.component.html",
+  styleUrls: ['./login.component.scss'],
   standalone: true,
   imports: [
     CommonModule,

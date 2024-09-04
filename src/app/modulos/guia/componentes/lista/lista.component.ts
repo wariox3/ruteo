@@ -37,6 +37,7 @@ import { FormControl, FormGroup, FormsModule } from "@angular/forms";
 import { finalize } from "rxjs/operators";
 import { SoloNumerosDirective } from "../../../../comun/directivas/solo-numeros.directive";
 import { PaginacionComponent } from "../../../../comun/componentes/paginacion/paginacion.component";
+import { ParametrosConsulta } from "@/interfaces/general/general.interface";
 
 @Component({
   selector: "app-lista",
@@ -87,7 +88,7 @@ export class ListaComponent extends General implements OnInit {
   base64File: string | null = null;
   fileName: string = "";
   cantidadRegistros: number;
-  arrParametrosConsulta: any = {
+  arrParametrosConsulta: ParametrosConsulta = {
     filtros: [],
     limite: 50,
     desplazar: 0,

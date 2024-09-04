@@ -1,4 +1,8 @@
-import { Contenedor, ContenedorDetalle, ListaContenedoresRespuesta } from "@/interfaces/contenedor/contenedor.interface";
+import {
+  Contenedor,
+  ContenedorDetalle,
+  ListaContenedoresRespuesta,
+} from "@/interfaces/contenedor/contenedor.interface";
 import { CommonModule, NgOptimizedImage } from "@angular/common";
 import {
   ChangeDetectionStrategy,
@@ -20,10 +24,14 @@ import {
 import { of } from "rxjs";
 import { catchError, switchMap, tap } from "rxjs/operators";
 import { General } from "../../../../comun/clases/general";
-import { ContenedorActionBorrarInformacion, ContenedorActionInit } from "../../../../redux/actions/contenedor.actions";
+import {
+  ContenedorActionBorrarInformacion,
+  ContenedorActionInit,
+} from "../../../../redux/actions/contenedor.actions";
 import { obtenerUsuarioId } from "../../../../redux/selectos/usuario.selector";
 import { ContenedorService } from "../../servicios/contenedor.service";
 import { EliminarComponent } from "../eliminar/eliminar.component";
+import { AnimationFadeinUpDirective } from "@/comun/directivas/animation-fade-in-up.directive";
 
 @Component({
   selector: "app-lista",
@@ -37,7 +45,8 @@ import { EliminarComponent } from "../eliminar/eliminar.component";
     NbContextMenuModule,
     NbEvaIconsModule,
     NbIconModule,
-    NbBadgeModule
+    NbBadgeModule,
+    AnimationFadeinUpDirective,
   ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],
@@ -47,6 +56,7 @@ export class ListaComponent extends General implements OnInit {
   private contenedorService = inject(ContenedorService);
   private menuService = inject(NbMenuService);
   private windowService = inject(NbWindowService);
+  arrConectando: boolean[] = [];
   arrContenedores: any[] = [];
   contenedor: any = [];
   dominioApp = ".reddoc.online";
@@ -59,11 +69,11 @@ export class ListaComponent extends General implements OnInit {
   ngOnInit() {
     this.consultarLista();
     this.menu();
-    this.limpiarContenedores()
+    this.limpiarContenedores();
   }
 
   limpiarContenedores() {
-    this.store.dispatch(ContenedorActionBorrarInformacion())
+    this.store.dispatch(ContenedorActionBorrarInformacion());
     this.changeDetectorRef.detectChanges();
   }
 
@@ -93,6 +103,9 @@ export class ListaComponent extends General implements OnInit {
           this.contenedorService.lista(respuestaUsuarioId)
         ),
         tap((respuestaLista: ListaContenedoresRespuesta) => {
+          respuestaLista.contenedores.forEach(() =>
+            this.arrConectando.push(false)
+          );
           this.arrContenedores = respuestaLista.contenedores;
           this.changeDetectorRef.detectChanges();
         }),
@@ -107,9 +120,17 @@ export class ListaComponent extends General implements OnInit {
       .subscribe();
   }
 
-  seleccionarEmpresa(contenedor_id: string) {
-    this.contenedorService.detalle(contenedor_id).subscribe(
-      (respuesta: ContenedorDetalle) => {
+  seleccionarEmpresa(contenedor_id: string, indexContenedor: number) {
+    this.arrConectando[indexContenedor] = true;
+    this.contenedorService
+      .detalle(contenedor_id)
+      .pipe(
+        catchError(() => {
+          this.arrConectando[indexContenedor] = false;
+          return of(null);
+        })
+      )
+      .subscribe((respuesta: ContenedorDetalle) => {
         const contenedor: Contenedor = {
           nombre: respuesta.nombre,
           imagen: respuesta.imagen,
@@ -118,24 +139,26 @@ export class ListaComponent extends General implements OnInit {
           id: respuesta.id,
           usuario_id: respuesta.usuario_id,
           seleccion: true,
-          rol: '',
+          rol: "",
           plan_id: respuesta.plan_id,
           plan_nombre: respuesta.plan_nombre,
           usuarios: respuesta.plan_limite_usuarios,
           usuarios_base: respuesta.plan_usuarios_base,
           reddoc: respuesta.reddoc,
           ruteo: respuesta.ruteo,
-          acceso_restringido: respuesta.acceso_restringido
+          acceso_restringido: respuesta.acceso_restringido,
         };
         this.store.dispatch(ContenedorActionInit({ contenedor }));
+        this.arrConectando[indexContenedor] = false;
         this.router.navigateByUrl("/dashboard");
-      }
-    )
-
+      });
   }
 
   eliminarContenedor() {
-    this.windowService.open(EliminarComponent, { title: `Eliminar contenedor`, context: this.contenedor });
+    this.windowService.open(EliminarComponent, {
+      title: `Eliminar contenedor`,
+      context: this.contenedor,
+    });
   }
 
   onMenuItemClick(contenedor: any) {
