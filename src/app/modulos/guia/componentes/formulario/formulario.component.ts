@@ -35,7 +35,6 @@ import { DevuelveDigitoVerificacionService } from "../../../../comun/servicios/d
 import { map, tap, throttleTime } from "rxjs/operators";
 import { RouterModule } from "@angular/router";
 import { GuiaService } from "../../servicios/guia.service";
-import { NbMomentDateModule } from "@nebular/moment";
 
 @Component({
   selector: "app-formulario",
@@ -53,7 +52,6 @@ import { NbMomentDateModule } from "@nebular/moment";
     NbIconModule,
     NbToggleModule,
     NbDatepickerModule,
-    NbMomentDateModule
   ],
   templateUrl: "./formulario.component.html",
   styleUrls: ["./formulario.component.css"],
