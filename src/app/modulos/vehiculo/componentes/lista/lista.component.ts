@@ -11,6 +11,7 @@ import { BaseFiltroComponent } from "../../../../comun/componentes/base-filtro/b
 import { General } from "../../../../comun/clases/general";
 import { vehiculoService } from "../../servicios/vehiculo.service";
 import { mapeo } from "../../mapeo";
+import { Vehiculo } from "@/interfaces/vehiculo/vehiculo.interface";
 
 @Component({
   selector: "app-lista",
@@ -37,7 +38,7 @@ export class ListaComponent extends General implements OnInit {
     modelo: "RutVehiculo",
   };
   cantidad_registros!: number;
-  arrVehiculos: any[];
+  arrVehiculos: Vehiculo[];
   encabezados: any[];
 
   private vehiculoService = inject(vehiculoService);

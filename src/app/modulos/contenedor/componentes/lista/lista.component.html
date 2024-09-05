@@ -64,8 +64,7 @@
                 </div> -->
                 <div class="d-flex justify-content-center">
                   <button *ngIf="arrConectando[i]; else botonCargando" nbButton href="#" status="primary" disabled>
-                    <span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span>
-                    <span>Cargando</span>
+                    <span>Conectando</span>
                   </button>
                   <ng-template #botonCargando>
                     <button nbButton href="#" status="primary"
