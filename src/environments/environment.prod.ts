@@ -6,5 +6,6 @@
 export const environment = {
   production: true,
   url_api : 'https://reddocapi.co',
-  url_api_subdominio: 'https://subdominio.reddocapi.co'
+  url_api_subdominio: 'https://subdominio.reddocapi.co',
+  dominioApp: '.ruteo.co'
 };
