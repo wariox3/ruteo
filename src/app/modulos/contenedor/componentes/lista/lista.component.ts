@@ -35,6 +35,7 @@ import { obtenerUsuarioId } from "../../../../redux/selectos/usuario.selector";
 import { ContenedorService } from "../../servicios/contenedor.service";
 import { EliminarComponent } from "../eliminar/eliminar.component";
 import { AnimationFadeinUpDirective } from "@/comun/directivas/animation-fade-in-up.directive";
+import { environment } from "environments/environment";
 
 @Component({
   selector: "app-lista",
@@ -65,7 +66,7 @@ export class ListaComponent extends General implements OnInit {
   arrConectando: boolean[] = [];
   arrContenedores: any[] = [];
   contenedor: any = [];
-  dominioApp = ".reddoc.online";
+  dominioApp = environment.dominioApp
   items = [
     { title: "Invitaciones" },
     { title: "Mi contenedor" },
