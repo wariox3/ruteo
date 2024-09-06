@@ -102,9 +102,25 @@
               </tr>
             </ng-container>
             <ng-template #mensaje>
-              <tr>
-                <td colspan="4">Sin contenedores</td>
-              </tr>
+              <div class="d-flex justify-content-between bgi-no-repeat bgi-size-cover bgi-position-x-center pb-0" style="
+                background-position: 100% 50%;
+                background-image: url('../../../../assets/images/42.png');
+              ">
+                <img ngSrc="assets/images/17.png" alt="" height="250" width="250">
+                <div class="fs-2hx text-gray-800">
+                  <p class="me-2 font-weight-bold mb-2" style="font-size: 2rem"> ¿Qué es un contenedor? </p>
+                  <br />
+                  <p class="text-muted font-weight-light" style="line-height: 1.5;">
+                    Imagina un contenedor como un espacio que va a almacenar la información de tu empresa y todas las
+                    aplicaciones que usas (ventas / facturación, compras, contabilidad, nómina). Invita a otros usuarios
+                    y
+                    viceversa para que hagan parte de estos espacios e interactúen con la información. Puedes escoger
+                    diferentes planes de pago para tu contenedor, según tus necesidades, con diferentes características
+                    porque vamos al ritmo de tu crecimiento. Pero eso sí, aquí NO pagas por ver, somos claros y te damos
+                    una probadita gratis.
+                  </p>
+                </div>
+              </div>
             </ng-template>
           </ng-template>
         </tbody>
@@ -113,5 +129,6 @@
   </nb-card-body>
 </nb-card>
 <ng-template #contentTemplate let-data>
-  <app-eliminar [data]="data" (emitirCerrarModal)="cerrar()" (emitirEliminarContenedor)="recibirEliminarContenedor($event)"></app-eliminar>
+  <app-eliminar [data]="data" (emitirCerrarModal)="cerrar()"
+    (emitirEliminarContenedor)="recibirEliminarContenedor($event)"></app-eliminar>
 </ng-template>
