@@ -66,6 +66,12 @@ export class ContenedorService {
     );
   }
 
+  eliminarContenedor(contenedorId: number) {
+    return this.http.delete(
+      `${environment.url_api}/contenedor/contenedor/${contenedorId}/`
+    );
+  }
+
   detalle(codigoContenedor: string) {
     return this.http.get<ContenedorDetalle>(
       `${environment.url_api}/contenedor/contenedor/${codigoContenedor}/`

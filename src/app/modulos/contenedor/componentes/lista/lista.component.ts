@@ -8,6 +8,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
+  TemplateRef,
+  ViewChild,
   inject,
 } from "@angular/core";
 import { RouterModule } from "@angular/router";
@@ -19,6 +21,7 @@ import {
   NbContextMenuModule,
   NbIconModule,
   NbMenuService,
+  NbWindowRef,
   NbWindowService,
 } from "@nebular/theme";
 import { of } from "rxjs";
@@ -47,15 +50,18 @@ import { AnimationFadeinUpDirective } from "@/comun/directivas/animation-fade-in
     NbIconModule,
     NbBadgeModule,
     AnimationFadeinUpDirective,
+    EliminarComponent
   ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListaComponent extends General implements OnInit {
+  @ViewChild('contentTemplate') contentTemplate: TemplateRef<any>;
   private contenedorService = inject(ContenedorService);
   private menuService = inject(NbMenuService);
   private windowService = inject(NbWindowService);
+  windowRef: NbWindowRef
   arrConectando: boolean[] = [];
   arrContenedores: any[] = [];
   contenedor: any = [];
@@ -155,10 +161,21 @@ export class ListaComponent extends General implements OnInit {
   }
 
   eliminarContenedor() {
-    this.windowService.open(EliminarComponent, {
+    this.windowRef = this.windowService.open(this.contentTemplate, {
       title: `Eliminar contenedor`,
-      context: this.contenedor,
+      context: {
+        contenedor: this.contenedor,
+      },
     });
+  }
+
+  recibirEliminarContenedor() {
+    this.consultarLista();
+    this.windowRef.close()
+  }
+
+  cerrar() {
+    this.windowRef.close()
   }
 
   onMenuItemClick(contenedor: any) {

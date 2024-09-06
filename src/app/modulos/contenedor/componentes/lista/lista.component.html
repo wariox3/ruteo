@@ -112,3 +112,6 @@
     </div>
   </nb-card-body>
 </nb-card>
+<ng-template #contentTemplate let-data>
+  <app-eliminar [data]="data" (emitirCerrarModal)="cerrar()" (emitirEliminarContenedor)="recibirEliminarContenedor($event)"></app-eliminar>
+</ng-template>

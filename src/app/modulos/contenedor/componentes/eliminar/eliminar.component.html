@@ -1,49 +1,41 @@
-<form
-  (ngSubmit)="eliminar()"
-  [formGroup]="formularioEliminar"
-  #form="ngForm"
-  aria-labelledby="title"
->
-  <div class="row mb-10">
+<form (ngSubmit)="eliminarContenedor()" [formGroup]="formularioEliminar" #form="ngForm" aria-labelledby="title">
+  <div class="mb-3 d-flex flex-column align-items-center">
+    <div class="mb-3 d-flex flex-column align-items-center">
+      <div class="d-flex justify-content-center">
+        <p class="font-weight-bold texto-danger"><nb-icon icon="alert-triangle-outline"></nb-icon> Este proceso es irreversible</p>
+      </div>
+      <div class="pr-3 pl-3">
+        <span>Para confirmar, escriba: </span>
+        <span class="text-muted">{{ data.contenedor.nombre }}</span>
+      </div>
+    </div>
     <div class="col-md-12 col-sm-12">
       <label class="label required">Subdominio</label>
-      <input
-        nbInput
-        fullWidth
-        formControlName="nombre"
-        type="text"
-        autocomplete="off"
-        autofocus
-        [status]="
+      <input nbInput #inputNombre fullWidth formControlName="nombre" type="text" autocomplete="off" focus [status]="
           formularioEliminar.get('nombre').dirty
             ? formularioEliminar.get('nombre').invalid
               ? 'danger'
               : 'success'
             : 'basic'
-        "
-        [attr.aria-invalid]="
+        " [attr.aria-invalid]="
           formularioEliminar.get('nombre').invalid &&
           formularioEliminar.get('nombre').touched
             ? true
             : null
-        "
-      />
-      <ng-container
-        *ngIf="
+        " />
+      <ng-container *ngIf="
           formularioEliminar.get('nombre').invalid &&
           formularioEliminar.get('nombre').touched
-        "
-      >
-        <p
-          class="caption status-danger"
-          *ngIf="formularioEliminar.get('nombre').errors?.required"
-        >
+        ">
+        <p class="caption status-danger" *ngIf="formularioEliminar.get('nombre').errors?.required">
           El subdominio es requerido!
         </p>
       </ng-container>
     </div>
   </div>
-  <div>
-    <button nbButton type="submit" status="primary" #btnGuardar>Guardar</button>
+  <div class="d-flex justify-content-end">
+    <button class="mr-2" nbButton type="submit" status="danger"
+      [disabled]="inputNombre.value !== data.contenedor.nombre">Eliminar</button>
+    <button nbButton type="button" (click)="cerrar()">Cancelar</button>
   </div>
 </form>
