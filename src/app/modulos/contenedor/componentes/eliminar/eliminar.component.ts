@@ -40,12 +40,12 @@ import { of } from "rxjs";
   styleUrls: ["./eliminar.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EliminarComponent extends General implements AfterViewInit {
+export class EliminarComponent extends General {
   @Input() data: { contenedor: Contenedor };
-  @Input() cerrarModal: any
+  @Input() cerrarModal: any;
   @Output() emitirEliminarContenedor: EventEmitter<any> = new EventEmitter();
   @Output() emitirCerrarModal: EventEmitter<any> = new EventEmitter();
-  @ViewChild('inputNombre', { read: ElementRef })
+  @ViewChild("inputNombre", { read: ElementRef })
   inputNombre: ElementRef<HTMLInputElement>;
   private formBuilder = inject(FormBuilder);
   private contenedorService = inject(ContenedorService);
@@ -54,30 +54,26 @@ export class EliminarComponent extends General implements AfterViewInit {
     nombre: new FormControl("", Validators.compose([Validators.required])),
   });
 
-  ngAfterViewInit(): void {
-    if (this.inputNombre?.nativeElement.value === '') {
-      this.inputNombre?.nativeElement.focus();
-    }
-  }
-
   cerrar() {
-    this.emitirCerrarModal.emit(true)
+    this.emitirCerrarModal.emit(true);
   }
 
   eliminarContenedor() {
     if (
-      this.formularioEliminar.get("nombre")?.value ===
-      this.data.contenedor.nombre
+      this.formularioEliminar.get("nombre")?.value.trim() ===
+      this.data.contenedor.nombre.trim()
     ) {
       const contenedorId = this.data.contenedor.id;
       this.contenedorService
         .eliminarContenedor(contenedorId)
-        .pipe(catchError(() => {
-          this.emitirEliminarContenedor.emit(true)
-          return of(null)
-        }))
+        .pipe(
+          catchError(() => {
+            this.emitirEliminarContenedor.emit(true);
+            return of(null);
+          })
+        )
         .subscribe((response) => {
-          this.emitirEliminarContenedor.emit(true)
+          this.emitirEliminarContenedor.emit(true);
           this.alerta.mensajaExitoso(
             "Se eliminó correctamente el contenedor.",
             "Guardado con éxito."

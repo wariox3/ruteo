@@ -7,6 +7,7 @@ import { CommonModule, NgOptimizedImage } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
+  OnDestroy,
   OnInit,
   TemplateRef,
   ViewChild,
@@ -24,8 +25,8 @@ import {
   NbWindowRef,
   NbWindowService,
 } from "@nebular/theme";
-import { of } from "rxjs";
-import { catchError, switchMap, tap } from "rxjs/operators";
+import { of, Subject } from "rxjs";
+import { catchError, switchMap, takeUntil, tap } from "rxjs/operators";
 import { General } from "../../../../comun/clases/general";
 import {
   ContenedorActionBorrarInformacion,
@@ -51,22 +52,23 @@ import { environment } from "environments/environment";
     NbIconModule,
     NbBadgeModule,
     AnimationFadeinUpDirective,
-    EliminarComponent
+    EliminarComponent,
   ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListaComponent extends General implements OnInit {
-  @ViewChild('contentTemplate') contentTemplate: TemplateRef<any>;
+export class ListaComponent extends General implements OnInit, OnDestroy {
+  @ViewChild("contentTemplate") contentTemplate: TemplateRef<any>;
   private contenedorService = inject(ContenedorService);
   private menuService = inject(NbMenuService);
   private windowService = inject(NbWindowService);
-  windowRef: NbWindowRef
+  private destroy$ = new Subject<void>();
+  windowRef: NbWindowRef | null;
   arrConectando: boolean[] = [];
   arrContenedores: any[] = [];
   contenedor: any = [];
-  dominioApp = environment.dominioApp
+  dominioApp = environment.dominioApp;
   items = [
     { title: "Invitaciones" },
     { title: "Mi contenedor" },
@@ -85,7 +87,7 @@ export class ListaComponent extends General implements OnInit {
   }
 
   menu() {
-    this.menuService.onItemClick().subscribe((evento) => {
+    this.menuService.onItemClick().pipe(takeUntil(this.destroy$)).subscribe((evento) => {
       if (evento.item.title == "Invitaciones") {
         this.router.navigateByUrl(
           `/contenedor/${this.contenedor.nombre}/${this.contenedor.contenedor_id}/invitacion/nuevo`
@@ -99,7 +101,7 @@ export class ListaComponent extends General implements OnInit {
       if (evento.item.title == "Eliminar") {
         this.eliminarContenedor();
       }
-    });
+    })
   }
 
   consultarLista() {
@@ -168,15 +170,21 @@ export class ListaComponent extends General implements OnInit {
         contenedor: this.contenedor,
       },
     });
+    this.changeDetectorRef.detectChanges();
   }
 
   recibirEliminarContenedor() {
     this.consultarLista();
-    this.windowRef.close()
+    this.windowRef.close();
   }
 
   cerrar() {
-    this.windowRef.close()
+    this.windowRef.close();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(); 
+    this.destroy$.complete();
   }
 
   onMenuItemClick(contenedor: any) {
