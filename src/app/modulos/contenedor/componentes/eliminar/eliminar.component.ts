@@ -61,7 +61,7 @@ export class EliminarComponent extends General {
   eliminarContenedor() {
     if (
       this.formularioEliminar.get("nombre")?.value.trim() ===
-      this.data.contenedor.nombre.trim()
+      this.data.contenedor.subdominio.trim()
     ) {
       const contenedorId = this.data.contenedor.id;
       this.contenedorService

@@ -70,8 +70,8 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
   contenedor: any = [];
   dominioApp = environment.dominioApp;
   items = [
-    { title: "Invitaciones" },
-    { title: "Mi contenedor" },
+    // { title: "Invitaciones" },
+    // { title: "Mi contenedor" },
     { title: "Eliminar" },
   ];
 
