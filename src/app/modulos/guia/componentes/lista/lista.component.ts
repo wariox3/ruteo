@@ -127,7 +127,7 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
   directionsResults: google.maps.DirectionsResult | undefined;
 
   // eliminar
-  isCheckedSeleccionarTodos;
+  isCheckedSeleccionarTodos: boolean = false;
   registrosAEliminar: number[] = [];
   arrProgramacionDetalle: any[] = [];
 

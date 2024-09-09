@@ -46,6 +46,20 @@ export const mapeo: any = {
       ordenable: false,
     },
     {
+      nombre: "Cod",
+      campoTipo: "IntegerField",
+      visibleTabla: true,
+      visibleFiltro: false,
+      ordenable: false,
+    },
+    {
+      nombre: "Ciudad",
+      campoTipo: "CharField",
+      visibleTabla: true,
+      visibleFiltro: true,
+      ordenable: false,
+    },
+    {
       nombre: " Teléfono",
       campoTipo: "CharField",
       visibleTabla: true,
