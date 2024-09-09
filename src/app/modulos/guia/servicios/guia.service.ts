@@ -45,12 +45,20 @@ export class GuiaService {
   }
 
   eliminarTodosLasGuias() {
-    return this.http.post('ruteo/visita/eliminar-todos/', {});
+    return this.http.post("ruteo/visita/eliminar-todos/", {});
   }
 
-  importarComplementos(registros: number) {
+  importarComplementos(parametros: {
+    numeroRegistros: number;
+    desde: number;
+    hasta: number;
+    pendienteDespacho: boolean
+  }) {
     return this.http.post(`ruteo/visita/importar-complemento/`, {
-      limite: registros,
+      limite: parametros.numeroRegistros,
+      guia_desde: parametros.desde,
+      guia_hasta: parametros.hasta,
+      pendiente_despacho: parametros.pendienteDespacho
     });
   }
 }

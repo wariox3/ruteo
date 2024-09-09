@@ -51,8 +51,8 @@
           <tr *ngFor="let guia of arrGuia">
             <td class="">
               <div class="form-check">
-                <input #checked class="form-check-input custom-checkbox" type="checkbox" id="blankCheckbox" [id]="guia.id"
-                  [value]="guia.id" [checked]="guia?.selected" (click)="
+                <input #checked class="form-check-input custom-checkbox" type="checkbox" id="blankCheckbox"
+                  [id]="guia.id" [value]="guia.id" [checked]="guia?.selected" (click)="
                   agregarRegistrosEliminar(guia.id)
                 ">
               </div>
@@ -156,16 +156,61 @@
 
 <ng-template #contentTemplateComplemento let-data>
   <div>
-    <div class="d-flex flex-column mb-4">
-      <label>Registros:</label>
-      <input appSoloNumeros fullWidth class="w-100" nbInput type="number" [(ngModel)]="numeroDeRegistrosAImportar">
-    </div>
+    <form [formGroup]="formularioComplementos">
+      <div class="d-flex flex-column mb-4">
+        <label>Desde:</label>
+        <input [appSoloNumeros] min="1" fullWidth class="w-100" nbInput type="number" formControlName="desde"
+          [status]="formularioComplementos.get('desde').dirty ? (formularioComplementos.get('desde').invalid  ? 'danger' : 'success') : 'basic'">
+        <ng-container
+          *ngIf="formularioComplementos.get('desde').invalid && formularioComplementos.get('desde').touched">
+          <span class="caption status-danger" *ngIf="formularioComplementos.get('desde').errors?.required">
+            El campo es requerido!
+          </span>
+        </ng-container>
+      </div>
+      <div class="d-flex flex-column mb-4">
+        <label>Hasta:</label>
+        <input [appSoloNumeros] min="1" fullWidth class="w-100" nbInput type="number" formControlName="hasta"
+          [status]="formularioComplementos.get('hasta').dirty || formularioComplementos.hasError('rangoInvalido') ? (formularioComplementos.get('hasta').invalid || formularioComplementos.hasError('rangoInvalido')  ? 'danger' : 'success') : 'basic'">
+        <ng-container
+          *ngIf="formularioComplementos.get('hasta').invalid && formularioComplementos.get('hasta').touched">
+          <span class="caption status-danger" *ngIf="formularioComplementos.get('hasta').errors?.required">
+            El campo es requerido!
+          </span>
+        </ng-container>
+        <ng-container
+          *ngIf="formularioComplementos.hasError('rangoInvalido')">
+          <span class="caption status-danger" *ngIf="formularioComplementos.hasError('rangoInvalido')">
+            El campo "Hasta" debe ser mayor o igual que "Desde".
+          </span>
+        </ng-container>
+      </div>
+      <div class="d-flex flex-column mb-4">
+        <label>Registros:</label>
+        <input appSoloNumeros min="1" fullWidth class="w-100" nbInput type="number" formControlName="numeroRegistros"
+          [status]="formularioComplementos.get('numeroRegistros').dirty ? (formularioComplementos.get('numeroRegistros').invalid  ? 'danger' : 'success') : 'basic'">
+        <ng-container
+          *ngIf="formularioComplementos.get('numeroRegistros').invalid && formularioComplementos.get('numeroRegistros').touched">
+          <span class="caption status-danger" *ngIf="formularioComplementos.get('numeroRegistros').errors?.required">
+            El campo es requerido!
+          </span>
+        </ng-container>
+      </div>
+      <div class="form-check form-check-custom form-check-solid">
+        <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault"
+          formControlName="pendienteDespacho" />
+        <label class="form-check-label text-gray-700" for="flexCheckDefault">
+          Pendiente despacho
+        </label>
+      </div>
+    </form>
     <div class="d-flex justify-content-end">
+      <button nbButton [disabled]="estaImportandoComplementos" class="mr-2" (click)="cerrarModalComplemento()">Cancel</button>
       <button disabled *ngIf="estaImportandoComplementos" nbButton status="primary" size="small">
         Cargando...
       </button>
-      <button *ngIf="!estaImportandoComplementos" nbButton status="primary" size="small"
-        (click)="importarComplemento()">
+      <button *ngIf="!estaImportandoComplementos" [disabled]="!formularioComplementos.valid" nbButton status="primary"
+        size="small" (click)="importarComplemento()">
         Importar
       </button>
     </div>

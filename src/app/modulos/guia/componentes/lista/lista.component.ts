@@ -35,7 +35,16 @@ import {
   MapDirectionsService,
   MapDirectionsRenderer,
 } from "@angular/google-maps";
-import { FormControl, FormGroup, FormsModule } from "@angular/forms";
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from "@angular/forms";
 import { finalize, takeUntil } from "rxjs/operators";
 import { SoloNumerosDirective } from "../../../../comun/directivas/solo-numeros.directive";
 import { PaginacionComponent } from "../../../../comun/componentes/paginacion/paginacion.component";
@@ -62,6 +71,7 @@ import { Subject } from "rxjs";
     SoloNumerosDirective,
     PaginacionComponent,
     NbCheckboxModule,
+    ReactiveFormsModule,
   ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],
@@ -86,6 +96,7 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
     super();
   }
 
+  importarRegistrosFormulario: FormGroup;
   private destroy$: Subject<void> = new Subject<void>();
   eliminandoRegistros: boolean = false;
   numeroDeRegistrosAImportar: number = 1;
@@ -134,6 +145,7 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
   ngOnInit() {
     this.consultaLista(this.arrParametrosConsulta);
     this.inicializarFormulario();
+    this.inicializarFormularioComplementos();
     this.encabezados = mapeo.datos.filter(
       (titulo) => titulo.visibleTabla === true
     );
@@ -172,6 +184,21 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
       });
   }
 
+  inicializarFormularioComplementos() {
+    this.formularioComplementos = new FormGroup(
+      {
+        numeroRegistros: new FormControl(
+          1,
+          Validators.compose([Validators.required])
+        ),
+        desde: new FormControl(1, Validators.compose([Validators.required])),
+        hasta: new FormControl(1, Validators.compose([Validators.required])),
+        pendienteDespacho: new FormControl(false),
+      },
+      { validators: this.validarRango() }
+    );
+  }
+
   inicializarFormulario() {
     this.formularioComplementos = new FormGroup({
       registros: new FormControl(1),
@@ -197,7 +224,7 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
 
   consultaLista(filtros: any) {
     this.isCheckedSeleccionarTodos = false;
-    this.registrosAEliminar = []
+    this.registrosAEliminar = [];
     this.guiaService.lista(filtros).subscribe((respuesta) => {
       this.arrGuia = respuesta.map((guia) => ({
         ...guia,
@@ -239,16 +266,37 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
     });
   }
 
+  cerrarModalComplemento() {
+    this.reiniciarFormulario()
+    this.cerrarModal()
+    this.changeDetectorRef.detectChanges()
+  }
+
   importarComplemento() {
     this.estaImportandoComplementos = true;
+    const desde = this.transformarAPositivoMayorCero(
+      this.formularioComplementos.get("desde")?.value
+    );
+    const hasta = this.transformarAPositivoMayorCero(
+      this.formularioComplementos.get("hasta")?.value
+    );
+    const pendienteDespacho =
+      this.formularioComplementos.get("pendienteDespacho")?.value;
+    const numeroRegistros = this.transformarAPositivoMayorCero(
+      this.formularioComplementos.get("numeroRegistros")?.value
+    );
     this.guiaService
-      .importarComplementos(
-        this.transformarAPositivoMayorCero(this.numeroDeRegistrosAImportar)
-      )
+      .importarComplementos({
+        numeroRegistros,
+        desde,
+        hasta,
+        pendienteDespacho,
+      })
       .pipe(
         finalize(() => {
           this.estaImportandoComplementos = false;
           this.numeroDeRegistrosAImportar = 1;
+          this.reiniciarFormulario();
         })
       )
       .subscribe((respuesta: { mensaje: string }) => {
@@ -424,7 +472,7 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
           finalize(() => {
             this.eliminandoRegistros = false;
             this.isCheckedSeleccionarTodos = false;
-            this.windowRef.close()
+            this.windowRef.close();
           })
         )
         .subscribe(() => {
@@ -435,7 +483,7 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
           this.consultaLista(this.arrParametrosConsulta);
         });
     } else {
-      this.windowRef.close()
+      this.windowRef.close();
       this.alerta.mensajeError(
         "No se han seleccionado registros para eliminar",
         "Error"
@@ -469,13 +517,32 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
 
     this.changeDetectorRef.detectChanges();
   }
-  
+
   cerrarModal() {
-    this.windowRef.close()
+    this.windowRef.close();
   }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  reiniciarFormulario() {
+    this.formularioComplementos.reset({
+      numeroRegistros: 1,
+      desde: 1,
+      hasta: 1,
+      pendienteDespacho: false,
+    });
+  }
+
+  validarRango(): ValidatorFn {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+      const desde = formGroup.get("desde")?.value;
+      const hasta = formGroup.get("hasta")?.value;
+
+      // Si "hasta" es menor que "desde", retorna el error
+      return hasta < desde ? { rangoInvalido: true } : null;
+    };
   }
 }
