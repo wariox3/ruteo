@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   TemplateRef,
   ViewChild,
@@ -11,6 +12,7 @@ import { RouterModule } from "@angular/router";
 import {
   NbButtonModule,
   NbCardModule,
+  NbCheckboxModule,
   NbContextMenuModule,
   NbDialogModule,
   NbIconModule,
@@ -34,10 +36,11 @@ import {
   MapDirectionsRenderer,
 } from "@angular/google-maps";
 import { FormControl, FormGroup, FormsModule } from "@angular/forms";
-import { finalize } from "rxjs/operators";
+import { finalize, takeUntil } from "rxjs/operators";
 import { SoloNumerosDirective } from "../../../../comun/directivas/solo-numeros.directive";
 import { PaginacionComponent } from "../../../../comun/componentes/paginacion/paginacion.component";
 import { ParametrosConsulta } from "@/interfaces/general/general.interface";
+import { Subject } from "rxjs";
 
 @Component({
   selector: "app-lista",
@@ -58,14 +61,17 @@ import { ParametrosConsulta } from "@/interfaces/general/general.interface";
     NbContextMenuModule,
     SoloNumerosDirective,
     PaginacionComponent,
+    NbCheckboxModule,
   ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],
 })
-export class ListaComponent extends General implements OnInit {
+export class ListaComponent extends General implements OnInit, OnDestroy {
   @ViewChild("contentTemplate") contentTemplate: TemplateRef<any>;
   @ViewChild("contentTemplateComplemento")
   contentTemplateComplemento: TemplateRef<any>;
+  @ViewChild("contentTemplateConfirmarEliminar")
+  contentTemplateConfirmarEliminar: TemplateRef<any>;
   @ViewChild("fileInput") fileInput: ElementRef;
   @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow;
 
@@ -80,9 +86,12 @@ export class ListaComponent extends General implements OnInit {
     super();
   }
 
+  private destroy$: Subject<void> = new Subject<void>();
+  eliminandoRegistros: boolean = false;
   numeroDeRegistrosAImportar: number = 1;
   estaImportandoComplementos: boolean = false;
   items = [{ title: "Por excel" }, { title: "Por complemento" }];
+  acciones = [{ title: "Eliminar" }, { title: "Eliminar todos" }];
   formularioComplementos: FormGroup;
   selectedFile: File | null = null;
   base64File: string | null = null;
@@ -117,6 +126,11 @@ export class ListaComponent extends General implements OnInit {
   };
   directionsResults: google.maps.DirectionsResult | undefined;
 
+  // eliminar
+  isCheckedSeleccionarTodos;
+  registrosAEliminar: number[] = [];
+  arrProgramacionDetalle: any[] = [];
+
   ngOnInit() {
     this.consultaLista(this.arrParametrosConsulta);
     this.inicializarFormulario();
@@ -125,23 +139,37 @@ export class ListaComponent extends General implements OnInit {
     );
 
     // menu
-    this.menuService.onItemClick().subscribe((evento) => {
-      switch (evento.item.title) {
-        case "Por excel":
-          this.windowRef = this.windowService.open(this.contentTemplate, {
-            title: "Importar excel",
-          });
-          break;
-        case "Por complemento":
-          this.windowRef = this.windowService.open(
-            this.contentTemplateComplemento,
-            {
-              title: "Importar complemento",
-            }
-          );
-          break;
-      }
-    });
+    this.menuService
+      .onItemClick()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((evento) => {
+        switch (evento.item.title) {
+          case "Por excel":
+            this.windowRef = this.windowService.open(this.contentTemplate, {
+              title: "Importar excel",
+            });
+            break;
+          case "Por complemento":
+            this.windowRef = this.windowService.open(
+              this.contentTemplateComplemento,
+              {
+                title: "Importar complemento",
+              }
+            );
+            break;
+          case "Eliminar":
+            this.eliminarRegistros();
+            break;
+          case "Eliminar todos":
+            this.windowRef = this.windowService.open(
+              this.contentTemplateConfirmarEliminar,
+              {
+                title: "Eliminar todos los registros",
+              }
+            );
+            break;
+        }
+      });
   }
 
   inicializarFormulario() {
@@ -156,7 +184,7 @@ export class ListaComponent extends General implements OnInit {
       ...this.arrParametrosConsulta,
       desplazar: event.desplazamiento,
       limite: event.limite,
-    }
+    };
     this.consultaLista({
       filtros: [],
       desplazar: event.desplazamiento,
@@ -168,16 +196,19 @@ export class ListaComponent extends General implements OnInit {
   }
 
   consultaLista(filtros: any) {
-    this.guiaService
-      .lista(filtros)
-      .subscribe((respuesta) => {
-        this.arrGuia = respuesta;
-        this.cantidadRegistros = respuesta?.length;
-        respuesta.forEach((punto) => {
-          this.addMarker({ lat: punto.latitud, lng: punto.longitud });
-        });
-        this.changeDetectorRef.detectChanges();
+    this.isCheckedSeleccionarTodos = false;
+    this.registrosAEliminar = []
+    this.guiaService.lista(filtros).subscribe((respuesta) => {
+      this.arrGuia = respuesta.map((guia) => ({
+        ...guia,
+        selected: false,
+      }));
+      this.cantidadRegistros = respuesta?.length;
+      respuesta.forEach((punto) => {
+        this.addMarker({ lat: punto.latitud, lng: punto.longitud });
       });
+      this.changeDetectorRef.detectChanges();
+    });
     if (this.arrGuiasOrdenadas?.length >= 1) {
       this.arrGuiasOrdenadas.forEach((punto) => {
         this.addMarkerOrdenadas({ lat: punto.latitud, lng: punto.longitud });
@@ -339,5 +370,112 @@ export class ListaComponent extends General implements OnInit {
       },
       error: (e) => console.error(e),
     });
+  }
+
+  // eliminar
+  agregarRegistrosEliminar(id: number) {
+    // Busca el índice del registro en el array de registros a eliminar
+    const index = this.registrosAEliminar.indexOf(id);
+    // Si el registro ya está en el array, lo elimina
+    if (index !== -1) {
+      this.registrosAEliminar.splice(index, 1);
+    } else {
+      // Si el registro no está en el array, lo agrega
+      this.registrosAEliminar.push(id);
+    }
+  }
+
+  eliminarRegistros() {
+    if (this.registrosAEliminar.length > 0) {
+      this.registrosAEliminar.forEach((id) => {
+        this.guiaService
+          .eliminarGuia(id)
+          .pipe(
+            finalize(() => {
+              this.isCheckedSeleccionarTodos = false;
+            })
+          )
+          .subscribe(() => {
+            this.alerta.mensajaExitoso(
+              "Se han eliminado los regsitros correctamente.",
+              "Eliminado con éxito."
+            );
+            this.consultaLista(this.arrParametrosConsulta);
+          });
+      });
+    } else {
+      this.alerta.mensajeError(
+        "No se han seleccionado registros para eliminar",
+        "Error"
+      );
+    }
+
+    this.registrosAEliminar = [];
+
+    this.changeDetectorRef.detectChanges();
+  }
+
+  eliminarTodosLosRegistros() {
+    if (this.arrGuia.length > 0) {
+      this.eliminandoRegistros = true;
+      this.guiaService
+        .eliminarTodosLasGuias()
+        .pipe(
+          finalize(() => {
+            this.eliminandoRegistros = false;
+            this.isCheckedSeleccionarTodos = false;
+            this.windowRef.close()
+          })
+        )
+        .subscribe(() => {
+          this.alerta.mensajaExitoso(
+            "Se han eliminado los regsitros correctamente.",
+            "Eliminado con éxito."
+          );
+          this.consultaLista(this.arrParametrosConsulta);
+        });
+    } else {
+      this.windowRef.close()
+      this.alerta.mensajeError(
+        "No se han seleccionado registros para eliminar",
+        "Error"
+      );
+    }
+  }
+
+  toggleSelectAll(event: Event) {
+    const seleccionarTodos = event.target as HTMLInputElement;
+    this.isCheckedSeleccionarTodos = !this.isCheckedSeleccionarTodos;
+    // Itera sobre todos los datos
+    if (seleccionarTodos.checked) {
+      this.arrGuia.forEach((item: any) => {
+        // Establece el estado de selección de cada registro
+        item.selected = !item.selected;
+        // Busca el índice del registro en el array de registros a eliminar
+        const index = this.registrosAEliminar.indexOf(item.id);
+        // Si el registro ya estaba en el array de registros a eliminar, lo elimina
+        if (index === -1) {
+          this.registrosAEliminar.push(item.id);
+        } // Si el registro no estaba en el array de registros a eliminar, lo agrega
+      });
+    } else {
+      this.arrGuia.forEach((item: any) => {
+        // Establece el estado de selección de cada registro
+        item.selected = !item.selected;
+      });
+
+      this.registrosAEliminar = [];
+    }
+
+    this.changeDetectorRef.detectChanges();
+  }
+  
+  cerrarModal() {
+    this.windowRef.close()
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

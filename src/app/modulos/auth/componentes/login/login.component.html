@@ -43,7 +43,7 @@
         fullWidth fieldSize="large" [type]="tipoClaveInput"
         [status]="formulario.get('password').dirty ? (formulario.get('password').invalid  ? 'danger' : 'success') : 'basic'"
         [attr.aria-invalid]="formulario.get('password').invalid && formulario.get('password').touched ? true : null">
-      <button nbSuffix nbButton ghost (click)="toggleMostrarClave()">
+      <button nbSuffix nbButton ghost (click)="toggleMostrarClave()" type="button">
         <nb-icon [icon]="tipoClaveInput === 'text' ? 'eye-outline' : 'eye-off-2-outline'" pack="eva"
           [attr.aria-label]="tipoClaveInput === 'text' ? 'hide password' : 'show password'">
         </nb-icon>

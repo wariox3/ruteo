@@ -12,8 +12,6 @@
   </nb-card-header>
   <nb-card-body>
     <div class="d-flex align-items-center justify-content-between">
-      <ngx-paginacion [cantidadRegistros]="cantidadRegistros"
-        (emitirPaginacion)="recibirPaginacion($event)"></ngx-paginacion>
       <div class="d-flex align-items-center">
         <button status="primary" size="small" nbButton [nbContextMenu]="items" class="spaced-button">
           Importar
@@ -27,62 +25,82 @@
         <button nbButton status="primary" size="small" [routerLink]="['../nuevo']" class="spaced-button">
           Nuevo
         </button>
+        <button nbButton [nbContextMenu]="acciones" size="small">Acciones</button>
       </div>
+      <ngx-paginacion [cantidadRegistros]="cantidadRegistros"
+        (emitirPaginacion)="recibirPaginacion($event)"></ngx-paginacion>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th *ngFor="let encabezado of encabezados">
-            {{ encabezado.nombre }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let guia of arrGuia">
-          <td>
-            <ng-container *ngIf="guia.decodificado_error; else noError">
-              <span class="circle-red"></span>
-            </ng-container>
-            <ng-template #noError>
-              <ng-container *ngIf="guia.decodificado; else notDecoded">
-                <span class="circle-green"></span>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th class="bg-gray-100">
+              <div class="form-check">
+                <input class="form-check-input custom-checkbox" [checked]="isCheckedSeleccionarTodos" #checkboxSelectAll
+                  type="checkbox" [value]="isCheckedSeleccionarTodos" id="seleccionarTodos"
+                  (click)="toggleSelectAll($event)">
+              </div>
+            </th>
+            <th></th>
+            <th *ngFor="let encabezado of encabezados">
+              {{ encabezado.nombre }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let guia of arrGuia">
+            <td class="">
+              <div class="form-check">
+                <input #checked class="form-check-input custom-checkbox" type="checkbox" id="blankCheckbox" [id]="guia.id"
+                  [value]="guia.id" [checked]="guia?.selected" (click)="
+                  agregarRegistrosEliminar(guia.id)
+                ">
+              </div>
+            </td>
+            <td>
+              <ng-container *ngIf="guia.decodificado_error; else noError">
+                <span class="circle-red"></span>
               </ng-container>
-              <ng-template #notDecoded>
-                <span class="circle-yellow"></span>
+              <ng-template #noError>
+                <ng-container *ngIf="guia.decodificado; else notDecoded">
+                  <span class="circle-green"></span>
+                </ng-container>
+                <ng-template #notDecoded>
+                  <span class="circle-yellow"></span>
+                </ng-template>
               </ng-template>
-            </ng-template>
-          </td>
-          <td>{{ guia.id }}</td>
-          <td>{{ guia.guia }}</td>
-          <td>{{ guia.fecha }}</td>
-          <td>{{ guia.documento }}</td>
-          <td>{{ guia.destinatario }}</td>
-          <td>{{ guia.destinatario_direccion }}</td>
-          <td>{{ guia.destinatario_telefono }}</td>
-          <td>{{ guia.destinatario_correo }}</td>
-          <td>{{ guia.peso }}</td>
-          <td>{{ guia.volumen }}</td>
-          <td>{{ guia.latitud }}</td>
-          <td>{{ guia.longitud }}</td>
-          <td>{{ guia.orden }}</td>
-          <td>{{ guia.distancia_proxima }}</td>
-          <td>{{ guia.franja_id }}</td>
-          <td>{{ guia.franja_nombre }}</td>
-          <td>{{ guia.franja_codigo }}</td>
-          <td>
-            <a class="menu-link px-3" style="cursor: pointer" (click)="editarGuia(guia.id)">
-              <nb-icon icon="edit-outline"></nb-icon>
-            </a>
-          </td>
-          <td>
-            <a class="menu-link px-3" style="cursor: pointer" (click)="detalleGuia(guia.id)">
-              <nb-icon icon="eye-outline"></nb-icon>
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+            <td>{{ guia.id }}</td>
+            <td>{{ guia.guia }}</td>
+            <td>{{ guia.fecha }}</td>
+            <td>{{ guia.documento }}</td>
+            <td>{{ guia.destinatario }}</td>
+            <td>{{ guia.destinatario_direccion }}</td>
+            <td>{{ guia.destinatario_telefono }}</td>
+            <td>{{ guia.destinatario_correo }}</td>
+            <td>{{ guia.peso }}</td>
+            <td>{{ guia.volumen }}</td>
+            <td>{{ guia.latitud }}</td>
+            <td>{{ guia.longitud }}</td>
+            <td>{{ guia.orden }}</td>
+            <td>{{ guia.distancia_proxima }}</td>
+            <td>{{ guia.franja_id }}</td>
+            <td>{{ guia.franja_nombre }}</td>
+            <td>{{ guia.franja_codigo }}</td>
+            <td>
+              <a class="menu-link px-3" style="cursor: pointer" (click)="editarGuia(guia.id)">
+                <nb-icon icon="edit-outline"></nb-icon>
+              </a>
+            </td>
+            <td>
+              <a class="menu-link px-3" style="cursor: pointer" (click)="detalleGuia(guia.id)">
+                <nb-icon icon="eye-outline"></nb-icon>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </nb-card-body>
 </nb-card>
 <!-- Se retira este mapa ya que pasa a rutear -->
@@ -148,6 +166,35 @@
         (click)="importarComplemento()">
         Importar
       </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentTemplateConfirmarEliminar let-data>
+  <div>
+    <div class="d-flex flex-column mb-4">
+      <div class="d-flex flex-column align-items-center">
+        <div class="d-flex justify-content-center">
+          <p class="font-weight-bold texto-danger"><nb-icon icon="alert-triangle-outline"></nb-icon><span> ¿Estas
+              seguro?</span></p>
+        </div>
+        <div class="pr-3 pl-3">
+          <span class="text'muted">Este proceso es irreversible. Todos los registros serán eliminados.</span>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <button nbButton class="mr-2" (click)="cerrarModal()">Cancel</button>
+
+      <button nbButton *ngIf="!eliminandoRegistros; else cargandoBoton" status="danger" size="small"
+        (click)="eliminarTodosLosRegistros()">
+        Eliminar
+      </button>
+      <ng-template #cargandoBoton>
+        <button disabled nbButton status="danger" size="small">
+          Eliminando...
+        </button>
+      </ng-template>
     </div>
   </div>
 </ng-template>

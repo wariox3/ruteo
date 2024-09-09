@@ -40,6 +40,14 @@ export class GuiaService {
     return this.http.post<any[]>(`ruteo/visita/rutear/`, "");
   }
 
+  eliminarGuia(id: number) {
+    return this.http.delete(`ruteo/visita/${id}/`, {});
+  }
+
+  eliminarTodosLasGuias() {
+    return this.http.post('ruteo/visita/eliminar-todos/', {});
+  }
+
   importarComplementos(registros: number) {
     return this.http.post(`ruteo/visita/importar-complemento/`, {
       limite: registros,

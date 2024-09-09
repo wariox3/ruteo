@@ -1,0 +1,36 @@
+.custom-checkbox {
+  width: 17px; /* Ajusta el tamaño del checkbox */
+  height: 17px;
+  appearance: none; /* Elimina el estilo predeterminado del checkbox */
+  background-color: #fff; /* Fondo del checkbox sin seleccionar */
+  border: 1px solid #7a7a7a; /* Borde inicial */
+  border-radius: 4px; /* Bordes redondeados */
+  cursor: pointer;
+  position: relative;
+}
+
+.custom-checkbox:checked {
+  background-color: #ff0000; /* Color de fondo cuando está seleccionado */
+  border-color: #ff0000; /* Color del borde cuando está seleccionado */
+}
+
+.custom-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.custom-checkbox:hover {
+  border-color: #b30000; /* Borde cuando pasas el ratón */
+}
+
+.custom-checkbox:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.25); /* Sombras cuando se enfoca */
+}
