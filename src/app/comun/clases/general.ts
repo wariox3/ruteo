@@ -10,6 +10,8 @@ export class General {
   protected changeDetectorRef = inject(ChangeDetectorRef);
   protected alerta = inject(AlertaService)
   protected store = inject(Store)
+  protected tipo = '';
+  protected modelo = '';
 
   constructor() { }
 

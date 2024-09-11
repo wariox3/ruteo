@@ -1,7 +1,9 @@
 <nb-card>
   <nb-card-header>Filtros</nb-card-header>
   <nb-card-body>
-    <app-base-filtro></app-base-filtro>
+    <app-base-filtro
+    (emitirFiltros)="obtenerFiltros($event)"
+    ></app-base-filtro>
   </nb-card-body>
 </nb-card>
 <nb-card>

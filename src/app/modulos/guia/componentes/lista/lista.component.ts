@@ -267,9 +267,9 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
   }
 
   cerrarModalComplemento() {
-    this.reiniciarFormulario()
-    this.cerrarModal()
-    this.changeDetectorRef.detectChanges()
+    this.reiniciarFormulario();
+    this.cerrarModal();
+    this.changeDetectorRef.detectChanges();
   }
 
   importarComplemento() {
@@ -544,5 +544,16 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
       // Si "hasta" es menor que "desde", retorna el error
       return hasta < desde ? { rangoInvalido: true } : null;
     };
+  }
+
+  obtenerFiltros(filtros: any) {
+    if (filtros.length >= 1) {
+      this.arrParametrosConsulta.filtros = filtros;
+    } else {
+      this.arrParametrosConsulta.filtros = [];
+    }
+
+    this.changeDetectorRef.detectChanges();
+    this.consultaLista(this.arrParametrosConsulta)
   }
 }

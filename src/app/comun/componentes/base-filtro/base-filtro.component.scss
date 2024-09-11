@@ -1,0 +1,41 @@
+.table-wrapper {
+  max-height: 15rem;
+  overflow-y: auto;
+  display: inline-block;
+  width: 100%;
+  scrollbar-width: thin;
+}
+
+.filter-wrapper {
+  max-height: 15rem;
+  overflow-y: auto;
+  display: inline-block;
+  width: 100%;
+  scrollbar-width: thin;
+}
+
+.button-remover:focus {
+  outline: 0px;
+}
+
+/* Estilos para navegadores basados en Webkit (Chrome, Edge, Safari) */
+.table-wrapper::-webkit-scrollbar,
+.filter-wrapper::-webkit-scrollbar {
+  height: 10px;  /* Altura de la barra de desplazamiento horizontal */
+}
+
+.table-wrapper::-webkit-scrollbar-track,
+.filter-wrapper::-webkit-scrollbar-track {
+  background-color: #f1f1f1;  /* Color del fondo del track de la barra */
+}
+
+.table-wrapper::-webkit-scrollbar-thumb,
+.filter-wrapper::-webkit-scrollbar-thumb {
+  background-color: #9c9c9c;  /* Color de la barra de desplazamiento */
+  border-radius: 5px;        /* Bordes redondeados para el thumb */
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover,
+.filter-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #979797;  /* Color de la barra cuando pasas el ratón */
+}
