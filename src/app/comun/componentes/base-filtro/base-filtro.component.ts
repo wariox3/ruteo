@@ -344,6 +344,8 @@ export class BaseFiltroComponent extends General implements OnInit {
       propiedad = propiedades.propiedad;
       operador = propiedades.operador;
       tipo = propiedades.tipo;
+      busquedaAvanzada = propiedades.busquedaAvanzada
+      modeloBusquedaAvanzada = propiedades.modeloBusquedaAvanzada
       const resultadoCriterioFiltro = criteriosFiltros[propiedades.tipo];
       this.criteriosBusqueda[index] = resultadoCriterioFiltro;
     }

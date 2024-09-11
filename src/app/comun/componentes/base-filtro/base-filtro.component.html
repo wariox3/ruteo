@@ -38,9 +38,10 @@
               : 'text'" [appSoloNumeros]="
               filtro.get('busquedaAvanzada')?.value === 'true'
             ">
-            <button *ngIf="filtro.get('busquedaAvanzada')?.value === 'true'" type="button" status="primary" nbSuffix
+            <button class="boton-busqueda" *ngIf="filtro.get('busquedaAvanzada')?.value === 'true'" type="button"  status="primary"  nbSuffix
               nbButton (click)="abrirModalFiltrosAvanzados(i)">
-              <nb-icon icon="search-outline"></nb-icon>
+              <!-- <nb-icon icon="search-outline"></nb-icon> -->
+               Buscar
             </button>
           </nb-form-field>
         </div>

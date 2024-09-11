@@ -1,5 +1,5 @@
 .table-wrapper {
-  max-height: 15rem;
+  max-height: 23rem;
   overflow-y: auto;
   display: inline-block;
   width: 100%;
@@ -16,6 +16,12 @@
 
 .button-remover:focus {
   outline: 0px;
+}
+
+.boton-busqueda {
+  border-top-left-radius: 0%;
+  border-bottom-left-radius: 0%;
+  font-size: .8rem;
 }
 
 /* Estilos para navegadores basados en Webkit (Chrome, Edge, Safari) */
