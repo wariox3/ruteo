@@ -226,14 +226,7 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
       desplazar: event.desplazamiento,
       limite: event.limite,
     };
-    this.consultaLista({
-      filtros: [],
-      desplazar: event.desplazamiento,
-      limite: event.limite,
-      ordenamientos: [],
-      limite_conteo: 10000,
-      modelo: "RutVisita",
-    });
+    this.consultaLista(this.arrParametrosConsulta);
   }
 
   consultaLista(filtros: any) {
