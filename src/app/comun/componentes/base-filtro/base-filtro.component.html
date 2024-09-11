@@ -38,10 +38,10 @@
               : 'text'" [appSoloNumeros]="
               filtro.get('busquedaAvanzada')?.value === 'true'
             ">
-            <button class="boton-busqueda" *ngIf="filtro.get('busquedaAvanzada')?.value === 'true'" type="button"  status="primary"  nbSuffix
-              nbButton (click)="abrirModalFiltrosAvanzados(i)">
+            <button class="boton-busqueda" *ngIf="filtro.get('busquedaAvanzada')?.value === 'true'" type="button"
+              status="primary" nbSuffix nbButton (click)="abrirModalFiltrosAvanzados(i)">
               <!-- <nb-icon icon="search-outline"></nb-icon> -->
-               Buscar
+              Buscar
             </button>
           </nb-form-field>
         </div>
@@ -53,15 +53,15 @@
     </div>
   </div>
   <div class="d-flex justify-content-end gap-2">
-    <button class="mr-1" nbButton type="submit" status="primary" size="small" (click)="aplicarFiltro()">
-      Filtrar
+    <button class="mr-1" nbButton size="small" type="submit" (click)="limpiarFormulario()" *ngIf="filtros.length >= 1">
+      Limpiar
     </button>
     <button class="mr-1" nbButton size="small" type="submit" status="primary" (click)="agregarNuevoFiltro()"
       *ngIf="filtros.length >= 1">
       Agregar
     </button>
-    <button nbButton size="small" type="submit" (click)="limpiarFormulario()" *ngIf="filtros.length >= 1">
-      Limpiar
+    <button nbButton type="submit" status="primary" size="small" (click)="aplicarFiltro()">
+      Filtrar
     </button>
   </div>
 </form>
@@ -111,28 +111,28 @@
     </form>
   </div>
   <div class="d-flex justify-content-end gap-2 mt-3">
-    <button class="mr-1" nbButton type="submit" status="primary" size="small"
-      (click)="aplicarFiltroModal(data.tituloModal)">
-      Filtrar
-    </button>
-    <button class="mr-1" nbButton size="small" type="button" status="primary" (click)="agregarNuevoFiltroModal()"
-      *ngIf="filtros.length >= 1">
-      Agregar
-    </button>
-    <button nbButton size="small" type="button" (click)="limpiarFormularioModal(data.tituloModal)"
+    <button class="mr-1" nbButton size="small" type="button" (click)="limpiarFormularioModal(data.tituloModal)"
       *ngIf="filtros.length >= 1">
       Limpiar
+      </button>
+    <button class="mr-1" nbButton size="small" type="button" status="primary" (click)="agregarNuevoFiltroModal()"
+    *ngIf="filtros.length >= 1">
+      Agregar
     </button>
+      <button nbButton type="submit" status="primary" size="small"
+        (click)="aplicarFiltroModal(data.tituloModal)">
+        Filtrar
+      </button>
   </div>
-  <div class="table-wrapper table-responsive table-loading mt-4">
-    <table class="table table-hover table-bordered table-rounded border mt-0">
+  <div class="table-wrapper table-responsive mt-4">
+    <table class="table table-hover table-bordered border mt-0">
       <thead>
         <tr class="text-center" *ngIf="
               arrRegistroBusquedaAvanzada &&
               arrRegistroBusquedaAvanzada.length > 0
             ">
           <th class="bg-gray-100" *ngFor="let key of arrRegistroBusquedaAvanzada[0] | keys">
-            {{ key }}
+            {{ key | titlecase }}
           </th>
           <td class="bg-gray-100"></td>
         </tr>

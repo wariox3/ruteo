@@ -84,6 +84,7 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
   contentTemplateConfirmarEliminar: TemplateRef<any>;
   @ViewChild("fileInput") fileInput: ElementRef;
   @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow;
+  public nombreFiltro: string;
 
   private windowRef: NbWindowRef | null = null;
 
@@ -143,6 +144,8 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
   arrProgramacionDetalle: any[] = [];
 
   ngOnInit() {
+    this.nombreFiltro = "visita_undefined";
+    this.construirFiltros();
     this.consultaLista(this.arrParametrosConsulta);
     this.inicializarFormulario();
     this.inicializarFormularioComplementos();
@@ -182,6 +185,17 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
             break;
         }
       });
+  }
+
+  construirFiltros() {
+    const filtroGuardado = localStorage.getItem(this.nombreFiltro);
+    if (filtroGuardado !== null) {
+      const filtros = JSON.parse(filtroGuardado)
+      console.log(...filtros)
+      this.arrParametrosConsulta.filtros = [
+        ...filtros
+      ];
+    }
   }
 
   inicializarFormularioComplementos() {
@@ -554,6 +568,6 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
     }
 
     this.changeDetectorRef.detectChanges();
-    this.consultaLista(this.arrParametrosConsulta)
+    this.consultaLista(this.arrParametrosConsulta);
   }
 }

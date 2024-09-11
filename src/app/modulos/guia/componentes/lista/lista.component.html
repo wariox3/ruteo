@@ -74,7 +74,7 @@
             </td>
             <td>{{ guia.id }}</td>
             <td>{{ guia.guia }}</td>
-            <td>{{ guia.fecha }}</td>
+            <td>{{ guia.fecha | date:'yy/mm/dd' }}</td>
             <td>{{ guia.documento }}</td>
             <td>{{ guia.destinatario }}</td>
             <td>{{ guia.destinatario_direccion }}</td>

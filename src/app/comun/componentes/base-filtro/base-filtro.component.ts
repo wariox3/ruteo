@@ -179,10 +179,15 @@ export class BaseFiltroComponent extends General implements OnInit {
       this.nombreFiltro = `${tipo}_${localStorage
         .getItem("itemNombre")
         ?.toLowerCase()}`;
-      if (localStorage.getItem(this.nombreFiltro) !== null) {
-        this.filtrosAplicados = JSON.parse(
-          localStorage.getItem(this.nombreFiltro)!
-        );
+      const localStorageFiltro = localStorage.getItem(this.nombreFiltro);
+      let filtrosParseados: [] | null = null
+
+      if (localStorageFiltro) {
+        filtrosParseados = JSON.parse(localStorageFiltro!);
+      }
+
+      if (filtrosParseados?.length) {
+        this.filtrosAplicados = JSON.parse(localStorageFiltro!);
         this.formularioItem.reset();
         this.filtros.clear();
         this.filtrosAplicados.map((propiedad, index) => {
@@ -227,7 +232,7 @@ export class BaseFiltroComponent extends General implements OnInit {
           setTimeout(() => {
             filtroPorActualizar.patchValue({
               tipo: propiedad.campoTipo,
-              valor1: '',
+              valor1: "",
               busquedaAvanzada: propiedad?.esFk ? "true" : "false",
               modeloBusquedaAvanzada: propiedad?.modeloFk || "",
               operador: filtro.valor,
@@ -246,9 +251,10 @@ export class BaseFiltroComponent extends General implements OnInit {
         }, 300);
       }
 
-      let inputValor1Modal: HTMLInputElement | null =
-            document.querySelector('#inputValor1' + index);
-          inputValor1Modal!.focus();
+      let inputValor1Modal: HTMLInputElement | null = document.querySelector(
+        "#inputValor1" + index
+      );
+      inputValor1Modal!.focus();
 
       this.changeDetectorRef.detectChanges();
     }
@@ -272,7 +278,7 @@ export class BaseFiltroComponent extends General implements OnInit {
           setTimeout(() => {
             filtroPorActualizar.patchValue({
               tipo: propiedad.campoTipo,
-              valor1: '',
+              valor1: "",
               busquedaAvanzada: propiedad?.esFk ? "true" : "false",
               modeloBusquedaAvanzada: propiedad?.modeloFk || "",
               operador: filtro.valor,
@@ -291,8 +297,9 @@ export class BaseFiltroComponent extends General implements OnInit {
         });
       }
 
-      let inputValor1Modal: HTMLInputElement | null =
-      document.querySelector('#inputValor1Modal' + index);
+      let inputValor1Modal: HTMLInputElement | null = document.querySelector(
+        "#inputValor1Modal" + index
+      );
       inputValor1Modal!.focus();
     }
   }
@@ -344,8 +351,8 @@ export class BaseFiltroComponent extends General implements OnInit {
       propiedad = propiedades.propiedad;
       operador = propiedades.operador;
       tipo = propiedades.tipo;
-      busquedaAvanzada = propiedades.busquedaAvanzada
-      modeloBusquedaAvanzada = propiedades.modeloBusquedaAvanzada
+      busquedaAvanzada = propiedades.busquedaAvanzada;
+      modeloBusquedaAvanzada = propiedades.modeloBusquedaAvanzada;
       const resultadoCriterioFiltro = criteriosFiltros[propiedades.tipo];
       this.criteriosBusqueda[index] = resultadoCriterioFiltro;
     }
