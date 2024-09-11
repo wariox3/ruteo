@@ -22,8 +22,8 @@
           <nb-form-field>
             <ng-container *ngIf="filtro.get('tipo')?.value === 'DateField'">
               <input nbInput [nbDatepicker]="dateTimePicker" formControlName="valor1" fullWidth
-                placeholder="dd/mm/yyyy" />
-              <nb-datepicker #dateTimePicker format="dd/MM/yyyy"></nb-datepicker>
+                placeholder="yy/mm/dd" />
+              <nb-datepicker #dateTimePicker format="yy/MM/dd"></nb-datepicker>
             </ng-container>
 
             <input *ngIf="filtro.get('tipo')?.value !== 'DateField'" [placeholder]="
