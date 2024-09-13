@@ -25,6 +25,7 @@ import {
   NbFormFieldModule,
   NbIconModule,
   NbInputModule,
+  NbPopoverModule,
   NbSelectModule,
   NbWindowRef,
   NbWindowService,
@@ -70,6 +71,7 @@ interface FiltroPropiedades {
     NbDatepickerModule,
     SoloNumerosDirective,
     NbMomentDateModule,
+    NbPopoverModule
   ],
 })
 export class BaseFiltroComponent extends General implements OnInit {
