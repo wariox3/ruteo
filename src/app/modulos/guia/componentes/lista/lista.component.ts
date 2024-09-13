@@ -10,6 +10,7 @@ import {
 } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import {
+  NbButtonGroupModule,
   NbButtonModule,
   NbCardModule,
   NbCheckboxModule,
@@ -72,6 +73,7 @@ import { Subject } from "rxjs";
     PaginacionComponent,
     NbCheckboxModule,
     ReactiveFormsModule,
+    NbButtonGroupModule
   ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],

@@ -1,9 +1,7 @@
 <nb-card>
   <nb-card-header>Filtros</nb-card-header>
   <nb-card-body>
-    <app-base-filtro
-    (emitirFiltros)="obtenerFiltros($event)"
-    ></app-base-filtro>
+    <app-base-filtro (emitirFiltros)="obtenerFiltros($event)"></app-base-filtro>
   </nb-card-body>
 </nb-card>
 <nb-card>
@@ -15,19 +13,22 @@
   <nb-card-body>
     <div class="d-flex align-items-center justify-content-between">
       <div class="d-flex align-items-center">
-        <button status="primary" size="small" nbButton [nbContextMenu]="items" class="spaced-button">
-          Importar
-        </button>
-        <button nbButton status="primary" size="small" (click)="decodificar()" class="spaced-button">
-          Decodificar
-        </button>
-        <button nbButton status="primary" size="small" (click)="ordenar()" class="spaced-button">
-          Ordenar
-        </button>
-        <button nbButton status="primary" size="small" [routerLink]="['../nuevo']" class="spaced-button">
-          Nuevo
-        </button>
-        <button nbButton [nbContextMenu]="acciones" size="small">Acciones</button>
+        <nb-button-group size="small">
+          <button status="primary"  nbButton [nbContextMenu]="items">
+            Importar<nb-icon icon="arrow-ios-downward-outline"></nb-icon>
+          </button>
+          <button nbButton status="primary" (click)="decodificar()">
+            Decodificar
+          </button>
+          <button nbButton status="primary" (click)="ordenar()">
+            Ordenar
+          </button>
+          <button nbButton status="primary" [routerLink]="['../nuevo']">
+            Nuevo
+          </button>
+          <button nbButton [nbContextMenu]="acciones" >Acciones<nb-icon
+              icon="arrow-ios-downward-outline"></nb-icon></button>
+        </nb-button-group>
       </div>
       <ngx-paginacion [cantidadRegistros]="cantidadRegistros"
         (emitirPaginacion)="recibirPaginacion($event)"></ngx-paginacion>
@@ -180,8 +181,7 @@
             El campo es requerido!
           </span>
         </ng-container>
-        <ng-container
-          *ngIf="formularioComplementos.hasError('rangoInvalido')">
+        <ng-container *ngIf="formularioComplementos.hasError('rangoInvalido')">
           <span class="caption status-danger" *ngIf="formularioComplementos.hasError('rangoInvalido')">
             El campo "Hasta" debe ser mayor o igual que "Desde".
           </span>
@@ -207,7 +207,8 @@
       </div>
     </form>
     <div class="d-flex justify-content-end">
-      <button nbButton [disabled]="estaImportandoComplementos" class="mr-2" (click)="cerrarModalComplemento()">Cancel</button>
+      <button nbButton [disabled]="estaImportandoComplementos" class="mr-2"
+        (click)="cerrarModalComplemento()">Cancel</button>
       <button disabled *ngIf="estaImportandoComplementos" nbButton status="primary" size="small">
         Cargando...
       </button>

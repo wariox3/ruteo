@@ -46,6 +46,7 @@
           </nb-form-field>
         </div>
         <div class=" col-12 col-md-1 mb-2">
+          <button *ngIf="filtros.length >= 1" class="border-0 bg-transparent button-remover" (click)="agregarNuevoFiltro()"><nb-icon icon="plus-outline"></nb-icon></button>
           <button *ngIf="filtros.length > 1" class="border-0 bg-transparent button-remover"
             (click)="eliminarFiltroLista(i)"><nb-icon icon="trash-outline"></nb-icon></button>
         </div>
@@ -55,10 +56,6 @@
   <div class="d-flex justify-content-end gap-2">
     <button class="mr-1" nbButton size="small" type="submit" (click)="limpiarFormulario()" *ngIf="filtros.length >= 1">
       Limpiar
-    </button>
-    <button class="mr-1" nbButton size="small" type="submit" status="primary" (click)="agregarNuevoFiltro()"
-      *ngIf="filtros.length >= 1">
-      Agregar
     </button>
     <button nbButton type="submit" status="primary" size="small" (click)="aplicarFiltro()">
       Filtrar
@@ -114,15 +111,14 @@
     <button class="mr-1" nbButton size="small" type="button" (click)="limpiarFormularioModal(data.tituloModal)"
       *ngIf="filtros.length >= 1">
       Limpiar
-      </button>
+    </button>
     <button class="mr-1" nbButton size="small" type="button" status="primary" (click)="agregarNuevoFiltroModal()"
-    *ngIf="filtros.length >= 1">
+      *ngIf="filtros.length >= 1">
       Agregar
     </button>
-      <button nbButton type="submit" status="primary" size="small"
-        (click)="aplicarFiltroModal(data.tituloModal)">
-        Filtrar
-      </button>
+    <button nbButton type="submit" status="primary" size="small" (click)="aplicarFiltroModal(data.tituloModal)">
+      Filtrar
+    </button>
   </div>
   <div class="table-wrapper table-responsive mt-4">
     <table class="table table-hover table-bordered border mt-0">
