@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpService } from "../../../comun/servicios/http.service";
-import { GeneralLista } from "@/interfaces/general/general.interface";
+import { RespuestaGeneralLista, ParametrosConsulta } from "@/interfaces/general/general.interface";
 import { Vehiculo } from "@/interfaces/vehiculo/vehiculo.interface";
+import { AutocompletarCiudades, RespuestaAutocompletar } from "@/interfaces/comun/autocompletar.interface";
 
 @Injectable({
   providedIn: "root",
@@ -9,8 +10,8 @@ import { Vehiculo } from "@/interfaces/vehiculo/vehiculo.interface";
 export class vehiculoService {
   constructor(private http: HttpService) {}
 
-  lista(parametros: any) {
-    return this.http.post<GeneralLista<Vehiculo>>(
+  lista(parametros: ParametrosConsulta) {
+    return this.http.post<RespuestaGeneralLista<Vehiculo>>(
       `general/funcionalidad/lista/`,
       parametros
     );
@@ -38,8 +39,8 @@ export class vehiculoService {
     );
   }
 
-  listaCiudades(arrFiltros: any) {
-    return this.http.post<any[]>(
+  listaCiudades(arrFiltros: ParametrosConsulta) {
+    return this.http.post<RespuestaAutocompletar<AutocompletarCiudades>>(
       "general/funcionalidad/autocompletar/",
       arrFiltros
     );

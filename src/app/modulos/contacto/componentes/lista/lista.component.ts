@@ -8,6 +8,8 @@ import { ContactoService } from "../../servicios/contacto.service";
 import { mapeo } from "../../mapeo"
 import { RouterModule } from "@angular/router";
 import { KeysPipe } from "../../../../comun/pipe/keys.pipe";
+import { ParametrosConsulta } from "@/interfaces/general/general.interface";
+import { RespuestaContacto } from "@/interfaces/contacto/contacto.interface";
 
 @Component({
   selector: "app-lista",
@@ -18,7 +20,7 @@ import { KeysPipe } from "../../../../comun/pipe/keys.pipe";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListaComponent extends General implements OnInit {
-  arrParametrosConsulta: any = {
+  arrParametrosConsulta: ParametrosConsulta = {
     filtros: [],
     limite: 50,
     desplazar: 0,
@@ -27,7 +29,7 @@ export class ListaComponent extends General implements OnInit {
     modelo: 'GenContacto'
   };
   cantidad_registros!: number;
-  arrItems: any[];
+  arrItems: RespuestaContacto[];
   encabezados: any[];
 
   private contactoService = inject(ContactoService);

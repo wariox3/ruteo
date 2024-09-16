@@ -1,15 +1,17 @@
+import { AutocompletarCiudades, AutocompletarIdentificacion, AutocompletarPlazoPagos, AutocompletarRegimen, AutocompletarTipoPersona } from "@/interfaces/comun/autocompletar.interface";
+import { Contacto } from "@/interfaces/contacto/contacto.interface";
+import { ParametrosConsulta } from "@/interfaces/general/general.interface";
 import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   OnInit,
   Output,
   ViewChild,
-  inject,
-  EventEmitter
+  inject
 } from "@angular/core";
-import { General } from "../../../../comun/clases/general";
 import {
   FormControl,
   FormGroup,
@@ -17,6 +19,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
+import { RouterModule } from "@angular/router";
 import {
   NbAutocompleteModule,
   NbButtonModule,
@@ -26,10 +29,10 @@ import {
   NbSelectModule,
 } from "@nebular/theme";
 import { Observable, asyncScheduler, of, zip } from "rxjs";
-import { ContactoService } from "../../servicios/contacto.service";
-import { DevuelveDigitoVerificacionService } from "../../../../comun/servicios/devuelve-digito-verificacion.service";
 import { map, tap, throttleTime } from "rxjs/operators";
-import { RouterModule } from "@angular/router";
+import { General } from "../../../../comun/clases/general";
+import { DevuelveDigitoVerificacionService } from "../../../../comun/servicios/devuelve-digito-verificacion.service";
+import { ContactoService } from "../../servicios/contacto.service";
 
 @Component({
   selector: "app-formulario",
@@ -54,7 +57,7 @@ export class FormularioComponent extends General implements OnInit {
   @Input() visualizarBtnAtras: boolean = true;
   @Output() dataFormulario: EventEmitter<any> = new EventEmitter();
 
-  informacionContacto: any = {
+  informacionContacto: Contacto = {
     numero_identificacion: "",
     digito_verificacion: "",
     nombre_corto: "",
@@ -64,12 +67,12 @@ export class FormularioComponent extends General implements OnInit {
     apellido2: null,
     direccion: "",
     correo: "",
-    ciudad: "",
+    ciudad: 0,
     ciudad_nombre: "",
     identificacion: "",
     telefono: "",
     celular: "",
-    tipo_persona: "",
+    tipo_persona: null,
     regimen: "",
     codigo_ciuu: null,
     barrio: "",
@@ -161,11 +164,11 @@ export class FormularioComponent extends General implements OnInit {
     )
   });
 
-  arrTipoPersona = [];
-  arrIdentificacion = [];
-  arrRegimen = [];
-  arrCiudades = [];
-  arrPlazoPagos = [];
+  arrTipoPersona: AutocompletarTipoPersona[] = [];
+  arrIdentificacion: AutocompletarIdentificacion[] = [];
+  arrRegimen: AutocompletarRegimen[] = [];
+  arrCiudades: AutocompletarCiudades[] = [];
+  arrPlazoPagos: AutocompletarPlazoPagos[] = [];
 
   tipoPersonaSeleccionada: number | null = null;
 
@@ -174,7 +177,7 @@ export class FormularioComponent extends General implements OnInit {
     DevuelveDigitoVerificacionService
   );
   @ViewChild("autoInput") input;
-  filteredOptions$: Observable<any[]>;
+  filteredOptions$: Observable<AutocompletarCiudades[]>;
 
   ngOnInit() {
     this.consultarInformacion();
@@ -215,11 +218,11 @@ export class FormularioComponent extends General implements OnInit {
 
   consultarInformacion() {
     zip(
-      this.contactoService.listaAutocompletar("GenTipoPersona"),
-      this.contactoService.listaAutocompletar("GenIdentificacion"),
-      this.contactoService.listaAutocompletar("GenRegimen"),
-      this.contactoService.listaAutocompletar("GenPlazoPago")
-    ).subscribe((respuesta: any) => {
+      this.contactoService.listaAutocompletar<AutocompletarTipoPersona>("GenTipoPersona"),
+      this.contactoService.listaAutocompletar<AutocompletarIdentificacion>("GenIdentificacion"),
+      this.contactoService.listaAutocompletar<AutocompletarRegimen>("GenRegimen"),
+      this.contactoService.listaAutocompletar<AutocompletarPlazoPagos>("GenPlazoPago")
+    ).subscribe((respuesta) => {
       this.arrTipoPersona = respuesta[0].registros;
       this.arrIdentificacion = respuesta[1].registros;
       this.arrRegimen = respuesta[2].registros;
@@ -231,7 +234,7 @@ export class FormularioComponent extends General implements OnInit {
   calcularDigitoVerificacion() {
     if (this.formularioContacto.get("numero_identificacion").value) {
       let digito = this.devuelveDigitoVerificacionService.digitoVerificacion(
-        this.formularioContacto.get("numero_identificacion")?.value
+        Number(this.formularioContacto.get("numero_identificacion")?.value)
       );
       this.formularioContacto.patchValue({
         digito_verificacion: digito,
@@ -240,7 +243,7 @@ export class FormularioComponent extends General implements OnInit {
   }
 
   consultarCiudad(valor: any) {
-    let arrFiltros = {
+    let arrFiltros: ParametrosConsulta = {
       filtros: [
         {
           operador: "__icontains",
@@ -255,21 +258,22 @@ export class FormularioComponent extends General implements OnInit {
       limite_conteo: 10000,
       modelo: "GenCiudad",
     };
+
     this.contactoService
       .listaCiudades(arrFiltros)
       .pipe(
         throttleTime(300, asyncScheduler, { leading: true, trailing: true }),
-        tap((respuesta: any) => {
-          this.arrCiudades = respuesta.registros;
+        tap((respuesta) => {
+          this.arrCiudades = respuesta.registros
           this.filteredOptions$ = of(this.arrCiudades);
         })
       )
       .subscribe();
   }
 
-  private filter(value: string): string[] {
+  private filter(value: string): AutocompletarCiudades[] {
     let arrCiudad = this.arrCiudades.find(
-      (ciudad: any) => ciudad.nombre === value
+      (ciudad: AutocompletarCiudades) => ciudad.nombre === value
     );
     if (arrCiudad) {
       this.formularioContacto.patchValue({
@@ -283,7 +287,7 @@ export class FormularioComponent extends General implements OnInit {
     );
   }
 
-  getFilteredOptions(value: string): Observable<string[]> {
+  getFilteredOptions(value: string): Observable<AutocompletarCiudades[]> {
     return of(value).pipe(map((filterString) => this.filter(filterString)));
   }
 
@@ -298,10 +302,10 @@ export class FormularioComponent extends General implements OnInit {
     this.filteredOptions$ = this.getFilteredOptions($event);
   }
 
-  seleccionarCiudad(ciudad: any) {
+  seleccionarCiudad(ciudad: AutocompletarCiudades) {
     this.formularioContacto.patchValue({
-      ciudad: ciudad?.ciudad_id,
-      ciudad_nombre: ciudad?.ciudad_nombre,
+      ciudad: ciudad?.id,
+      ciudad_nombre: ciudad?.nombre,
     });
   }
 }

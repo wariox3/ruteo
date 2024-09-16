@@ -260,9 +260,9 @@
             <nb-option
               (click)="seleccionarCiudad(option)"
               *ngFor="let option of filteredOptions$ | async"
-              [value]="option.ciudad_nombre"
+              [value]="option.nombre"
             >
-              {{ option.ciudad_nombre }}
+              {{ option.nombre }}
             </nb-option>
           </nb-autocomplete>
           <ng-container

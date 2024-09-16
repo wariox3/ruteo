@@ -63,7 +63,7 @@ export class FormularioComponent extends General implements OnChanges {
       "",
       Validators.compose([Validators.required, Validators.pattern("^[0-9]*$")])
     ),
-    estado_activo: new FormControl(""),
+    estado_activo: new FormControl(false),
   });
 
   ngOnChanges(changes: SimpleChanges) {

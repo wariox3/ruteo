@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpService } from "../../../comun/servicios/http.service";
+import { ParametrosConsulta, RespuestaGeneralLista } from "@/interfaces/general/general.interface";
+import { AutocompletarCiudades, RespuestaAutocompletar } from "@/interfaces/comun/autocompletar.interface";
+import { RespuestaContacto } from "@/interfaces/contacto/contacto.interface";
 
 @Injectable({
   providedIn: "root",
@@ -8,15 +11,15 @@ import { HttpService } from "../../../comun/servicios/http.service";
 export class ContactoService {
   constructor(private http: HttpService) {}
 
-  lista(parametros: any) {
-    return this.http.post<any>(
+  lista(parametros: ParametrosConsulta) {
+    return this.http.post<RespuestaGeneralLista<RespuestaContacto>>(
       `general/funcionalidad/lista/`,
       parametros
     );
   }
 
-  listaAutocompletar(modelo:string) {
-    return this.http.post<{ cantidad_registros: number; registros: any[] }>(
+  listaAutocompletar<T>(modelo:string) {
+    return this.http.post<RespuestaAutocompletar<T>>(
       "general/funcionalidad/autocompletar/",
       {
         filtros: [
@@ -37,14 +40,14 @@ export class ContactoService {
     );
   }
 
-  listaCiudades(arrFiltros: any) {
-    return this.http.post<any[]>(
+  listaCiudades(arrFiltros: ParametrosConsulta) {
+    return this.http.post<RespuestaAutocompletar<AutocompletarCiudades>>(
       "general/funcionalidad/autocompletar/",
       arrFiltros
     );
   }
 
   guardarContacto(data: any) {
-    return this.http.post<any[]>(`general/contacto/`, data);
+    return this.http.post<RespuestaContacto>(`general/contacto/`, data);
   }
 }

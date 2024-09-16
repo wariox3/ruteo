@@ -12,6 +12,7 @@ import { General } from "../../../../comun/clases/general";
 import { vehiculoService } from "../../servicios/vehiculo.service";
 import { mapeo } from "../../mapeo";
 import { Vehiculo } from "@/interfaces/vehiculo/vehiculo.interface";
+import { ParametrosConsulta } from "@/interfaces/general/general.interface";
 
 @Component({
   selector: "app-lista",
@@ -29,7 +30,7 @@ import { Vehiculo } from "@/interfaces/vehiculo/vehiculo.interface";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListaComponent extends General implements OnInit {
-  arrParametrosConsulta: any = {
+  arrParametrosConsulta: ParametrosConsulta = {
     filtros: [],
     limite: 50,
     desplazar: 0,
