@@ -145,8 +145,9 @@ export class BaseFiltroComponent extends General implements OnInit {
         cantidad_registros: number;
         registros: any[];
         propiedades: any[];
-      }>("general/funcionalidad/buscar/", {
+      }>("general/funcionalidad/lista/", {
         modelo,
+        serializador: 'ListaBuscar',
         filtros: listaFiltros,
       })
       .subscribe((respuesta) => {
