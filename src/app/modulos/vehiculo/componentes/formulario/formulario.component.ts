@@ -47,33 +47,34 @@ import { General } from "../../../../comun/clases/general";
   styleUrls: ["./formulario.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormularioComponent extends General implements OnChanges {
+export class FormularioComponent extends General {
   @Input() informacionVehiculo: any;
+  public formularioVehiculo: FormGroup;
 
   @Input() visualizarBtnAtras: boolean = true;
   @Output() dataFormulario: EventEmitter<any> = new EventEmitter();
   @ViewChild("autoInput") input;
 
-  formularioVehiculo = new FormGroup({
-    placa: new FormControl(
-      "",
-      Validators.compose([Validators.required, Validators.maxLength(6)])
-    ),
-    capacidad: new FormControl(
-      "",
-      Validators.compose([Validators.required, Validators.pattern("^[0-9]*$")])
-    ),
-    estado_activo: new FormControl(false),
-  });
+  constructor() {
+    super();
+    this._inicializarFormulario();
+  }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.informacionVehiculo.currentValue) {
-      this.formularioVehiculo.patchValue({
-        placa: this.informacionVehiculo.placa,
-        capacidad: this.informacionVehiculo.capacidad,
-        estado_activo: this.informacionVehiculo.estado_activo,
-      });
-    }
+  private _inicializarFormulario() {
+    this.formularioVehiculo = new FormGroup({
+      placa: new FormControl(
+        "",
+        Validators.compose([Validators.required, Validators.maxLength(6)])
+      ),
+      capacidad: new FormControl(
+        "",
+        Validators.compose([
+          Validators.required,
+          Validators.pattern("^[0-9]*$"),
+        ])
+      ),
+      estado_activo: new FormControl(true),
+    });
   }
 
   enviar() {
