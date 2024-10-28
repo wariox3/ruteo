@@ -25,7 +25,7 @@ export class GuiaService {
   }
 
   importarVisitas(data: any) {
-    return this.http.post<any[]>(`ruteo/visita/importar/`, data);
+    return this.http.post<any[]>(`ruteo/visita/importar-excel/`, data);
   }
 
   decodificar() {
