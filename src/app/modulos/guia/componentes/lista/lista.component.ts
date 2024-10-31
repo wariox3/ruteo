@@ -1,6 +1,6 @@
+import { ParametrosConsulta } from "@/interfaces/general/general.interface";
 import { CommonModule } from "@angular/common";
 import {
-  ChangeDetectionStrategy,
   Component,
   ElementRef,
   OnDestroy,
@@ -8,34 +8,6 @@ import {
   TemplateRef,
   ViewChild,
 } from "@angular/core";
-import { RouterModule } from "@angular/router";
-import {
-  NbButtonGroupModule,
-  NbButtonModule,
-  NbCardModule,
-  NbCheckboxModule,
-  NbContextMenuModule,
-  NbDialogModule,
-  NbIconModule,
-  NbInputModule,
-  NbMenuModule,
-  NbMenuService,
-  NbSelectModule,
-  NbWindowModule,
-  NbWindowRef,
-  NbWindowService,
-} from "@nebular/theme";
-import { BaseFiltroComponent } from "../../../../comun/componentes/base-filtro/base-filtro.component";
-import { General } from "../../../../comun/clases/general";
-import { GuiaService } from "../../servicios/guia.service";
-import { mapeo } from "../../servicios/mapeo";
-import {
-  GoogleMapsModule,
-  MapInfoWindow,
-  MapMarker,
-  MapDirectionsService,
-  MapDirectionsRenderer,
-} from "@angular/google-maps";
 import {
   AbstractControl,
   FormControl,
@@ -46,11 +18,45 @@ import {
   ValidatorFn,
   Validators,
 } from "@angular/forms";
-import { finalize, takeUntil } from "rxjs/operators";
-import { SoloNumerosDirective } from "../../../../comun/directivas/solo-numeros.directive";
+import {
+  GoogleMapsModule,
+  MapDirectionsService,
+  MapInfoWindow,
+  MapMarker,
+} from "@angular/google-maps";
+import { RouterModule } from "@angular/router";
+import {
+  NbButtonGroupModule,
+  NbButtonModule,
+  NbCardModule,
+  NbCheckboxModule,
+  NbContextMenuModule,
+  NbDialogModule,
+  NbIconModule,
+  NbInputModule,
+  NbMenuService,
+  NbSelectModule,
+  NbWindowModule,
+  NbWindowRef,
+  NbWindowService,
+} from "@nebular/theme";
+import { saveAs } from "file-saver";
+import { of, Subject } from "rxjs";
+import {
+  catchError,
+  finalize,
+  mergeMap,
+  takeUntil,
+  toArray,
+} from "rxjs/operators";
+import * as XLSX from "xlsx";
+import { General } from "../../../../comun/clases/general";
+import { BaseFiltroComponent } from "../../../../comun/componentes/base-filtro/base-filtro.component";
 import { PaginacionComponent } from "../../../../comun/componentes/paginacion/paginacion.component";
-import { ParametrosConsulta } from "@/interfaces/general/general.interface";
-import { Subject } from "rxjs";
+import { SoloNumerosDirective } from "../../../../comun/directivas/solo-numeros.directive";
+import { GuiaService } from "../../servicios/guia.service";
+import { mapeo } from "../../servicios/mapeo";
+import { DescargarArchivosService } from "@/comun/servicios/descargar-archivos.service";
 
 @Component({
   selector: "app-lista",
@@ -73,7 +79,7 @@ import { Subject } from "rxjs";
     PaginacionComponent,
     NbCheckboxModule,
     ReactiveFormsModule,
-    NbButtonGroupModule
+    NbButtonGroupModule,
   ],
   templateUrl: "./lista.component.html",
   styleUrls: ["./lista.component.scss"],
@@ -89,12 +95,14 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
   public nombreFiltro: string;
 
   private windowRef: NbWindowRef | null = null;
+  public erroresImportar: any[] = [];
 
   constructor(
     private windowService: NbWindowService,
     private guiaService: GuiaService,
     private directionsService: MapDirectionsService,
-    private menuService: NbMenuService
+    private menuService: NbMenuService,
+    private _archivosService: DescargarArchivosService
   ) {
     super();
   }
@@ -162,6 +170,7 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
       .subscribe((evento) => {
         switch (evento.item.title) {
           case "Por excel":
+            this._limpiarImportarExcel();
             this.windowRef = this.windowService.open(this.contentTemplate, {
               title: "Importar excel",
             });
@@ -189,14 +198,20 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
       });
   }
 
+  private _limpiarImportarExcel() {
+    this.erroresImportar = [];
+    this.selectedFile = null;
+    this.base64File = null;
+    this.fileName = "";
+    this.changeDetectorRef.detectChanges();
+  }
+
   construirFiltros() {
     const filtroGuardado = localStorage.getItem(this.nombreFiltro);
     if (filtroGuardado !== null) {
-      const filtros = JSON.parse(filtroGuardado)
-      console.log(...filtros)
-      this.arrParametrosConsulta.filtros = [
-        ...filtros
-      ];
+      const filtros = JSON.parse(filtroGuardado);
+      console.log(...filtros);
+      this.arrParametrosConsulta.filtros = [...filtros];
     }
   }
 
@@ -350,10 +365,40 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
     };
   }
 
+  private _adaptarErroresImportar(errores: any[]) {
+    of(...errores)
+      .pipe(
+        mergeMap((errorItem) =>
+          of(
+            ...Object.entries(errorItem.errores).map(
+              ([campo, mensajes]: any) => ({
+                fila: errorItem.fila,
+                campo: campo,
+                error: mensajes.join(", "),
+              })
+            )
+          )
+        ),
+        toArray() // Agrupa todas las emisiones en un solo array
+      )
+      .subscribe((result) => {
+        this.erroresImportar = result;
+      });
+  }
+
   uploadFile() {
     if (this.base64File) {
       this.guiaService
         .importarVisitas({ archivo_base64: this.base64File })
+        .pipe(
+          catchError((err) => {
+            if (err.errores_validador) {
+              this._adaptarErroresImportar(err.errores_validador);
+            }
+
+            return err;
+          })
+        )
         .subscribe((response) => {
           this.consultaLista(this.arrParametrosConsulta);
           this.alerta.mensajaExitoso(
@@ -564,5 +609,31 @@ export class ListaComponent extends General implements OnInit, OnDestroy {
 
     this.changeDetectorRef.detectChanges();
     this.consultaLista(this.arrParametrosConsulta);
+  }
+
+  descargarExcelErroresImportar() {
+    const nombreArchivo = "errores";
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
+      this.erroresImportar
+    );
+    const workbook: XLSX.WorkBook = {
+      Sheets: { data: worksheet },
+      SheetNames: ["data"],
+    };
+    const excelBuffer: any = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const data: Blob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    saveAs(data, nombreArchivo); // Nombre del archivo Excel a descargar
+  }
+
+  descargarEjemploExcelImportar() {
+    this._archivosService.descargarArchivoLocal(
+      "assets/ejemplos/modelo/estructuraVisita.xlsx",
+      "estructuraVisita"
+    );
   }
 }

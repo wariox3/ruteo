@@ -15,8 +15,6 @@ export const errorhttpInterceptor: HttpInterceptorFn = (req, next) => {
       let errorMensaje: string = "";
 
       if (error instanceof HttpErrorResponse) {
-        console.log(error.status);
-
         switch (error.status) {
           case 401:
             errorMensaje = "Credenciales invalidas.";
@@ -42,11 +40,11 @@ export const errorhttpInterceptor: HttpInterceptorFn = (req, next) => {
             }
             break;
         }
-        console.log(errorCodigo);
 
         alerta.mensajeError(errorMensaje, `Código de error:  ${errorCodigo}`);
       }
-      return throwError(errorMensaje);
+
+      return throwError(error?.error);
     })
   );
 };

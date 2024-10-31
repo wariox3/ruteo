@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { NbButtonModule, NbCardModule, NbIconModule } from "@nebular/theme";
+import { catchError } from "rxjs/operators";
 import { General } from "../../../../comun/clases/general";
 import { GuiaService } from "../../servicios/guia.service";
 
@@ -13,13 +14,15 @@ import { GuiaService } from "../../servicios/guia.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImportarComponent extends General {
+  public erroresImportar: any[] = [];
+
   constructor(private importarService: GuiaService) {
     super();
   }
 
   selectedFile: File | null = null;
   base64File: string | null = null;
-  fileName: string = '';
+  fileName: string = "";
 
   onFileChange(event: any) {
     const file = event.target.files[0];
@@ -46,6 +49,15 @@ export class ImportarComponent extends General {
     if (this.base64File) {
       this.importarService
         .importarVisitas({ archivo_base64: this.base64File })
+        .pipe(
+          catchError((err) => {
+            if (err.errores_validador) {
+              this.erroresImportar = err.errores_validador;
+            }
+
+            return err;
+          })
+        )
         .subscribe((response) => {
           this.alerta.mensajaExitoso(
             "Se han cargado las guias con éxito",

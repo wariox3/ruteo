@@ -14,7 +14,7 @@
     <div class="d-flex flex-column flex-xl-row align-items-start justify-content-between">
       <div class="d-flex align-items-center mb-3 mb-xl-0">
         <nb-button-group size="small">
-          <button status="primary"  nbButton [nbContextMenu]="items">
+          <button status="primary" nbButton [nbContextMenu]="items">
             Importar<nb-icon icon="arrow-ios-downward-outline"></nb-icon>
           </button>
           <button nbButton status="primary" (click)="decodificar()">
@@ -26,7 +26,7 @@
           <button nbButton status="primary" [routerLink]="['../nuevo']">
             Nuevo
           </button>
-          <button nbButton [nbContextMenu]="acciones" >Acciones<nb-icon
+          <button nbButton [nbContextMenu]="acciones">Acciones<nb-icon
               icon="arrow-ios-downward-outline"></nb-icon></button>
         </nb-button-group>
       </div>
@@ -146,12 +146,43 @@
       <input #fileInput id="fileInput" type="file" (change)="onFileChange($event)" />
       <span class="file-name" *ngIf="fileName">{{ fileName }}</span>
     </div>
-    <div>
-      <button type="button" class="mr-2" nbButton size="small" (click)="fileInput.click()">
-        Seleccionar archivo
-      </button>
-      <button [disabled]="!base64File" nbButton status="primary" size="small" (click)="uploadFile()">
-        Importar
+    <div class="d-flex justify-content-between">
+      <div><button type="button" status="primary" class="mr-2" nbButton size="small"
+          (click)="descargarEjemploExcelImportar()">
+          Ejemplo
+        </button></div>
+      <div>
+        <button type="button" class="mr-2" nbButton size="small" (click)="fileInput.click()">
+          Seleccionar archivo
+        </button>
+        <button [disabled]="!base64File" nbButton status="primary" size="small" (click)="uploadFile()">
+          Importar
+        </button>
+      </div>
+    </div>
+    <!-- Agregamos una clase para limitar la altura y permitir el desplazamiento -->
+    <div class="table-container mt-3">
+      <table>
+        <thead>
+          <tr>
+            <th>Fila</th>
+            <th>Campo</th>
+            <th>Error</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let error of erroresImportar">
+            <td>{{ error.fila }}</td>
+            <td>{{ error.campo }}</td>
+            <td>{{ error.error }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-end mt-3">
+      <button *ngIf="erroresImportar.length" type="button" status="primary" class="mr-2" nbButton size="small"
+        (click)="descargarExcelErroresImportar()">
+        Descargar errores
       </button>
     </div>
   </nb-card-body>

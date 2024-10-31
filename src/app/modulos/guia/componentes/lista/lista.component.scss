@@ -37,24 +37,48 @@
 
 /* Estilos para navegadores basados en Webkit (Chrome, Edge, Safari) */
 .table-responsive::-webkit-scrollbar {
-  height: 10px;  /* Altura de la barra de desplazamiento horizontal */
+  height: 10px; /* Altura de la barra de desplazamiento horizontal */
 }
 
 .table-responsive::-webkit-scrollbar-track {
-  background-color: #f1f1f1;  /* Color del fondo del track de la barra */
+  background-color: #f1f1f1; /* Color del fondo del track de la barra */
 }
 
 .table-responsive::-webkit-scrollbar-thumb {
-  background-color: #9c9c9c;  /* Color de la barra de desplazamiento */
-  border-radius: 18px;        /* Bordes redondeados para el thumb */
+  background-color: #9c9c9c; /* Color de la barra de desplazamiento */
+  border-radius: 18px; /* Bordes redondeados para el thumb */
 }
 
 .table-responsive::-webkit-scrollbar-thumb:hover {
-  background-color: #979797;  /* Color de la barra cuando pasas el ratón */
+  background-color: #979797; /* Color de la barra cuando pasas el ratón */
 }
 
 /* Estilos para Firefox */
 .table-responsive {
-  scrollbar-width: thin;        /* Grosor de la barra de desplazamiento */
-  scrollbar-color: #b1b1b1 #f1f1f1;  /* Color de la barra y el fondo */
-} 
+  scrollbar-width: thin; /* Grosor de la barra de desplazamiento */
+  scrollbar-color: #b1b1b1 #f1f1f1; /* Color de la barra y el fondo */
+}
+
+.table-container {
+  max-height: 400px;
+  width: 45rem;
+  overflow-y: auto;
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-container thead th {
+  position: sticky;
+  top: 0;
+  background-color: #f5f5f5;
+  z-index: 1;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+  height: 40px; /* Ajusta según la altura que prefieras para el encabezado */
+}
+
+table {
+  margin: 0;
+}
